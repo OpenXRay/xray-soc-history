@@ -29,30 +29,56 @@ IC	float	CalcSSA				(float& distSQ, Fvector& C, IRender_Visual* V)
 
 void CRender::InsertSG_Dynamic	(IRender_Visual *pVisual, Fvector& Center)
 {
-	if (pVisual->vis.frame == RImplementation.marker)	return;
-	pVisual->vis.frame			= RImplementation.marker;
+	if (pVisual->vis.frame	==	RImplementation.marker)	return;
+	pVisual->vis.frame		=	RImplementation.marker;
 
 	float distSQ;
-	float SSA    = CalcSSA		(distSQ,pVisual->vis.sphere.P,pVisual);
+	float SSA				=	CalcSSA		(distSQ,pVisual->vis.sphere.P,pVisual);
 	if (SSA<=r_ssaDISCARD)		return;
 
-	// Select List and add to it
+	// Select shader
+#if		RENDER==R_R1
+	ShaderElement*		sh		= (L_Projector->shadowing()?pVisual->hShader->E[0]:pVisual->hShader->E[1])._get();
+#elif	RENDER==R_R2
 	ShaderElement*		sh		= pVisual->hShader->E[RImplementation.phase]._get();
-	if (val_bHUD)	{
-		// HUD
+#endif
+
+	// Invisible elements exist only in R1
+#if RENDER==R_R1
+	if (val_bInvisible)	{
+		mapMatrixItem::TNode	C;
+		C.val.pObject			= val_pObject;
+		C.val.pVisual			= pVisual;
+		C.val.Matrix			= *val_pTransform;
+		C.val.vCenter.set		(Center);
+		L_Shadows->add_element	(&C);
+	} else
+#endif
+
+	// HUD rendering
+	if (val_bHUD)		{
 		mapHUD_Node* N			= mapHUD.insertInAnyWay(distSQ);
+		N->val.pObject			= val_pObject;
 		N->val.pVisual			= pVisual;
 		N->val.Matrix			= *val_pTransform;
 		N->val.vCenter.set		(Center);
-	} else if (sh->Flags.bStrictB2F) {
-		// Strict
+	} else 
+
+	// strict-sorting selection
+	if (sh->Flags.bStrictB2F) {
 		mapSorted_Node* N		= mapSorted.insertInAnyWay(distSQ);
+		N->val.pObject			= val_pObject;
 		N->val.pVisual			= pVisual;
 		N->val.Matrix			= *val_pTransform;
 		N->val.vCenter.set		(Center);
-	} else {
-		// Normal
-		SPass&						pass	= *sh->Passes.front();
+#if RENDER==R_R1
+		L_Shadows->add_element	(N);
+#endif
+	} else
+
+	// the most common node
+	{
+		SPass&						pass	= *sh->Passes.front	();
 		mapMatrix_T&				map		= mapMatrix;
 		mapMatrixVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
 		mapMatrixPS::TNode*			Nps		= Nvs->val.insert	(pass.ps->ps);
@@ -80,70 +106,65 @@ void CRender::InsertSG_Dynamic	(IRender_Visual *pVisual, Fvector& Center)
 			}
 		}
 
-		if (SSA<r_ssaDONTSORT)	
-		{
-			item.unsorted.push_back			(_MatrixItem());
-			item.unsorted.back().pVisual	= pVisual;
-			item.unsorted.back().Matrix		= *val_pTransform;
-			item.unsorted.back().vCenter.set(Center);
-		}
-		else					
-		{
-			FixedMAP<float,_MatrixItem>::TNode*	N	= item.sorted.insertInAnyWay	(distSQ);
-			N->val.pVisual							= pVisual;
-			N->val.Matrix							= *val_pTransform;
-			N->val.vCenter.set						(Center);
-		}
+		item.unsorted.push_back			(_MatrixItem());
+		item.unsorted.back().pObject	= val_pObject;
+		item.unsorted.back().pVisual	= pVisual;
+		item.unsorted.back().Matrix		= *val_pTransform;
+		item.unsorted.back().vCenter.set(Center);
+#if RENDER==R_R1
+		L_Shadows->add_element			(item.unsorted.back());
+#endif
 	}
 }
 
 void CRender::InsertSG_Static	(IRender_Visual *pVisual)
 {
 	if (pVisual->vis.frame == RImplementation.marker)	return;
-	pVisual->vis.frame = RImplementation.marker;
+	pVisual->vis.frame			= RImplementation.marker;
 
 	float distSQ;
-	float SSA    = CalcSSA		(distSQ,pVisual->vis.sphere.P,pVisual);
+	float SSA					= CalcSSA	(distSQ,pVisual->vis.sphere.P,pVisual);
 	if (SSA<=r_ssaDISCARD)		return;
 
-	// Select List and add to it
-	ShaderElement*		sh		= (pVisual->hShader->E[RImplementation.phase])._get();
+	// Select shader
+#if		RENDER==R_R1
+	ShaderElement*		sh		= (((_sqrt(distSQ)-pVisual->vis.sphere.R)<20)?pVisual->hShader->E[0]:pVisual->hShader->E[1])._get();
+#elif	RENDER==R_R2
+	ShaderElement*		sh		= pVisual->hShader->E[RImplementation.phase]._get();
+#endif
+
+	// strict-sorting selection
 	if (sh->Flags.bStrictB2F) {
-		mapSorted_Node* N		= mapSorted.insertInAnyWay(distSQ);
-		N->val.pVisual			= pVisual;
-		N->val.Matrix			= Fidentity;
-		N->val.vCenter.set		(pVisual->vis.sphere.P);
+		mapSorted_Node* N			= mapSorted.insertInAnyWay(distSQ);
+		N->val.pObject				= NULL;
+		N->val.pVisual				= pVisual;
+		N->val.Matrix				= Fidentity;
+		N->val.vCenter.set			(pVisual->vis.sphere.P);
 	} else {
-		SPass&						pass	= *sh->Passes.front();
-		mapNormal_T&				map		= mapNormal;		//	[sh->Flags.iPriority];
+		SPass&						pass	= *sh->Passes.front	();
+		mapNormal_T&				map		= mapNormal			[sh->Flags.iPriority/2];
 		mapNormalVS::TNode*			Nvs		= map.insert		(pass.vs->vs);
 		mapNormalPS::TNode*			Nps		= Nvs->val.insert	(pass.ps->ps);
 		mapNormalCS::TNode*			Ncs		= Nps->val.insert	(pass.constants._get());
 		mapNormalStates::TNode*		Nstate	= Ncs->val.insert	(pass.state->state);
 		mapNormalTextures::TNode*	Ntex	= Nstate->val.insert(pass.T._get());
 		mapNormalVB::TNode*			Nvb		= Ntex->val.insert	(pVisual->hGeom->vb);
-		mapNormalItems&				item	= Nvb->val;
+		mapNormalItems&				items	= Nvb->val;
+		_NormalItem					item	= {SSA,pVisual};
+		items.push_back						(item);
 
 		// Need to sort for HZB efficient use
-		if (SSA>Nvb->val.ssa) {
-			Nvb->val.ssa = SSA;
-			if (SSA>Ntex->val.ssa) {
-				Ntex->val.ssa = SSA;
-				if (SSA>Nstate->val.ssa) {
-					Nstate->val.ssa = SSA;
-					if (SSA>Ncs->val.ssa)	{
-						Ncs->val.ssa = SSA;
-						if (SSA>Nps->val.ssa) {
-							Nps->val.ssa = SSA;
-							if (SSA>Nvs->val.ssa)	Nvs->val.ssa = SSA; 
+		if (SSA>Nvb->val.ssa) {	Nvb->val.ssa = SSA;
+			if (SSA>Ntex->val.ssa) { Ntex->val.ssa = SSA;
+				if (SSA>Nstate->val.ssa) { Nstate->val.ssa = SSA;
+					if (SSA>Ncs->val.ssa) { Ncs->val.ssa = SSA;
+						if (SSA>Nps->val.ssa)  { Nps->val.ssa = SSA;
+							if (SSA>Nvs->val.ssa)	Nvs->val.ssa = SSA;
 						}
 					}
 				}
 			}
 		}
-
-		if (SSA<r_ssaDONTSORT)		item.unsorted.push_back		(pVisual);
-		else						item.sorted.insertInAnyWay	(distSQ,pVisual);
 	}
 }
 
@@ -170,11 +191,12 @@ void CRender::add_leafs_Dynamic(IRender_Visual *pVisual)
 			// Add all children, doesn't perform any tests
 			FHierrarhyVisual* pV = (FHierrarhyVisual*)pVisual;
 			I = pV->children.begin	();
-			E = pV->children.end		();
+			E = pV->children.end	();
 			for (; I!=E; I++)	add_leafs_Dynamic	(*I);
 		}
 		return;
-	case MT_SKELETON:
+	case MT_SKELETON_ANIM:
+	case MT_SKELETON_RIGID:
 		{
 			// Add all children, doesn't perform any tests
 			CKinematics * pV = (CKinematics*)pVisual;
@@ -188,9 +210,9 @@ void CRender::add_leafs_Dynamic(IRender_Visual *pVisual)
 		{
 			// General type of visual
 			// Calculate distance to it's center
-			Fvector		Tpos;
-			val_pTransform->transform_tiny(Tpos, pVisual->vis.sphere.P);
-			InsertSG_Dynamic(pVisual,Tpos);
+			Fvector							Tpos;
+			val_pTransform->transform_tiny	(Tpos, pVisual->vis.sphere.P);
+			InsertSG_Dynamic				(pVisual,Tpos);
 		}
 		return;
 	}
@@ -222,7 +244,8 @@ void CRender::add_leafs_Static(IRender_Visual *pVisual)
 			for (; I!=E; I++)	add_leafs_Static (*I);
 		}
 		return;
-	case MT_SKELETON:
+	case MT_SKELETON_ANIM:
+	case MT_SKELETON_RIGID:
 		{
 			// Add all children, doesn't perform any tests
 			CKinematics * pV = (CKinematics*)pVisual;
@@ -235,7 +258,6 @@ void CRender::add_leafs_Static(IRender_Visual *pVisual)
 	case MT_LOD:
 		{
 			FLOD		* pV	= (FLOD*) pVisual;
-			/*
 			float		D;
 			float		ssa		= CalcSSA	(D,pV->vis.sphere.P,pV);
 			if (ssa<r_ssaLOD_A)
@@ -246,21 +268,11 @@ void CRender::add_leafs_Static(IRender_Visual *pVisual)
 			}
 			if (ssa>r_ssaLOD_B)
 			{
-			*/
 				// Add all children, doesn't perform any tests
 				I = pV->children.begin	();
 				E = pV->children.end	();
 				for (; I!=E; I++)	add_leafs_Static (*I);
-			/*
 			}
-			*/
-		}
-		break;
-	case MT_TREE:
-		{
-			FTreeVisual*	pV	= (FTreeVisual*) pVisual;
-			val_pTransform		= &pV->xform;
-			InsertSG_Dynamic	(pV,pV->vis.sphere.P);
 		}
 		break;
 	default:
@@ -307,7 +319,7 @@ BOOL CRender::add_Dynamic(IRender_Visual *pVisual, u32 planes)
 			// Add all children
 			FHierrarhyVisual* pV = (FHierrarhyVisual*)pVisual;
 			I = pV->children.begin	();
-			E = pV->children.end		();
+			E = pV->children.end	();
 			if (fcvPartial==VIS) {
 				for (; I!=E; I++)	add_Dynamic			(*I,planes);
 			} else {
@@ -315,7 +327,8 @@ BOOL CRender::add_Dynamic(IRender_Visual *pVisual, u32 planes)
 			}
 		}
 		break;
-	case MT_SKELETON:
+	case MT_SKELETON_ANIM:
+	case MT_SKELETON_RIGID:
 		{
 			// Add all children, doesn't perform any tests
 			CKinematics * pV		= (CKinematics*)pVisual;
@@ -343,16 +356,11 @@ void CRender::add_Static(IRender_Visual *pVisual, u32 planes)
 {
 	// Check frustum visibility and calculate distance to visual's center
 	EFC_Visible	VIS;
-	//	VIS = View->testSphere(pVisual->bv_Position,pVisual->bv_Radius,planes);
-	//	VIS = (View->testSphere_dirty(pVisual->bv_Position,pVisual->bv_Radius))?fcvFully:fcvNone;
-	//	VIS = View->testAABB(pVisual->bv_BBox.min,pVisual->bv_BBox.max,planes);
 	vis_data&	vis			= pVisual->vis;
 	VIS = View->testSAABB	(vis.sphere.P,vis.sphere.R,vis.box.min,vis.box.max,planes);
-	if (fcvNone==VIS){
-		return;
-	}
+	if (fcvNone==VIS)		return;
 	if (!HOM.visible(vis))	return;
-
+	
 	// If we get here visual is visible or partially visible
 	xr_vector<IRender_Visual*>::iterator I,E;	// it may be usefull for 'hierrarhy' visuals
 
@@ -383,7 +391,8 @@ void CRender::add_Static(IRender_Visual *pVisual, u32 planes)
 			}
 		}
 		break;
-	case MT_SKELETON:
+	case MT_SKELETON_ANIM:
+	case MT_SKELETON_RIGID:
 		{
 			// Add all children, doesn't perform any tests
 			CKinematics * pV	= (CKinematics*)pVisual;
@@ -400,7 +409,6 @@ void CRender::add_Static(IRender_Visual *pVisual, u32 planes)
 	case MT_LOD:
 		{
 			FLOD		* pV	= (FLOD*) pVisual;
-			/*
 			float		D;
 			float		ssa		= CalcSSA	(D,pV->vis.sphere.P,pV);
 			if (ssa<r_ssaLOD_A)	
@@ -411,27 +419,17 @@ void CRender::add_Static(IRender_Visual *pVisual, u32 planes)
 			}
 			if (ssa>r_ssaLOD_B)
 			{
-			*/
 				// Add all children, perform tests
 				I = pV->children.begin	();
 				E = pV->children.end	();
 				for (; I!=E; I++)	add_leafs_Static	(*I);
-			/*
 			}
-			*/
-		}
-		break;
-	case MT_TREE:
-		{
-			FTreeVisual*	pV	= (FTreeVisual*) pVisual;
-			val_pTransform		= &pV->xform;
-			InsertSG_Dynamic	(pV,pV->vis.sphere.P);
 		}
 		break;
 	default:
 		{
 			// General type of visual
-			InsertSG_Static		(pVisual);
+			InsertSG_Static(pVisual);
 		}
 		break;
 	}

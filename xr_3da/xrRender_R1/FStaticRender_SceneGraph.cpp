@@ -1,4 +1,3 @@
-// exxZERO Time Stamp AddIn. Document modified at : Thursday, March 07, 2002 11:44:58 , by user : Oles , from computer : OLES
 #include "stdafx.h"
 
 #include "..\fhierrarhyvisual.h"
@@ -34,7 +33,7 @@ void CRender::InsertSG_Dynamic	(IRender_Visual *pVisual, Fvector& Center)
 
 	// Select List and add to it
 	ShaderElement*		sh		= (L_Projector->shadowing()?pVisual->hShader->E[0]:pVisual->hShader->E[1])._get();
-	if (val_bInvisible){
+	if (val_bInvisible)	{
 		mapMatrixItem::TNode C;
 		C.val.pObject			= val_pObject;
 		C.val.pVisual			= pVisual;
