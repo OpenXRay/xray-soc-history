@@ -12,9 +12,9 @@
 #include "ai/stalker/ai_stalker.h"
 #include "inventory.h"
 
-class CObjectStateShow : public CObjectStateBase {
+class CObjectStateIdle : public CObjectStateBase {
 public:
-						CObjectStateShow	(CInventoryItem *inventory_item, const u32 weapon_state, bool equality = false) :
+						CObjectStateIdle	(CInventoryItem *inventory_item, const u32 weapon_state, bool equality = false) :
 							CObjectStateBase(inventory_item,weapon_state,equality)
 	{
 	}
@@ -23,7 +23,6 @@ public:
 	{
 		inherited::initialize();
 		VERIFY			(m_inventory_item);
-		m_object->inventory().Slot(m_inventory_item);
-		m_object->inventory().Activate(m_inventory_item->GetSlot());
+		m_object->inventory().Action	(kWPN_FIRE,	CMD_STOP);
 	}
 };
