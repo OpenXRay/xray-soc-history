@@ -1,15 +1,10 @@
-object fraPortal: TfraPortal
+object fraLight: TfraLight
   Left = 0
   Top = 0
   Width = 198
   Height = 277
-  VertScrollBar.ButtonSize = 11
-  VertScrollBar.Range = 257
-  VertScrollBar.Smooth = True
-  VertScrollBar.Style = ssFlat
   VertScrollBar.Visible = False
   Align = alClient
-  AutoScroll = False
   Constraints.MaxWidth = 198
   Constraints.MinWidth = 198
   Color = 10528425
@@ -25,10 +20,30 @@ object fraPortal: TfraPortal
     Left = 0
     Top = 0
     Width = 198
-    Height = 68
+    Height = 49
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    object ebUseSelInD3D: TExtBtn
+      Left = 2
+      Top = 17
+      Width = 95
+      Height = 15
+      Align = alNone
+      AllowAllUp = True
+      BevelShow = False
+      HotTrack = True
+      HotColor = 15790320
+      CloseButton = False
+      Caption = 'Enable Sel'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      OnClick = ebUseSelInD3DClick
+    end
     object APHeadLabel1: TLabel
       Left = 1
       Top = 1
@@ -36,10 +51,10 @@ object fraPortal: TfraPortal
       Height = 13
       Align = alTop
       Alignment = taCenter
-      Caption = 'Command'
+      Caption = 'Affect in D3D'
       Color = clGray
       ParentColor = False
-      OnClick = TopClick
+      OnClick = ExpandClick
     end
     object ExtBtn2: TExtBtn
       Left = 185
@@ -63,64 +78,67 @@ object fraPortal: TfraPortal
         00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
         0000}
       ParentFont = False
-      OnClick = PanelMinClick
+      OnClick = PaneMinClick
     end
-    object ebInvertOrient: TExtBtn
+    object ebUnuseSelInD3D: TExtBtn
       Left = 2
-      Top = 18
-      Width = 195
+      Top = 32
+      Width = 95
       Height = 15
       Align = alNone
+      AllowAllUp = True
       BevelShow = False
       HotTrack = True
       HotColor = 15790320
       CloseButton = False
-      Caption = 'Invert Orientation'
+      Caption = 'Disable Sel'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
-      OnClick = ebInvertOrientClick
+      OnClick = ebUnuseSelInD3DClick
     end
-    object ebComputeAllPortals: TExtBtn
-      Left = 2
-      Top = 34
-      Width = 195
+    object ebUseAllInD3D: TExtBtn
+      Left = 98
+      Top = 17
+      Width = 95
       Height = 15
       Align = alNone
+      AllowAllUp = True
       BevelShow = False
       HotTrack = True
       HotColor = 15790320
       CloseButton = False
-      Caption = 'Compute All Portals'
+      Caption = 'Enable All'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
-      OnClick = ebComputeAllPortalsClick
+      OnClick = ebUseAllInD3DClick
     end
-    object ebComputeSelPortals: TExtBtn
-      Left = 2
-      Top = 50
-      Width = 195
+    object ebUnuseAllInD3D: TExtBtn
+      Left = 98
+      Top = 32
+      Width = 95
       Height = 15
       Align = alNone
+      AllowAllUp = True
       BevelShow = False
       HotTrack = True
       HotColor = 15790320
       CloseButton = False
-      Caption = 'Compute Sel. Portals'
+      Caption = 'Disable All'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
-      OnClick = ebComputeClick
+      OnClick = ebUnuseAllInD3DClick
     end
   end
 end

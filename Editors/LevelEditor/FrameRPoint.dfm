@@ -5,8 +5,8 @@ object fraSpawnPoint: TfraSpawnPoint
   Height = 277
   VertScrollBar.Visible = False
   Align = alClient
-  Constraints.MaxWidth = 154
-  Constraints.MinWidth = 123
+  Constraints.MaxWidth = 198
+  Constraints.MinWidth = 198
   Color = 10528425
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
@@ -18,12 +18,10 @@ object fraSpawnPoint: TfraSpawnPoint
   TabOrder = 0
   object paCurrent: TPanel
     Left = 0
-    Top = 0
+    Top = 51
     Width = 443
-    Height = 35
+    Height = 175
     Align = alTop
-    Constraints.MaxWidth = 123
-    Constraints.MinWidth = 123
     ParentColor = True
     TabOrder = 0
     object APHeadLabel1: TLabel
@@ -39,7 +37,7 @@ object fraSpawnPoint: TfraSpawnPoint
       OnClick = ExpandClick
     end
     object ExtBtn2: TExtBtn
-      Left = 110
+      Left = 185
       Top = 2
       Width = 11
       Height = 11
@@ -62,34 +60,31 @@ object fraSpawnPoint: TfraSpawnPoint
       ParentFont = False
       OnClick = PaneMinClick
     end
-    object ebCurObj: TExtBtn
-      Left = 2
-      Top = 16
-      Width = 120
-      Height = 14
-      Align = alNone
-      BevelShow = False
-      HotTrack = True
-      HotColor = 15790320
-      CloseButton = False
-      Caption = '<none>'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsUnderline]
-      ParentFont = False
-      OnClick = ebCurObjClick
+    object Bevel1: TBevel
+      Left = 1
+      Top = 14
+      Width = 441
+      Height = 1
+      Align = alTop
+      Shape = bsSpacer
+    end
+    object paItems: TPanel
+      Left = 1
+      Top = 15
+      Width = 441
+      Height = 159
+      Align = alClient
+      BevelOuter = bvNone
+      ParentColor = True
+      TabOrder = 0
     end
   end
   object paCommands: TPanel
     Left = 0
-    Top = 35
+    Top = 0
     Width = 443
     Height = 51
     Align = alTop
-    Constraints.MaxWidth = 123
-    Constraints.MinWidth = 123
     ParentColor = True
     TabOrder = 1
     object Label1: TLabel
@@ -105,7 +100,7 @@ object fraSpawnPoint: TfraSpawnPoint
       OnClick = ExpandClick
     end
     object ExtBtn1: TExtBtn
-      Left = 110
+      Left = 185
       Top = 2
       Width = 11
       Height = 11
@@ -131,7 +126,7 @@ object fraSpawnPoint: TfraSpawnPoint
     object ebAttachObject: TExtBtn
       Left = 2
       Top = 17
-      Width = 120
+      Width = 195
       Height = 15
       Align = alNone
       AllowAllUp = True
@@ -152,7 +147,7 @@ object fraSpawnPoint: TfraSpawnPoint
     object evDetachObject: TExtBtn
       Left = 2
       Top = 32
-      Width = 120
+      Width = 195
       Height = 15
       Align = alNone
       BevelShow = False
@@ -172,7 +167,7 @@ object fraSpawnPoint: TfraSpawnPoint
   object fsStorage: TFormStorage
     IniSection = 'FrameRPoint'
     Options = []
-    Version = 2
+    Version = 3
     StoredProps.Strings = (
       'paCurrent.Tag'
       'paCurrent.Height'
