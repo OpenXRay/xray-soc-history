@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////
-//	Module 		: visual_memory_manager.h
+//	Module 		: hit_memory_manager.h
 //	Created 	: 02.10.2001
 //  Modified 	: 19.11.2003
 //	Author		: Dmitriy Iassenev
-//	Description : Visual memory manager
+//	Description : Hit memory manager
 ////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
-class CVisualMemoryManager {
+class CHitMemoryManager {
 public:
-					CVisualMemoryManager			();
-	virtual			~CVisualMemoryManager			();
+					CHitMemoryManager			();
+	virtual			~CHitMemoryManager			();
 };
