@@ -1,14 +1,13 @@
 #pragma once
 #include "../state_manager_first.h"
 
-class CBurer;
+class CAI_Dog;
 
-class CStateManagerBurer : public CStateManagerFirst {
+class CStateManagerDog : public CStateManagerFirst {
 	typedef CStateManagerFirst inherited;
-	CBurer *m_object;
+	CAI_Dog *m_object;
 public:
 
-					CStateManagerBurer	(CBurer *monster); 
+					CStateManagerDog	(CAI_Dog *monster); 
 	virtual void	update				();
 };
-
