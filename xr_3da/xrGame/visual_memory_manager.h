@@ -1,18 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////
-//	Module 		: weapon_manager.cpp
+//	Module 		: visual_memory.h
 //	Created 	: 02.10.2001
 //  Modified 	: 19.11.2003
 //	Author		: Dmitriy Iassenev
-//	Description : Weapon manager
+//	Description : Visual memory
 ////////////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-#include "enemy_selector.h"
+#pragma once
 
-CEnemySelector::CEnemySelector		()
-{
-}
-
-CEnemySelector::~CEnemySelector		()
-{
-}
+class CVisualMemoryManager {
+public:
+					CVisualMemoryManager			();
+	virtual			~CVisualMemoryManager			();
+};

@@ -1,18 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////
-//	Module 		: weapon_manager.cpp
+//	Module 		: event_memory.cpp
 //	Created 	: 02.10.2001
 //  Modified 	: 19.11.2003
 //	Author		: Dmitriy Iassenev
-//	Description : Weapon manager
+//	Description : Event memory
 ////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "enemy_selector.h"
+#include "event_memory.h"
 
-CEnemySelector::CEnemySelector		()
+CEventMemoryManager::CEventMemoryManager		()
 {
 }
 
-CEnemySelector::~CEnemySelector		()
+CEventMemoryManager::~CEventMemoryManager		()
 {
 }

@@ -1,18 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////
-//	Module 		: weapon_manager.cpp
+//	Module 		: sound_memory.h
 //	Created 	: 02.10.2001
 //  Modified 	: 19.11.2003
 //	Author		: Dmitriy Iassenev
-//	Description : Weapon manager
+//	Description : Sound memory
 ////////////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-#include "enemy_selector.h"
+#pragma once
 
-CEnemySelector::CEnemySelector		()
-{
-}
-
-CEnemySelector::~CEnemySelector		()
-{
-}
+class CSoundMemoryManager {
+public:
+					CSoundMemoryManager			();
+	virtual			~CSoundMemoryManager			();
+};
