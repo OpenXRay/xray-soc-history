@@ -20,68 +20,14 @@
  *                                                                       *
  *************************************************************************/
 
-#include <ode/config.h>
-#include <ode/memory.h>
-#include <ode/error.h>
+#ifndef _ODE_QUICK_STEP_H_
+#define _ODE_QUICK_STEP_H_
+
+#include <ode/common.h>
 
 
-static dAllocFunction *allocfn = 0;
-static dReallocFunction *reallocfn = 0;
-static dFreeFunction *freefn = 0;
+void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
+		     dxJoint * const *_joint, int nj, dReal stepsize);
 
 
-
-void dSetAllocHandler (dAllocFunction *fn)
-{
-  allocfn = fn;
-}
-
-
-void dSetReallocHandler (dReallocFunction *fn)
-{
-  reallocfn = fn;
-}
-
-
-void dSetFreeHandler (dFreeFunction *fn)
-{
-  freefn = fn;
-}
-
-
-dAllocFunction *dGetAllocHandler()
-{
-  return allocfn;
-}
-
-
-dReallocFunction *dGetReallocHandler()
-{
-  return reallocfn;
-}
-
-
-dFreeFunction *dGetFreeHandler()
-{
-  return freefn;
-}
-
-
-void * dAlloc (size_t size)
-{
-  if (allocfn) return allocfn (size); else return malloc (size);
-}
-
-
-void * dRealloc (void *ptr, size_t oldsize, size_t newsize)
-{
-  if (reallocfn) return reallocfn (ptr,oldsize,newsize);
-  else return realloc (ptr,newsize);
-}
-
-
-void dFree (void *ptr, size_t size)
-{
-  if (!ptr) return;
-  if (freefn) freefn (ptr,size); else free (ptr);
-}
+#endif

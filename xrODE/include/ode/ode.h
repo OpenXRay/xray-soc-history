@@ -26,6 +26,7 @@
 /* include *everything* here */
 
 #include <ode/config.h>
+#include <ode/compatibility.h>
 #include <ode/common.h>
 #include <ode/contact.h>
 #include <ode/error.h>
@@ -38,15 +39,9 @@
 #include <ode/misc.h>
 #include <ode/objects.h>
 #include <ode/odecpp.h>
-
-#ifdef ODE_OLD_COLLISION
-#include <ode/space.h>
-#include <ode/geom.h>
-#include <ode/odecpp_old_collision.h>
-#else
 #include <ode/collision_space.h>
 #include <ode/collision.h>
 #include <ode/odecpp_collision.h>
-#endif
+#include <ode/export-dif.h>
 
 #endif
