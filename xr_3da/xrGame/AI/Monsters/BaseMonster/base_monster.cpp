@@ -34,6 +34,7 @@
 #include "../control_path_builder_base.h"
 #include "../anomaly_detector.h"
 #include "../monster_cover_manager.h"
+#include "../monster_home.h"
 
 CBaseMonster::CBaseMonster()
 {
@@ -72,6 +73,8 @@ CBaseMonster::CBaseMonster()
 
 	m_anomaly_detector				= xr_new<CAnomalyDetector>(this);
 	CoverMan						= xr_new<CMonsterCoverManager>(this);
+
+	Home							= xr_new<CMonsterHome>(this);
 }
 
 
@@ -91,6 +94,7 @@ CBaseMonster::~CBaseMonster()
 
 	xr_delete(m_anomaly_detector);
 	xr_delete(CoverMan);
+	xr_delete(Home);
 }
 
 void CBaseMonster::UpdateCL()
@@ -335,8 +339,6 @@ void CBaseMonster::on_kill_enemy(const CEntity *obj)
 
 void CBaseMonster::on_first_update()
 {
-	// HUD уже загружен, подгрузить дополнительные данные
-//	HUD().GetUI()->UIMainIngameWnd->AddMonsterClawsEffect ("monster", "controller\\controller_blood_01");
 }
 
 CMovementManager *CBaseMonster::create_movement_manager	()
