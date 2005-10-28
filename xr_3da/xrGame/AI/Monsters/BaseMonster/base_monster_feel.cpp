@@ -23,6 +23,7 @@
 #include "../control_animation_base.h"
 #include "../../../UIGameCustom.h"
 #include "../../../UI/UIStatic.h"
+#include "../../../ai_object_location.h"
 
 void CBaseMonster::feel_sound_new(CObject* who, int eType, CSound_UserDataPtr user_data, const Fvector &Position, float power)
 {
@@ -33,16 +34,19 @@ void CBaseMonster::feel_sound_new(CObject* who, int eType, CSound_UserDataPtr us
 
 	if (user_data)
 		user_data->accept	(sound_user_data_visitor());
-	
-	// ignore sounds if not from enemies
-	CEntityAlive* entity = smart_cast<CEntityAlive*> (who);
-	if (entity && (!EnemyMan.is_enemy(entity))) return;
 
 	// ignore unknown sounds
 	if (eType == 0xffffffff) return;
 
 	// ignore distant sounds
 	if (this->Position().distance_to(Position) > db().m_max_hear_dist)	return;
+
+	// ignore sounds if not from enemies and not help sounds
+	CEntityAlive* entity = smart_cast<CEntityAlive*> (who);
+	if (entity && (!EnemyMan.is_enemy(entity))) {
+		SoundMemory.check_help_sound(eType, entity->ai_location().level_vertex_id());
+		return;
+	}
 	
 	if ((eType & SOUND_TYPE_WEAPON_SHOOTING) == SOUND_TYPE_WEAPON_SHOOTING) power = 1.f;
 
@@ -68,7 +72,7 @@ void CBaseMonster::HitEntity(const CEntity *pEntity, float fDamage, float impuls
 
 		// перевод из локальных координат в мировые вектора направления импульса
 		Fvector hit_dir;
-//		XFORM().transform_dir(hit_dir,dir);
+		XFORM().transform_dir(hit_dir,dir);
 		hit_dir = dir;
 		hit_dir.normalize();
 
