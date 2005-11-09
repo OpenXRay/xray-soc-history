@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Level.h"
+#include "HUDManager.h"
+#include "UIGameDM.h"
 
 #define DEMO_DATA_SIZE	65536
 
@@ -8,30 +10,41 @@ void						CLevel::Demo_StoreData			(void* data, u32 size, DEMO_CHUNK DataType)
 	if (!IsDemoSave()) return;
 
 //	DemoCS.Enter();
-
+	
 	u32 CurTime = timeServer_Async();
-	u32 TotalSize = sizeof(CurTime) + sizeof(size) + size;
+	u32 TotalSize = 4 + 4 + 4;//	
+	switch(DataType)
+	{
+	case DATA_FRAME:
+		{
+			TotalSize += size;
+		}break;
+	case DATA_PACKET:
+		{
+			TotalSize += size + 4;
+		}break;
+	}
 
 	R_ASSERT2(size <= DEMO_DATA_SIZE, "Data is too BIG!");
-	if ((TotalSize + m_dwStoredDemoDataSize) > DEMO_DATA_SIZE)
+	if ((TotalSize + m_dwStoredDemoDataSize) >= DEMO_DATA_SIZE)
 	{
-		Demo_DumpData();
+		Demo_DumpData();		
 	};
 
 	DEMO_CHUNK	Chunk = DataType;
-	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &Chunk, 4); m_dwStoredDemoDataSize += 4;
-	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &m_dwCurDemoFrame, 4); m_dwStoredDemoDataSize += 4;
-	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &CurTime, 4); m_dwStoredDemoDataSize += 4;	
+	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &Chunk, 4);				m_dwStoredDemoDataSize += 4;					
+	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &m_dwCurDemoFrame, 4);	m_dwStoredDemoDataSize += 4;		
+	CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &CurTime, 4);			m_dwStoredDemoDataSize += 4;				
 	switch (DataType)
 	{
 	case DATA_FRAME:
 		{
-			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, data, size); m_dwStoredDemoDataSize += size;
+			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, data, size);		m_dwStoredDemoDataSize += size;		
 		}break;
 	case DATA_PACKET:
 		{
-			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &size, 4); m_dwStoredDemoDataSize += 4;
-			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, data, size); m_dwStoredDemoDataSize += size;
+			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, &size, 4);		m_dwStoredDemoDataSize += 4;
+			CopyMemory(m_pStoredDemoData + m_dwStoredDemoDataSize, data, size);		m_dwStoredDemoDataSize += size;		
 		}break;
 	}
 	
@@ -68,6 +81,7 @@ void						CLevel::Demo_DumpData()
 
 void						CLevel_DemoCrash_Handler	()
 {
+	if (!g_pGameLevel) return;
 	Level().WriteStoredDemo();
 	Level().CallOldCrashHandler();
 }
@@ -131,35 +145,55 @@ void						CLevel::Demo_Load				(LPCSTR DemoName)
 	
 	string1024	DemoFileName;
 	FS.update_path      (DemoFileName,"$logs$",DemoName);
+	//-----------------------------------------------------
+	HANDLE hDemoFile = CreateFile(DemoFileName, FILE_ALL_ACCESS, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hDemoFile == NULL) return;
 
-	FILE* fTDemo = fopen(DemoFileName, "rb");
-	if (fTDemo)
+	u32	FileSize = GetFileSize(hDemoFile, NULL);
+	u8* pDemoData = xr_alloc<u8>(FileSize/sizeof(u8));
+	ReadFile(hDemoFile, pDemoData, FileSize, (LPDWORD)&FileSize, NULL);
+	CloseHandle(hDemoFile);
+	u8* pTDemoData = pDemoData;
+	//-----------------------------------------------------
+
+//	FILE* fTDemo = fopen(DemoFileName, "rb");
+//	if (fTDemo)
 	{
 //		NET_Packet NewPacket;
 		DemoDataStruct NewData;
 		Msg("\n------- Loading Demo... ---------\n");
 
-		while (!feof(fTDemo))
+//		while (!feof(fTDemo))
+		while (u32(pTDemoData - pDemoData) < FileSize)
 		{
-			fread(&(NewData.m_dwDataType), sizeof(NewData.m_dwDataType), 1, fTDemo);
-			fread(&(NewData.m_dwFrame), sizeof(NewData.m_dwFrame), 1, fTDemo);
-			fread(&(NewData.m_dwTimeReceive), sizeof(NewData.m_dwTimeReceive), 1, fTDemo);
+			CopyMemory(&(NewData.m_dwDataType), pTDemoData, sizeof(NewData.m_dwDataType));				pTDemoData += sizeof(NewData.m_dwDataType);
+			CopyMemory(&(NewData.m_dwFrame), pTDemoData, sizeof(NewData.m_dwFrame));					pTDemoData += sizeof(NewData.m_dwFrame);
+			CopyMemory(&(NewData.m_dwTimeReceive), pTDemoData, sizeof(NewData.m_dwTimeReceive));		pTDemoData += sizeof(NewData.m_dwTimeReceive);
+
+//			fread(&(NewData.m_dwDataType), sizeof(NewData.m_dwDataType), 1, fTDemo);
+//			fread(&(NewData.m_dwFrame), sizeof(NewData.m_dwFrame), 1, fTDemo);
+//			fread(&(NewData.m_dwTimeReceive), sizeof(NewData.m_dwTimeReceive), 1, fTDemo);
 			switch (NewData.m_dwDataType)
 			{
 			case DATA_FRAME:
 				{
-					fread(&(NewData.FrameTime), 1, sizeof(NewData.FrameTime), fTDemo);
+					CopyMemory(&(NewData.FrameTime), pTDemoData, sizeof(NewData.FrameTime));			pTDemoData += sizeof(NewData.FrameTime);
+//					fread(&(NewData.FrameTime), sizeof(NewData.FrameTime), 1, fTDemo);
+					m_dwLastDemoFrame = NewData.m_dwFrame;
 				}break;
 			case DATA_PACKET:
 				{
-					fread(&(NewData.Packet.B.count), sizeof(NewData.Packet.B.count), 1, fTDemo);
-					fread((NewData.Packet.B.data), 1, NewData.Packet.B.count, fTDemo);
+					CopyMemory(&(NewData.Packet.B.count), pTDemoData, sizeof(NewData.Packet.B.count));	pTDemoData += sizeof(NewData.Packet.B.count);
+					CopyMemory((NewData.Packet.B.data), pTDemoData, NewData.Packet.B.count);			pTDemoData += NewData.Packet.B.count;
+
+//					fread(&(NewData.Packet.B.count), sizeof(NewData.Packet.B.count), 1, fTDemo);
+//					fread((NewData.Packet.B.data), 1, NewData.Packet.B.count, fTDemo);
 				}break;
 			};			
 
 			m_aDemoData.push_back(NewData);
 		}
-		fclose(fTDemo);
+//		fclose(fTDemo);
 		if (!m_aDemoData.empty()) 
 		{
 			m_bDemoPlayMode = TRUE;
@@ -167,6 +201,7 @@ void						CLevel::Demo_Load				(LPCSTR DemoName)
 		};
 		m_dwCurDemoFrame = 0;
 	}
+	xr_free(pDemoData);
 }
 
 void						CLevel::Demo_Update				()
@@ -190,7 +225,10 @@ void						CLevel::Demo_Update				()
 		}
 		else
 		{
-			if (P->m_dwFrame != m_dwCurDemoFrame) break;
+			if (P->m_dwFrame != m_dwCurDemoFrame) 
+			{
+				break;
+			};
 			switch (P->m_dwDataType)
 			{
 			case DATA_FRAME:
@@ -210,6 +248,31 @@ void						CLevel::Demo_Update				()
 			}
 		}
 	}
+	//-------------------------------
+	if (HUD().GetUI())
+	{
+		CUIGameDM* game_dm_ui = smart_cast<CUIGameDM*>( HUD().GetUI()->UIGame());
+		if (game_dm_ui)
+		{
+			if (Pos < m_aDemoData.size())
+			{
+				string1024 tmp;
+				if (m_bDemoPlayByFrame)
+				{
+					sprintf(tmp, "Demo Playing. %d perc.", u32(float(m_dwCurDemoFrame)/m_dwLastDemoFrame*100.0f));
+				}
+				else
+				{
+					sprintf(tmp, "Demo Playing. %d perc.", u32(float(Pos)/m_aDemoData.size()*100.0f));
+				}
+				game_dm_ui->SetDemoPlayCaption(tmp);
+			}
+			else
+				game_dm_ui->SetDemoPlayCaption("");
+			
+		}
+	}
+	//---------------------------------
 
 //	m_dwCurDemoFrame++;
 
