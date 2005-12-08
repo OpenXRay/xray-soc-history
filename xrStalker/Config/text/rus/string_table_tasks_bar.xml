@@ -2,7 +2,7 @@
 	<text>Помочь Круглову выбраться с "дикой территории".</text>
 </string>
 <string id="bar_resque_scientific_information">
-	<text>...</text>
+	<text></text>
 </string>
 <string id="bar_resque_scientific_information_get">
 	<text>Пробиться через засады наемников к профессору Круглову.</text>
@@ -142,7 +142,8 @@
 <string id="x16_documents">
 	<text>Найти документы лаборатории X16</text>
 </string>
-<string id="x16_yantar">Узнать у ученых местонахождение лаборатории X16 и найти в ней документы, 
+<string id="x16_yantar">
+	<text>Узнать у ученых местонахождение лаборатории X16 и найти в ней документы, 
 	касающиеся выжигателя мозгов</text>
 </string>
 <string id="find_x16_location">
