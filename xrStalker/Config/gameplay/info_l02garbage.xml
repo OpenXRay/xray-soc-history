@@ -5,13 +5,11 @@
 	<!-- атака бандитов на Серого -->
 	<info_portion id="garbage_meetstalker_start">
 		<task>garbage_meet_stalker</task>
-		<article>sl_fox_meet</article>
+		<article>meet_seryi_start</article>
 	</info_portion>
 	<info_portion id="garbage_meetstalker_done"></info_portion>
 	<info_portion id="garbage_meetstalker_die"></info_portion>
-	<info_portion id="garbage_meetstalker_end">
-		<article>sl_seryi_meet</article>
-	</info_portion>
+	<info_portion id="garbage_meetstalker_end"></info_portion>
 	<info_portion id="gar_seryi_drug_die"></info_portion>
 	<info_portion id="gar_seryi_drug2_die"></info_portion>
 	
@@ -23,23 +21,19 @@
 	<info_portion id="gar_begin_assault"></info_portion>
 	<info_portion id="gar_seryi_silence"></info_portion>
 	<info_portion id="gar_seryi_change_st"></info_portion>
-	<info_portion id="gar_seryi_meet"></info_portion>
 	
 	<!-- атака сталкеров и бандитов -->
 	<info_portion id="gar_bandit_leader_dead"></info_portion>
 	<info_portion id="gar_alarm"></info_portion>
 	<info_portion id="gar_bandits_raid"></info_portion>
 	<info_portion id="gar_bandits_damaged"></info_portion>
-	<info_portion id="gar_hellcar_help">
-		<task>gar_help_dymon</task>
-	</info_portion>
+	<info_portion id="gar_hellcar_help"></info_portion>
 	<info_portion id="gar_hellcar_reject"></info_portion>
 	<info_portion id="gar_open_fire"></info_portion>
 	<info_portion id="gar_counter_fire"></info_portion>
 	<info_portion id="gar_direction"></info_portion>
-	<info_portion id="gar_start_graveyard"></info_portion>
-	<info_portion id="gar_start_quest">
-		<task>gar_car_graveyard_quest</task>
+	<info_portion id="gar_start_graveyard">
+		<task>gar_help_dymon</task>
 	</info_portion>
 	<info_portion id="gar_no_mapspot"></info_portion>
 	<info_portion id="gar_animation_radio"></info_portion>
@@ -69,6 +63,9 @@
 	<!-- Псевдораненый -->
 	<info_portion id="gar_wounded_help"></info_portion>
 	<info_portion id="gar_wounded_fight"></info_portion>
+	
+	<!-- Атака псевдособак -->
+	<info_portion id="gar_dog_attack"></info_portion>
 	
 	<!-- Новичок в туннеле -->
 	<info_portion id="gar_help_newbie">
@@ -119,8 +116,6 @@
 	<info_portion id="gar_remove_fake_spot10"></info_portion>
 	<info_portion id="gar_add_fake_spot11"></info_portion>
 	<info_portion id="gar_remove_fake_spot11"></info_portion>
-	
-	<info_portion id="gar_hellcar_tips_end"></info_portion>
 
 
 
