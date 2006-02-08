@@ -905,7 +905,7 @@ void CWeaponMagazined::ApplySilencerKoeffs	()
 		clamp(CD_k, 0.0f, 1.0f);
 	};
 
-	fHitPower			= fHitPower*BHPk;
+	iHitPower			= int(iHitPower*BHPk);
 	fHitImpulse			*= BSk;
 	m_fStartBulletSpeed *= BSk;
 	fireDispersionBase	*= FDB_k;
