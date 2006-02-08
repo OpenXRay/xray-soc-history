@@ -522,18 +522,6 @@ void CWeaponMagazined::SetDefaults	()
 	CWeapon::SetDefaults		();
 }
 
-void CWeaponMagazined::Hide		()
-{
-	// add shot effector
-	//SwitchState(eHiding);
-	OnZoomOut();
-	SwitchState(eHidden);
-}
-void CWeaponMagazined::Show		()
-{
-	SwitchState(eShowing);
-}
-
 
 void CWeaponMagazined::OnShot		()
 {
@@ -917,7 +905,7 @@ void CWeaponMagazined::ApplySilencerKoeffs	()
 		clamp(CD_k, 0.0f, 1.0f);
 	};
 
-	iHitPower			= int(iHitPower*BHPk);
+	fHitPower			= fHitPower*BHPk;
 	fHitImpulse			*= BSk;
 	m_fStartBulletSpeed *= BSk;
 	fireDispersionBase	*= FDB_k;
