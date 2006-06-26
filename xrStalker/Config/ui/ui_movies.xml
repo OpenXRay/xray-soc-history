@@ -149,3 +149,21 @@
 			</video_wnd>
 		</item>
 	</mov_desire_5>
+
+	<mov_join_osoznanie>
+		<play_each_item>1</play_each_item>
+		<global_wnd x="0" y="0" width="1" height="1">
+			<auto_static x="0" y="0" width="1024" height="768" stretch="1">
+				<window_name>back</window_name>
+			</auto_static>
+		</global_wnd>
+		
+		<item type="video">
+			<sound>intro\intro_stalker</sound>
+			<pause_state>on</pause_state>
+			<function_on_stop>xr_effects.game_credits</function_on_stop>
+			<video_wnd x="0" y="0" width="1024" height="768" stretch="1">
+				<texture>intro\intro_stalker</texture>
+			</video_wnd>
+		</item>
+	</mov_join_osoznanie>
