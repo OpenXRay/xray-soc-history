@@ -201,3 +201,30 @@
 			</video_wnd>
 		</item>
 	</mov_join_osoznanie>
+
+
+
+	<end_logo>
+		<global_wnd x="0" y="0" width="1024" height="768">
+			<auto_static x="0" y="0" width="1024" height="768" stretch="1">
+				<texture>intro\intro_back</texture>
+			</auto_static>
+		</global_wnd>
+		<play_each_item>1</play_each_item>
+
+		<item type="video">
+			<delay>1</delay>
+			<video_wnd x="0" y="0" width="1024" height="768" stretch="1">
+				<texture>intro\intro_thq</texture>
+			</video_wnd>
+		</item>
+		<item type="video">
+			<sound>intro\intro_gsc</sound>
+			<delay>1</delay>
+			<function_on_stop>xr_effects.game_over</function_on_stop>
+			<video_wnd x="0" y="0" width="1024" height="768" stretch="1">
+				<texture>intro\intro_gsc</texture>
+			</video_wnd>
+		</item>
+	</end_logo>
+
