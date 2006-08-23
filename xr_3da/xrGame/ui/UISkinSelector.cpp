@@ -223,11 +223,11 @@ bool CUISkinSelectorWnd::OnKeyboard(int dik, EUIMessages keyboard_action)
 		return false;
 	}
 
-	u32 right_border = m_skins.size();
+	int right_border = (int)m_skins.size();
 	if (right_border > 9)
 		right_border = 9;
 
-	if (dik >= DIK_1 && dik < right_border + DIK_1)
+	if (dik >= DIK_1 && dik < (int)right_border + DIK_1)
 	{
 		m_iActiveIndex = dik - DIK_1;
 		OnBtnOK();
