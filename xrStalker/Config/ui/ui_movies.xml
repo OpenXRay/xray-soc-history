@@ -85,11 +85,11 @@
 		</global_wnd>
 		
 		<item type="video">
-			<sound>intro\intro_stalker</sound>
+			<sound>intro\yantar_dream</sound>
 			<pause_state>on</pause_state>
 			<function_on_stop>xr_effects.end_yantar_dream</function_on_stop>
 			<video_wnd x="0" y="0" width="1024" height="768" stretch="1">
-				<texture>intro\intro_stalker</texture>
+				<texture>intro\yantar_dream</texture>
 			</video_wnd>
 		</item>
 	</yantar_dream>
