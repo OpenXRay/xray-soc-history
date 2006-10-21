@@ -89,7 +89,7 @@ float Distance (const Fvector& rkPoint, const Fvector rkTri[3], float& pfSParam,
 
 void CWalmarkManager::StartWorkflow()
 {
-	LPCSTR				sect				= pSettings->r_string(m_owner->cNameSect(), "wallmark_section");
+	LPCSTR				sect				= "explosion_marks";
 	float				m_trace_dist		= pSettings->r_float(sect,"dist");
 	float				m_wallmark_size		= pSettings->r_float(sect,"size");
 	u32					max_wallmarks_count = pSettings->r_u32(sect,"max_count");
@@ -109,7 +109,7 @@ void CWalmarkManager::StartWorkflow()
 
 
 	u32 _ray_test		= 0;
-	u32 _tri_behind		= 0;
+//	u32 _tri_behind		= 0;
 	u32 _tri_not_plane	= 0;
 	u32 _not_dist		= 0;
 /*
