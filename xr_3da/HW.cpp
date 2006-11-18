@@ -94,7 +94,7 @@ D3DFORMAT CHW::selectDepthStencil	(D3DFORMAT fTarget)
 {
 	// R2 hack
 #pragma todo("R2 need to specify depth format")
-	if (g_r2.test(1))	return D3DFMT_D24S8;
+	if (psDeviceFlags.test(rsR2))	return D3DFMT_D24S8;
 
 	// R1 usual
 	static	D3DFORMAT	fDS_Try1[6] =
@@ -135,7 +135,9 @@ void	CHW::DestroyDevice	()
 #endif    
 	DestroyD3D				();
 	
+#ifndef _EDITOR
 	free_vid_mode_list		();
+#endif
 }
 void	CHW::selectResolution	(u32 &dwWidth, u32 &dwHeight)
 {
@@ -311,6 +313,10 @@ void		CHW::CreateDevice		(HWND m_hWnd,u32 &dwWidth,u32 &dwHeight)
 								GPU | D3DCREATE_MULTITHREADED,	//. ? locks at present
 								&P,
                                 &pDevice ));
+	
+	// if (FAILED(CreateDevice))	{
+	//	CreateDevice()
+	//}
 
 	_SHOW_REF	("* CREATE: DeviceREF:",HW.pDevice);
 	switch (GPU)
@@ -340,9 +346,8 @@ void		CHW::CreateDevice		(HWND m_hWnd,u32 &dwWidth,u32 &dwHeight)
 	Msg		("*          DDI-level: %2.1f",		float(D3DXGetDriverLevel(pDevice))/100.f);
 #ifndef _EDITOR
 	updateWindowProps	(m_hWnd);
-#endif
-
 	fill_vid_mode_list			(this);
+#endif
 }
 
 u32	CHW::selectPresentInterval	()
@@ -481,6 +486,7 @@ struct _uniq_mode
 	bool operator() (LPCSTR _other) {return !stricmp(_val,_other);}
 };
 
+#ifndef _EDITOR
 void free_vid_mode_list()
 {
 	for( int i=0; vid_mode_token[i].name; i++ )
@@ -496,7 +502,8 @@ void	fill_vid_mode_list			(CHW* _hw)
 	xr_vector<LPCSTR>	_tmp;
 	u32 cnt = _hw->pD3D->GetAdapterModeCount	(_hw->DevAdapter, _hw->Caps.fTarget);
 
-	for(u32 i=0; i<cnt;++i)
+    u32 i;
+	for(i=0; i<cnt;++i)
 	{
 		D3DDISPLAYMODE	Mode;
 		string32		str;
@@ -521,11 +528,12 @@ void	fill_vid_mode_list			(CHW* _hw)
 	vid_mode_token[_cnt-1].name		= NULL;
 
 	Msg("Avialable video modes[%d]:",_tmp.size());
-	for(u32 i=0; i<_tmp.size();++i)
+	for(i=0; i<_tmp.size();++i)
 	{
 		vid_mode_token[i].id		= i;
 		vid_mode_token[i].name		= _tmp[i];
 		Msg							("[%s]",_tmp[i]);
 	}
-
 }
+#endif
+
