@@ -15,6 +15,7 @@ class "ph_item_box"
 function ph_item_box:__init(obj)
 	self.obj = obj
 	
+
 	local community_list = { "stalker", "dolg", "freedom", "bandit", "military", "zombied", "ecolog", "killer", "monolith", "arena_enemy" }	
 	
 	for k,v in pairs(community_list) do
@@ -84,6 +85,24 @@ end
 function ph_item_box:spawn_items()
 	local ini = self.obj:spawn_ini()
 	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "stalker")
+	if utils.cfg_get_string(ini, "drop_box", "items", self.obj, false, "", "") ~= nil then
+		local items = r_items(ini, "drop_box", "items")
+		for k,v in pairs(items) do
+			for i = 1,v.count do
+				local position = vector():set(0,0,0)
+				position.x = self.obj:position().x + math.random(-30,30)/100
+				position.z = self.obj:position().z + math.random(-30,30)/100
+				position.y = self.obj:position().y + math.random(30,50)/100
+
+				alife():create(v.section,	
+					    position,
+						self.obj:level_vertex_id(),	
+						self.obj:game_vertex_id())
+			end
+		end
+		return
+	end
+			
 		printf(" community = %s", community)
 	--' Доспавниваем необходимое количество итемов:
     --' Необходимо составить список объектов которые могут быть заспавнены для персонажа
@@ -121,10 +140,49 @@ function create_items(obj, section, number, rnd)
 			--' Проверяем вероятность появить каждый объект в отдельности
             if math.random(100) <=  rnd then
 				alife():create(section,	
-					    obj:position(),
+					    position,
 						obj:level_vertex_id(),	
 						obj:game_vertex_id())
 			end
         end
     end    
+end
+
+function r_items( spawn_ini, section, line)
+	if spawn_ini:line_exist( section, line ) then
+		--' если default-ов больше, чем значений в ini, то забить недостающие последним значением из ini
+		local t = parse_names( spawn_ini:r_string( section, line ) )
+		local n = table.getn( t )
+		
+		local ret_table = {}
+		local k = 1
+		while k <= n do
+			local item = {}
+			item.section = t[k]
+			-- Проверяем что это не последняя запись
+			if t[k+1] ~= nil then
+				local p = tonumber(t[k+1])
+				-- проверяем что вторым числом задана вероятность, а не другая секция спавну
+				if p then
+					-- забиваем число
+					item.count = p
+					k = k + 2
+				else
+					-- забиваем дефолт 1
+					item.count = 1
+					k = k + 1
+				end
+			else
+				item.count	 = 1
+				k = k + 1
+			end
+			table.insert(ret_table, item)	
+		end
+		return ret_table
+	end
+	return nil
+end
+
+function create_obligatory_items(obj, table)
+	
 end
