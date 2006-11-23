@@ -15,8 +15,7 @@ class "ph_item_box"
 function ph_item_box:__init(obj)
 	self.obj = obj
 	
-
-	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons", "big_box_arsenal"}	
+	local community_list = { "stalker", "dolg", "freedom", "bandit", "military", "zombied", "ecolog", "killer", "monolith", "arena_enemy" }	
 	
 	for k,v in pairs(community_list) do
         --' Необходимо заполнить таблицу
@@ -84,26 +83,11 @@ end
 
 function ph_item_box:spawn_items()
 	local ini = self.obj:spawn_ini()
-	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "def_box")
-	if r_items(ini, "drop_box", "items") ~= nil then
-		local items = r_items(ini, "drop_box", "items")
-		for k,v in pairs(items) do
-			create_obligatory_items(self.obj, v.section, v.count)
-		end
-		return
-	end
-			
+	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "stalker")
 		printf(" community = %s", community)
 	--' Доспавниваем необходимое количество итемов:
     --' Необходимо составить список объектов которые могут быть заспавнены для персонажа
-    local spawn_items = item_by_community[community]
-	--' Если комьюнити задана не верно, то ставим дефолт и срем в лог.
-	if spawn_items == nil then 
-		printf("xr_box: wrong community -- %s setting default def_box ", community)
-		local spawn_items = {}
-        local spawn_items = item_by_community["def_box"]
-	end
-    
+    local spawn_items = item_by_community[community]    
     for k,v in pairs(spawn_items) do		
 		--' По каждому объекту необходимо получить количество
 		local number = math.ceil(math.random(count_by_level[k].min, count_by_level[k].max))
@@ -124,7 +108,7 @@ function create_items(obj, section, number, rnd)
 				position.z = obj:position().z + math.random(-30,30)/100
 				position.y = obj:position().y + math.random(30,50)/100
 
-				se_respawn.create_ammo(section,	
+				alife():create_ammo(section,	
 					    position,
 						obj:level_vertex_id(),	
 						obj:game_vertex_id(),
@@ -136,73 +120,11 @@ function create_items(obj, section, number, rnd)
         for i=1,number do
 			--' Проверяем вероятность появить каждый объект в отдельности
             if math.random(100) <=  rnd then
-				local position = vector():set(0,0,0)
-				position.x = obj:position().x + math.random(-30,30)/100
-				position.z = obj:position().z + math.random(-30,30)/100
-				position.y = obj:position().y + math.random(30,50)/100
-
 				alife():create(section,	
-					    position,
+					    obj:position(),
 						obj:level_vertex_id(),	
 						obj:game_vertex_id())
 			end
         end
     end    
-end
-
-function parse_names( s )
-    local t = {}
-    for name in string.gfind( s, "([%w_%-.\\]+)%p*" ) do
-        table.insert( t, name )
-    end
-    return t
-end
-
-function r_items( spawn_ini, section, line)
-	if spawn_ini:line_exist( section, line ) then
-		--' если default-ов больше, чем значений в ini, то забить недостающие последним значением из ini
-		local t = parse_names( spawn_ini:r_string( section, line ) )
-		local n = table.getn( t )
-		
-		local ret_table = {}
-		local k = 1
-		while k <= n do
-			local item = {}
-			item.section = t[k]
-			-- Проверяем что это не последняя запись
-			if t[k+1] ~= nil then
-				local p = tonumber(t[k+1])
-				-- проверяем что вторым числом задана вероятность, а не другая секция спавну
-				if p then
-					-- забиваем число
-					item.count = p
-					k = k + 2
-				else
-					-- забиваем дефолт 1
-					item.count = 1
-					k = k + 1
-				end
-			else
-				item.count	 = 1
-				k = k + 1
-			end
-			table.insert(ret_table, item)	
-		end
-		return ret_table
-	end
-	return nil
-end
-
-function create_obligatory_items(obj, item , count)
-	for i = 1,count do
-				local position = vector():set(0,0,0)
-				position.x = obj:position().x + math.random(-30,30)/100
-				position.z = obj:position().z + math.random(-30,30)/100
-				position.y = obj:position().y + math.random(30,50)/100
-
-				alife():create(item,	
-					    position,
-						obj:level_vertex_id(),	
-						obj:game_vertex_id())
-			end
 end
