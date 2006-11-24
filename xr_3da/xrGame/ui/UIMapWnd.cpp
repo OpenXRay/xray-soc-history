@@ -456,11 +456,11 @@ bool CUIMapWnd::OnMouse(float x, float y, EUIMessages mouse_action)
 
 			if(mouse_action==WINDOW_MOUSE_WHEEL_UP)
 			{
-				Msg("up");
+//.				Msg("up");
 			}
 			if(mouse_action==WINDOW_MOUSE_WHEEL_DOWN)
 			{
-				Msg("down");
+//.				Msg("down");
 			}
 			CUIGlobalMap* gm				= GlobalMap();
 			float _prev_zoom				= GetZoom();
@@ -545,7 +545,7 @@ void CUIMapWnd::Update()
 
 void CUIMapWnd::SetZoom	( float value)
 {
-	float _prev_zoom = m_currentZoom;
+//	float _prev_zoom = m_currentZoom;
 	m_currentZoom	= value;
 	clamp		(m_currentZoom, GlobalMap()->GetMinZoom(), GlobalMap()->GetMaxZoom());
 }
