@@ -85,20 +85,10 @@ end
 function ph_item_box:spawn_items()
 	local ini = self.obj:spawn_ini()
 	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "stalker")
-	if utils.cfg_get_string(ini, "drop_box", "items", self.obj, false, "", "") ~= nil then
+	if r_items(ini, "drop_box", "items") ~= nil then
 		local items = r_items(ini, "drop_box", "items")
 		for k,v in pairs(items) do
-			for i = 1,v.count do
-				local position = vector():set(0,0,0)
-				position.x = self.obj:position().x + math.random(-30,30)/100
-				position.z = self.obj:position().z + math.random(-30,30)/100
-				position.y = self.obj:position().y + math.random(30,50)/100
-
-				alife():create(v.section,	
-					    position,
-						self.obj:level_vertex_id(),	
-						self.obj:game_vertex_id())
-			end
+			create_obligatory_items(self.obj, v.section, v.count)
 		end
 		return
 	end
@@ -183,6 +173,16 @@ function r_items( spawn_ini, section, line)
 	return nil
 end
 
-function create_obligatory_items(obj, table)
-	
+function create_obligatory_items(obj, item , count)
+	for i = 1,count do
+				local position = vector():set(0,0,0)
+				position.x = obj:position().x + math.random(-30,30)/100
+				position.z = obj:position().z + math.random(-30,30)/100
+				position.y = obj:position().y + math.random(30,50)/100
+
+				alife():create(item,	
+					    position,
+						obj:level_vertex_id(),	
+						obj:game_vertex_id())
+			end
 end
