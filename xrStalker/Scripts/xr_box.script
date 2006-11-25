@@ -129,6 +129,11 @@ function create_items(obj, section, number, rnd)
         for i=1,number do
 			--' Проверяем вероятность появить каждый объект в отдельности
             if math.random(100) <=  rnd then
+				local position = vector():set(0,0,0)
+				position.x = obj:position().x + math.random(-30,30)/100
+				position.z = obj:position().z + math.random(-30,30)/100
+				position.y = obj:position().y + math.random(30,50)/100
+
 				alife():create(section,	
 					    position,
 						obj:level_vertex_id(),	
