@@ -173,40 +173,31 @@ function load_job(sj, gname, type, squad, groups)
 	end
 
 	if type == "dar_military_scout" then
-        for i = 1, 6 do
-		    t = { section = "logic@dar_military_scout_hide",
-			    idle = 0,
-			    prior = 5, state = {0},
-                online = false,
-			    in_rest = "", out_rest = "",
-		    }
-		    table.insert(sj, t)
-        end
-
-        for i = 1, 3 do
-		    t = { section = "logic@dar_military_scout_assault",
-			    idle = 0,
-			    prior = 5, state = {1},
-			    in_rest = "", out_rest = "",
-		    }
-		    table.insert(sj, t)
-        end
-
-		t = { section = "logic@dar_military_scout_camper1",
+       	t = { section = "logic@dar_military_scout_hide",
+		    idle = 0,
+		    prior = 5, state = {0},
+            online = "{+x18_actor_fall}",
+		    in_rest = "", out_rest = "",
+		}
+		table.insert(sj, t)
+       	t = { section = "logic@dar_military_scout_camper1",
 			idle = 0,
-			prior = 5, state = {1},
+			prior = 5, state = {0},
+			online = "{+x18_actor_fall}",
 			in_rest = "", out_rest = "",
 		}
 		table.insert(sj, t)
 		t = { section = "logic@dar_military_scout_camper2",
 			idle = 0,
-			prior = 5, state = {1},
+			prior = 5, state = {0},
+			online = "{+x18_actor_fall}",
 			in_rest = "", out_rest = "",
 		}
 		table.insert(sj, t)
 		t = { section = "logic@dar_military_scout_camper3",
 			idle = 0,
-			prior = 5, state = {1},
+			prior = 5, state = {0},
+			online = "{+x18_actor_fall}",
 			in_rest = "", out_rest = "",
 		}
 		table.insert(sj, t)
@@ -265,11 +256,11 @@ function load_states(gname, type)
 	
 	if type == "dar_poltergeist_ring" then        
 		return function(gulag)
-			if db.actor:dont_has_info("dar_codelock1_unlock") then
+			if not has_alife_info("dar_codelock1_unlock") then
 				return 3 -- оффлайн все
-			elseif db.actor:has_info("dar_ring_spawn1") and db.actor:dont_has_info("dar_ring_spawn2") then
+			elseif has_alife_info("dar_ring_spawn1") and not has_alife_info("dar_ring_spawn2") then
 				return 1 -- онлайн 2
-			elseif 	db.actor:has_info("dar_ring_spawn2") then
+			elseif has_alife_info("dar_ring_spawn2") then
 				return 2 -- онлайн 3
 			else			
 				return 0 -- онлайн 1
@@ -280,11 +271,8 @@ function load_states(gname, type)
 
 	if type == "dar_military_scout" then        
 		return function(gulag)
-            if db.actor_proxy:has_info("bar_darklab_document_gain") == true then
-                return 1
-            end
-			return 0
-		end
+          		return 0
+			end
 	end
 	
 end
