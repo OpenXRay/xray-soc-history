@@ -4,9 +4,10 @@
 --------------------------------------------------------------------------------------------------------------------]]
 
 function is_enemy( obj, enemy, st )
---	if obj:name() == "agr_krot" then
---		printf( "ENEMY_CALLBACK obj='%s', enemy='%s'", obj:name(), enemy:name() )
---	end
+
+	if obj:critically_wounded() then
+		return true
+	end
 
 	if not st then
 		st = db.storage[obj:id()].combat_ignore
@@ -17,9 +18,6 @@ function is_enemy( obj, enemy, st )
 	end
 
 	if not st.enabled then
---		if obj:name() == "agr_krot" then	
---			printf( "true (scheme disabled) - KILL HIM" )
---		end
 		return true
 	end
 
@@ -32,16 +30,10 @@ function is_enemy( obj, enemy, st )
 	   db.actor and
 	   xr_logic.pick_section_from_condlist( db.actor, obj, overrides.combat_ignore.condlist ) ~= nil
 	then
---		if obj:name() == "agr_krot" then
---			printf( "false - IGNORE COMBAT" )
---		end
 		obj:enable_memory_object( enemy, false )
 		return false
 	end
 
---	if obj:name() == "agr_krot" then
---		printf( "true - KILL HIM" )
---	end
 	return true
 end
 ----------------------------------------------------------------------------------------------------------------------
@@ -54,6 +46,12 @@ function action_process_enemy:__init( obj, storage )
 end
 
 function action_process_enemy:enemy_callback( obj, enemy )
+	local obj_pos = self.object:position()
+	local ene_pos = enemy:position()
+	printf("FOUND ENEMY [%s](%s,%s,%s) -> [%s](%s,%s,%s)", self.object:name(), obj_pos.x, obj_pos.y, obj_pos.z,
+														   enemy:name(), ene_pos.x, ene_pos.y, ene_pos.z)
+
+
 	return is_enemy( obj, enemy, self.st )
 end
 
