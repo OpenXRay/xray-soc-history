@@ -16,7 +16,7 @@ function ph_item_box:__init(obj)
 	self.obj = obj
 	
 
-	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons" }	
+	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons", "big_box_arsenal"}	
 	
 	for k,v in pairs(community_list) do
         --' Необходимо заполнить таблицу
@@ -83,6 +83,7 @@ function ph_item_box:__init(obj)
 end
 
 function ph_item_box:spawn_items()
+	local spawn_items = {}
 	local ini = self.obj:spawn_ini()
 	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "def_box")
 	if r_items(ini, "drop_box", "items") ~= nil then
@@ -96,7 +97,14 @@ function ph_item_box:spawn_items()
 		printf(" community = %s", community)
 	--' Доспавниваем необходимое количество итемов:
     --' Необходимо составить список объектов которые могут быть заспавнены для персонажа
-    local spawn_items = item_by_community[community]    
+    local spawn_items = item_by_community[community]
+	--' Если комьюнити задана не верно, то ставим дефолт и срем в лог.
+	if spawn_items == nil then 
+		printf("xr_box: wrong community -- %s setting default def_box ", community)
+		local spawn_items = {}
+        local spawn_items = item_by_community["def_box"]
+	end
+    
     for k,v in pairs(spawn_items) do		
 		--' По каждому объекту необходимо получить количество
 		local number = math.ceil(math.random(count_by_level[k].min, count_by_level[k].max))
