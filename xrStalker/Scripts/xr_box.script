@@ -16,7 +16,7 @@ function ph_item_box:__init(obj)
 	self.obj = obj
 	
 
-	local community_list = { "stalker", "dolg", "freedom", "bandit", "military", "zombied", "ecolog", "killer", "monolith", "arena_enemy" }	
+	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons" }	
 	
 	for k,v in pairs(community_list) do
         --' Необходимо заполнить таблицу
@@ -84,7 +84,7 @@ end
 
 function ph_item_box:spawn_items()
 	local ini = self.obj:spawn_ini()
-	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "stalker")
+	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "def_box")
 	if r_items(ini, "drop_box", "items") ~= nil then
 		local items = r_items(ini, "drop_box", "items")
 		for k,v in pairs(items) do
@@ -117,7 +117,7 @@ function create_items(obj, section, number, rnd)
 				position.z = obj:position().z + math.random(-30,30)/100
 				position.y = obj:position().y + math.random(30,50)/100
 
-				alife():create_ammo(section,	
+				se_respawn.create_ammo(section,	
 					    position,
 						obj:level_vertex_id(),	
 						obj:game_vertex_id(),
@@ -141,6 +141,14 @@ function create_items(obj, section, number, rnd)
 			end
         end
     end    
+end
+
+function parse_names( s )
+    local t = {}
+    for name in string.gfind( s, "([%w_%-.\\]+)%p*" ) do
+        table.insert( t, name )
+    end
+    return t
 end
 
 function r_items( spawn_ini, section, line)
