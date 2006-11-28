@@ -119,9 +119,9 @@ hp_cover        = 0|false
 [logic@mil_freedom_sniper1]
 active = camper1@mil_freedom_sniper1
 on_death = on_death@mil_freedom_sniper1
-combat_ignore = combat_ignore@mil_freedom_sniper1
+combat_ignore = c@mil_freedom_sniper1
 
-[combat_ignore@mil_freedom_sniper1]
+[c@mil_freedom_sniper1]
 
 [on_death@mil_freedom_sniper1]
 on_info = %+mil_sniper_dead%
@@ -132,7 +132,8 @@ path_look = camp_look4
 sniper = true
 enemy_idle = 60000
 radius = 20
-combat_ignore_cond = {-mil_sniper_get_job}
+on_info = {=heavy_wounded} %+mil_sniper_dead%
+combat_ignore_cond = {=check_fighting(740)} true
 wounded = wounded_ignore@mil_sniper
 
 -------------------------
@@ -147,7 +148,7 @@ on_death = on_death@mil_freedom_sniper2
 on_info = %=mil_sniper_dead +mil_sniper2_dead%
 
 [combat@mil_freedom_sniper2]
-on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper2 ;%+mil_freedom_under_attack%
+on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper2 %+mil_freedom_under_attack%
 
 [camper1@mil_freedom_sniper2]
 path_walk = sniper_walk1
@@ -186,7 +187,7 @@ on_death = on_death@mil_freedom_sniper5
 on_info = %=mil_sniper_dead +mil_sniper1_dead%
 
 [combat@mil_freedom_sniper5]
-on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper5 ;%+mil_freedom_under_attack%
+on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper5 %+mil_freedom_under_attack%
 
 [camper1@mil_freedom_sniper5]
 path_walk = sniper_walk2
@@ -217,7 +218,7 @@ on_death = on_death@mil_freedom_sniper3
 on_info = %=mil_sniper_dead +mil_sniper3_dead%
 
 [combat@mil_freedom_sniper3]
-on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper3 ;%+mil_freedom_under_attack%
+on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper3 %+mil_freedom_under_attack%
 
 [walker1@mil_freedom_sniper3]
 path_walk = path_walk10
@@ -246,7 +247,7 @@ active = camper1@mil_freedom_sniper4
 on_combat = combat@mil_freedom_sniper4
 
 [combat@mil_freedom_sniper4]
-on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper4 ;%+mil_freedom_under_attack%
+on_info = {-mil_freedom_under_attack} camper1@mil_freedom_sniper4 %+mil_freedom_under_attack%
 
 [camper1@mil_freedom_sniper4]
 path_walk = sniper_walk3
@@ -297,16 +298,15 @@ meet_dialog = mil_trader_dialog
 
 ;------------------------------------- Охранник арсенала --------------------------
 [logic@mil_freedom_aguard]
-active = camper@mil_freedom_aguard
+active = walker1@mil_freedom_aguard
 on_combat = combat
 
-[camper@mil_freedom_aguard]
+[walker1@mil_freedom_aguard]
 path_walk = armory_walk_warn
 path_look = armory_look_warn
-;on_info = {!is_day} kamp1@mil_freedom_aguard
+on_info = {!is_day} kamp1@mil_freedom_aguard
 meet = meet@mil_freedom_aguard
 danger = danger_condition@mil_freedom_aguard
-radius = 1
 
 [meet@mil_freedom_aguard]
 meet_dialog = mil_guard_arsenal_dialog
@@ -319,7 +319,7 @@ victim_wpn = 5|actor
 
 [kamp1@mil_freedom_aguard]
 center_point = aguard_kamp
-on_info = {=is_day} camper@mil_freedom_aguard
+on_info = {=is_day} walker1@mil_freedom_aguard
 danger = danger_condition@mil_freedom_aguard
 
 [danger_condition@mil_freedom_aguard]
@@ -353,7 +353,7 @@ meet_dialog = mil_bodyguard_dialog
 path_walk = zoneguard_walk_warn2
 path_look = zoneguard_look_warn2
 danger = danger@mil_freedom
-meet = no_meet
+
 ;------------------------------------- Телохранитель 1 --------------------------
 [logic@mil_freedom_bodyguard1]
 active = walker1@mil_freedom_bodyguard1
@@ -448,7 +448,7 @@ id = mil_max_dialog_common1,mil_max_dialog_common2,mil_max_dialog_common3
 [combat_ignore@mil_freedom_max]
 
 [combat@mil_freedom_max]
-on_info = {+mil_dolg_before_explode} %+mil_freedom_under_attack%
+on_info = %+mil_freedom_under_attack%
 
 [walker1@mil_freedom_max]
 path_walk = max_walk
