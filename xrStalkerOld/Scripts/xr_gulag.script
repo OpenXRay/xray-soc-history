@@ -1,7 +1,7 @@
 --' Диденко Руслан (Stohe), Чугай Александр (Chugai)
 
-function printf()
-end
+--function printf()
+--end
 
 --' в работах поле object хранит id объекта
 
@@ -157,6 +157,7 @@ function gulag:prepare_jobs()
 
 		job.path_name        = path_name
 		job.game_vertex_id   = ptrl:game_vertex_id( 0 )
+		job.level_id		 = game_graph():vertex(job.game_vertex_id):level_id()
 		job.position         = ptrl:point( 0 )
 
 		job_loaded           = self.JobLoaded[i] or empty_table
@@ -434,19 +435,17 @@ function gulag:update_objs()
 			self:object_setup_offline( obj_id )
 		end
 
-		obj = cl_obj or npc_info.se_obj
+		--'obj = cl_obj or npc_info.se_obj
 	end
 end
 
 --' Убирание мертвого чувака. Вызывается из смарттеррейна
 function gulag:clear_dead(obj_id)
---'	printf( "[smart_terrain %s] gulag: Clear_dead: obj=%s", self.name, self.npc_info[obj_id].name)
-
-	self:changeCasualities( 1 )
+	printf( "[smart_terrain %s] gulag: Clear_dead: obj=%s", self.name, self.npc_info[obj_id].name)
 
 	if self.ObjectJob[obj_id] then
+		self:changeCasualities( 1 )
 		local job = self.Job[self.ObjectJob[obj_id]]
-
 		job.idle_after_death_end = game.time() + ( job.idle_after_death or job_idle_after_death ) * 1000
 	end
 
@@ -456,6 +455,11 @@ end
 function gulag:update_beginning_jobs()
 	for obj_id, obj in pairs( self.Object ) do
 		if self:can_obj_begin_job( obj_id, obj ) then
+
+			local job = self.Job[self.ObjectJob[obj_id]]
+			local jl = self:distance_to_job_location(obj_id, job)
+			printf("### [%s] %s < %s", alife():object(obj_id):name(), tostring(jl), tostring(job.position_threshold or job_position_threshold))
+
 			self:beginJob( obj_id )
 		end
 	end
@@ -473,11 +477,7 @@ function gulag:can_obj_begin_job( obj_id, obj )
 	if jobN and not self.Object_begin_job[obj_id] then
 		local job = self.Job[jobN]
 
-		if obj == true then
-			return self.npc_info[obj_id].se_obj.m_game_vertex_id == job.game_vertex_id
-		else
-			return obj:position():distance_to( job.position ) < ( job.position_threshold or job_position_threshold )
-		end
+		return self:distance_to_job_location(obj_id, job) < (job.position_threshold or job_position_threshold)
 	else
 		return false
 	end
@@ -583,7 +583,7 @@ function gulag:prepare_available_jobs()
 
 			table.insert( Job_avail, job )
 		else
-			printf( "job unavailable: %d %s", job.num, job.section )
+			--'printf( "job unavailable: %d %s", job.num, job.section )
 		end
 	end
 
@@ -777,6 +777,10 @@ function gulag:print()
 	printf("***  %s -- State: %d -- Total population: %d/%d -- Non exclusive population: %d/%d",
 	         self.name, self.state, self:get_population(), self.capacity, self:get_non_exclusive_population(), self.capacity_non_exclusive)
 
+	if true then
+		return
+	end
+
 	printf("Resources:")
 	for k,v in pairs( self.Object ) do
 		printf("id: %d name: %s", k, self.npc_info[k].name)
@@ -854,6 +858,13 @@ function gulag:setup_squad_and_group( obj_id, job )
 		local obj = self.Object[obj_id]
 
 		local squad = level_groups[level.name()]
+		if not obj:alive() then
+			printf("CHANGE TEAM [%s] to [%s][%s][%s]. Object is DEAD, clearing", obj:name(), npc_info.team, squad or npc_info.o_squad, job.group or npc_info.o_group)
+			self:clear_dead(obj_id) --'Затычка против вылета.
+			return
+		end
+
+		printf("CHANGE TEAM [%s] to [%s][%s][%s]", obj:name(), npc_info.team, squad or npc_info.o_squad, job.group or npc_info.o_group )
 		obj:change_team( npc_info.team, squad or npc_info.o_squad, job.group or npc_info.o_group )
 
 		npc_info.squad = obj:squad()
@@ -939,10 +950,10 @@ end
 -- установить объекту рестрикторы в онлайне.
 -- obj - game_object
 function gulag:set_restrictions(obj, r_out, r_in, r_info)
---'	printf( "RESTR [%s] HAVE (IN)  : %s", obj:name(), obj:in_restrictions() )
---'	printf( "RESTR [%s] HAVE (OUT) : %s", obj:name(), obj:out_restrictions() )
---'	printf( "RESTR [%s] NEED (IN)  : %s", obj:name(), r_in )
---'	printf( "RESTR [%s] NEED (OUT) : %s", obj:name(), r_out )
+	printf( "RESTR [%s] HAVE (IN)  : %s", obj:name(), obj:in_restrictions() )
+	printf( "RESTR [%s] HAVE (OUT) : %s", obj:name(), obj:out_restrictions() )
+	printf( "RESTR [%s] NEED (IN)  : %s", obj:name(), r_in )
+	printf( "RESTR [%s] NEED (OUT) : %s", obj:name(), r_out )
 
 	-- узнать, какие рестрикторы уже были назначены этим гулагом
 	local restr = self.restrictors[obj:id()]
@@ -1138,8 +1149,6 @@ end
 -- установить логику и сообщить смарту, что объект перешёл в онлайн.
 -- вызывается из net_spawn() объектов
 function setup_gulag_and_logic_on_spawn( obj, st, sobject, stype, loaded )
---	printf( "setup_gulag_and_logic_on_spawn obj=%s", obj:name() )
-
 	local sim = alife()
 	if sim then
 		local strn_id
@@ -1149,6 +1158,8 @@ function setup_gulag_and_logic_on_spawn( obj, st, sobject, stype, loaded )
 		else
 			strn_id = 65535
 		end
+
+		printf( "setup_gulag_and_logic_on_spawn obj=%s, strn_id=%s", obj:name(), tostring(strn_id) )
 
 		if strn_id ~= 65535 then
 			local strn                   = sim:object( strn_id )
@@ -1227,7 +1238,8 @@ end
 function getGulagPopulation( name_or_sid )
 	local gulag = get_gulag( name_or_sid )
 
-	return ( gulag and gulag:get_population() ) or 0
+--'	return ( gulag and gulag:get_population() ) or 0
+	return ( gulag and gulag:get_population_comed() ) or 0
 end
 
 -- получить кол-во населения смарта по имени (только пришедшие персонажи)
