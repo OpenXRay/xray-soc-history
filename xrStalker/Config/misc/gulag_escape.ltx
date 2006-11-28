@@ -977,14 +977,7 @@ path_walk = post2_walk
 path_look = post2_look
 meet = meet@sold_zoneguard
 combat_ignore_cond = {-esc_bridge_pass_fire =fighting_actor =is_alive(032)}
-on_actor_dist_le_nvis = 35 | remark@esc_bridge_post2_1
-on_info = {+esc_bridge_pass_fire} walker3@esc_bridge_post2
-
-[remark@esc_bridge_post2_1]
-anim = guard
-target = actor
-on_actor_dist_le_nvis = 20 | remark@esc_bridge_post2_1
-combat_ignore_cond = {-esc_bridge_pass_fire =fighting_actor =is_alive(032)}
+on_actor_dist_le_nvis = 25| remark@esc_bridge_post2
 on_info = {+esc_bridge_pass_fire} walker3@esc_bridge_post2
 
 [remark@esc_bridge_post2]
@@ -1461,11 +1454,10 @@ active = mob_walker@esc_dogs_to_fox_home2
 [mob_walker@esc_dogs_to_fox_home2]
 path_walk = path2
 on_info = mob_walker@esc_dogs_to_fox_home3 %=esc_hit_from_fox%
-panic = 0
 
 [mob_walker@esc_dogs_to_fox_home3]
 path_walk = path2
-panic = 0
+
 
 ;------------------------------
 ;-------- Dogs swarm ----------
