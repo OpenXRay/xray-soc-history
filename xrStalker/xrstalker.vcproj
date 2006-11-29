@@ -1708,12 +1708,6 @@
 					Name="item_infos"
 					Filter="">
 					<File
-						RelativePath=".\Config\ui\af_params.xml">
-					</File>
-					<File
-						RelativePath=".\Config\ui\af_params_16.xml">
-					</File>
-					<File
 						RelativePath=".\Config\ui\buy_mp_item.xml">
 					</File>
 					<File
@@ -1774,9 +1768,6 @@
 					</File>
 					<File
 						RelativePath=".\config\ui\map_desc_16.xml">
-					</File>
-					<File
-						RelativePath=".\Config\ui\mp_buy_menu.xml">
 					</File>
 					<File
 						RelativePath=".\Config\ui\skin_selector.xml">
@@ -2129,9 +2120,6 @@
 				</File>
 				<File
 					RelativePath=".\Config\scripts\gar_dm_novice.ltx">
-				</File>
-				<File
-					RelativePath=".\Config\scripts\gar_dolg_pass_gates.ltx">
 				</File>
 				<File
 					RelativePath=".\config\scripts\postprocess.ltx">
