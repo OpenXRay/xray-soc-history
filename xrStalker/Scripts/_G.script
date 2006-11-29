@@ -126,6 +126,17 @@ function distance_between_safe(obj1, obj2)
 	return obj1:position():distance_to(obj2:position())
 end
 
+
+--' Проверка на инфопоршны, даже если игрока не существует
+function has_alife_info(info_id)
+	local aa = alife()
+	if aa == nil then
+		return false
+	end
+	return aa:has_info(0, info_id)
+end
+
+
 --------------------------------------------------
 -- іласс LUA реализуі   ий Finite State Machine
 -- для управления персонажами
@@ -1101,6 +1112,8 @@ end
 function abort(fmt, ...)
 	local reason = string.format(fmt, ...)
 	assert("ERROR: " .. reason)
+	printf("ERROR: " .. reason)
+	printf("%s")
 end
 
 function set_postprocess(name_ini_file)
@@ -1133,10 +1146,10 @@ end
 
 --' Усталость
 function on_actor_critical_power()
-	if db.actor:has_info("esc_trader_newbie") then
+	if has_alife_info("esc_trader_newbie") then
 		game.start_tutorial("part_11_weakness")
 	end
-	if not db.actor:has_info("encyclopedy_tutorial_weakness") then
+	if not has_alife_info("encyclopedy_tutorial_weakness") then
 		db.actor:give_info_portion("encyclopedy_tutorial_weakness")
 	end
 end
@@ -1146,10 +1159,10 @@ end
 
 --' Кровотечение
 function on_actor_bleeding()
-	if db.actor:has_info("esc_trader_newbie") then
+	if has_alife_info("esc_trader_newbie") then
 		game.start_tutorial("part_8_wound")
 	end
-	if not db.actor:has_info("encyclopedy_tutorial_wound") then
+	if not has_alife_info("encyclopedy_tutorial_wound") then
 		db.actor:give_info_portion("encyclopedy_tutorial_wound")
 	end
 end
@@ -1159,30 +1172,30 @@ end
 
 --' Радиация
 function on_actor_radiation()
-	if db.actor:has_info("esc_trader_newbie") then
+	if has_alife_info("esc_trader_newbie") then
 		game.start_tutorial("part_6_radiation")
 	end
-	if not db.actor:has_info("encyclopedy_tutorial_radiation") then
+	if not has_alife_info("encyclopedy_tutorial_radiation") then
 		db.actor:give_info_portion("encyclopedy_tutorial_radiation")
 	end
 end
 
 --' Заклинило оружие
 function on_actor_weapon_jammed()
-	if db.actor:has_info("esc_trader_newbie") then
+	if has_alife_info("esc_trader_newbie") then
 		game.start_tutorial("part_9_weapon")
 	end
-	if not db.actor:has_info("encyclopedy_tutorial_weapon") then
+	if not has_alife_info("encyclopedy_tutorial_weapon") then
 		db.actor:give_info_portion("encyclopedy_tutorial_weapon")
 	end
 end
 
 --' не может ходить изза веса
 function on_actor_cant_walk_weight()
-	if db.actor:has_info("esc_trader_newbie") then
+	if has_alife_info("esc_trader_newbie") then
 		game.start_tutorial("part_14_overload")
 	end
-	if not db.actor:has_info("encyclopedy_tutorial_overload") then
+	if not has_alife_info("encyclopedy_tutorial_overload") then
 		db.actor:give_info_portion("encyclopedy_tutorial_overload")
 	end
 end
@@ -1214,7 +1227,56 @@ function get_texture_info(id_name, id_default)
 	return task_info:get_file_name(), r
 end
 
-function start_game_callback	()
+function start_game_callback()
 	printf	("start_game_callback called")
 	task_manager.clear_task_manager()
+	treasure_manager.clear_treasure_manager()
+	xr_sound.clear_all_sound_object()
+	dialog_manager.fill_phrase_table()	
 end
+
+ammo_section = {}
+ammo_section["ammo_9x18_fmj"]		= true
+ammo_section["ammo_9x18_pbp"]		= true
+ammo_section["ammo_9x19_fmj"]		= true
+ammo_section["ammo_9x19_pbp"]		= true
+ammo_section["ammo_5.45x39_fmj"]	= true
+ammo_section["ammo_5.45x39_ap"]		= true
+ammo_section["ammo_5.56x45_ss190"]	= true
+ammo_section["ammo_5.56x45_ap"]		= true
+ammo_section["ammo_5.7x28_fmj"]		= true
+ammo_section["ammo_5.7x28_ap"]		= true
+ammo_section["ammo_7.62x54_7h1"]	= true
+ammo_section["ammo_7.62x54_ap"]		= true
+ammo_section["ammo_7.62x54_7h14"]	= true
+ammo_section["ammo_9x39_pab9"]		= true
+ammo_section["ammo_gauss"]			= true
+ammo_section["ammo_9x39_ap"]		= true
+ammo_section["ammo_9x39_sp5"]		= true
+ammo_section["ammo_11.43x23_fmj"]	= true
+ammo_section["ammo_11.43x23_hydro"]	= true
+ammo_section["ammo_12x70_buck"]		= true
+ammo_section["ammo_12x76_dart"]		= true
+ammo_section["ammo_12x76_zhekan"]	= true
+
+quest_section = {}
+quest_section["gunslinger_flash"]	= true
+quest_section["af_blood_tutorial"]	= true
+quest_section["esc_wounded_flash"]	= true
+quest_section["quest_case_02"]		= true
+quest_section["dar_document1"]		= true
+quest_section["dar_document2"]		= true
+quest_section["dar_document3"]		= true
+quest_section["dar_document4"]		= true
+quest_section["dar_document5"]		= true
+quest_section["kruglov_flash"]		= true
+quest_section["lab_x16_documents"]	= true
+quest_section["good_psy_helmet"]	= true
+quest_section["bad_psy_helmet"]		= true
+quest_section["decoder"]			= true
+quest_section["dynamite"]			= true
+quest_section["quest_case_01"]		= true
+quest_section["hunters_toz"]		= true
+quest_section["bar_ecolog_flash"]	= true
+quest_section["bar_tiran_pda"]		= true
+quest_section["bar_lucky_pda"]		= true
