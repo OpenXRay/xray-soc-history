@@ -2,7 +2,7 @@
 	<title>agroprom_get_military_documents</title>
 	<objective>
 		<text>agroprom_get_military_documents_0</text>
-		<icon x="250" y="50" width="50" height="50">ui\ui_icons_task</icon>
+		<icon>ui_iconsTotal_agroprom_get_military_documents</icon>
 		<infoportion_complete>agroprom_military_case_done</infoportion_complete>
 		<article>agr_task_case</article>
 	</objective>
@@ -25,14 +25,16 @@
 	<title>agr_meet_krot_band</title>
 	<objective>
 		<text>agr_meet_krot_band_0</text>
-		<icon x="200" y="50" width="50" height="50">ui\ui_icons_task</icon>
+		<icon>ui_iconsTotal_agr_meet_krot_band</icon>
 		<infoportion_complete>agr_krot_task_complete</infoportion_complete>
 		<infoportion_set_complete>agr_krot_band_done</infoportion_set_complete>
 		<function_fail>agroprom_tasks.agr_actor_enemy</function_fail>
+		<infoportion_fail>agr_find_gunslinger_cache_found</infoportion_fail>
+		<article>storyline_seriy_flash_info</article>
 	</objective>
 	<objective>
 		<text>agr_meet_krot_band_1</text>
-		<icon x="200" y="50" width="50" height="50">ui\ui_icons_task</icon>
+		<icon>ui_iconsTotal_agr_meet_krot_band</icon>
 		<map_location_type hint="agr_meet_krot_hint">green_location</map_location_type>
 		<object_story_id>agr_factory_skirmish1</object_story_id>
 		<infoportion_complete>agr_meet_krot_band_done</infoportion_complete>
@@ -40,7 +42,7 @@
 	</objective>
 	<objective>
 		<text>agr_meet_krot_band_2</text>
-		<icon x="200" y="50" width="50" height="50">ui\ui_icons_task</icon>
+		<icon>ui_iconsTotal_agr_meet_krot_band</icon>
 		<map_location_type hint="agr_take_krots_info_hint">green_location</map_location_type>
 		<object_story_id>agr_krot</object_story_id>
 		<infoportion_complete>agr_krot_secret_info</infoportion_complete>
@@ -52,6 +54,7 @@
 		<text>agroprom_find_gunslinger_cache_0</text>
 		<icon>ui_iconsTotal_grouping</icon>
 		<infoportion_complete>agr_find_gunslinger_cache_final</infoportion_complete>
+		<article>agroprom_find_gunslinger_cache</article>
 	</objective>
 	<objective>
 		<text>agroprom_find_gunslinger_cache_1</text>
@@ -90,7 +93,7 @@
 	<title>agr_help_stalkers</title>
 	<objective>
 		<text>agr_help_stalkers_0</text>
-		<icon>ui_icons_task_eliminate_lager</icon>
+		<icon>ui_iconsTotal_eliminate_lager</icon>
 		<infoportion_complete>agr_help_stalkers_assault_dead</infoportion_complete>
 		<infoportion_fail>agr_help_stalkers_defence_dead</infoportion_fail>
 		<function_fail>agroprom_tasks.agr_actor_enemy</function_fail>
@@ -109,7 +112,7 @@
 	<title>agr_help_krot</title>
 	<objective>
 		<text>agr_help_krot_0</text>
-		<icon>ui_icons_task_kill_stalker</icon>
+		<icon>ui_iconsTotal_kill_stalker</icon>
 		<infoportion_complete>agr_find_gunslinger_cache_start</infoportion_complete>
 		<infoportion_fail>agr_krot_dead</infoportion_fail>
 		<infoportion_set_fail>agr_help_krot_done</infoportion_set_fail>
@@ -137,6 +140,7 @@
 		<text>agr_find_ghost</text>
 		<icon>ui_iconsTotal_grouping</icon>
 		<infoportion_complete>yan_find_vasilyev_end</infoportion_complete>
+		<article>agr_find_ghost_descr</article>
 	</objective>
 	<objective>
 		<text>agr_find_ghost</text>
