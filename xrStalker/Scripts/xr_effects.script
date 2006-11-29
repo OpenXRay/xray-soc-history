@@ -568,8 +568,9 @@ function gar_direction_fire(actor, npc)
 end
 
 function gar_hellcar_victory(actor, npc)
-	if has_alife_info("gar_hellcar_help") and not has_alife_info("gar_hellcar_thanks") then
+	if not has_alife_info("gar_hellcar_tips_end") and has_alife_info("gar_hellcar_help") and not has_alife_info("gar_hellcar_thanks") then
 		news_manager.send_tip(actor, "gar_hellcar_victory", 0, "stalker", 0)
+		db.actor:give_info_portion("gar_hellcar_tips_end")
 	end
 end
 
@@ -864,6 +865,9 @@ function bar_arena_hit(actor, npc)
 end
 function esc_hit_from_fox(actor, npc)
 	local fox = level_object_by_sid (005)
+	if fox == nil then
+		return
+	end
 	local h = hit()
 	h.power = 0.01
 	h.direction = npc:direction()
@@ -993,7 +997,7 @@ function bar_arena_teleport ( actor, npc)
 		table.insert(spawn_items, "ammo_9x19_pbp")
 		table.insert(spawn_items, "wpn_knife")		
 	elseif	has_alife_info("bar_arena_fight_3") then
-		table.insert(spawn_items, "wpn_toz34")
+		table.insert(spawn_items, "wpn_bm16")
 		table.insert(spawn_items, "ammo_12x70_buck")
 		table.insert(spawn_items, "ammo_12x70_buck")
 		table.insert(spawn_items, "wpn_knife")
@@ -1024,6 +1028,10 @@ function bar_arena_teleport ( actor, npc)
 	elseif	has_alife_info("bar_arena_fight_7") then
 		table.insert(spawn_items, "wpn_knife")
 		table.insert(spawn_items, "bandage")
+		table.insert(spawn_items, "grenade_f1")
+		table.insert(spawn_items, "grenade_f1")
+		table.insert(spawn_items, "grenade_f1")
+		table.insert(spawn_items, "grenade_f1")
 	elseif	has_alife_info("bar_arena_fight_8") then
 		table.insert(spawn_items, "wpn_g36")
 		table.insert(spawn_items, "ammo_5.56x45_ap")
@@ -1827,7 +1835,8 @@ function x18_gluk (actor, npc)
 		level.add_pp_effector ("blink.ppe", 234, false)
 		local sound_obj_l		= sound_object( [[affects\psy_blackout_l]] )
         local sound_obj_r		= sound_object( [[affects\psy_blackout_r]] )
-        
+        local snd_obj			= sound_object( [[affects\tinnitus3a]] )
+		snd_obj:play_no_feedback(db.actor, sound_object.s2d, 0, vector(), 1.0)
 		sound_obj_l:play_no_feedback(actor, sound_object.s2d, 0, vector():set(-1, 0, 1), 1.0)
 		sound_obj_r:play_no_feedback(actor, sound_object.s2d, 0, vector():set( 1, 0, 1), 1.0)
 	level.add_cam_effector("camera_effects\\earthquake.anm", 1974, false, "")
@@ -1977,6 +1986,11 @@ function game_over(actor, npc)
 	if db.gameover_credits_started ~= true then
 		return
 	end
+	local c = get_console()
+	c:execute("disconnect")
+end
+
+function pri_game_over(actor, npc)
 	local c = get_console()
 	c:execute("disconnect")
 end
