@@ -186,40 +186,6 @@ function gulag_state(actor, npc, p)
 	return false
 end
 
-function npc_community(actor, npc, p)
-	if p[1] == nil then
-		abort("Wrong number of params in npc_community")
-	end
-
-	if npc:character_community() == p[1] then
-		return true
-	end
-	return false
-end
-
-function npc_rank(actor, npc, p)
-	if p[1] == nil then
-		abort("Wrong number of params in npc_rank")
-	end
-
-	if ranks.get_obj_rank_name(npc) == p[1] then
-		return true
-	end
-	return false
-end
-
-function npc_profile(actor, npc, p)
-	if p[1] == nil then
-		abort("Wrong number of params in npc_profile")
-	end
-	
-	if npc:profile_name() == p[1] then
-		return true
-	end
-	return false
-	
-end
-
 
 -- ѕроверка того что удар был нанесен кем-то из npc указанных в списке.
 -- ѕараметры это story_id персонажей. ћожно задавать несколько story_id.
@@ -445,7 +411,7 @@ function gulag_inactive(actor, npc, p)
 	 local gulag = xr_gulag.get_gulag_by_name( p[1] )
 
     if gulag == nil then
-		return false
+		return 0
 	end
 	
 	local val = 0
@@ -548,7 +514,7 @@ function talking(actor, npc)
 end
 
 function talking_or_tutor(actor, npc)
-	return actor:is_talking() or has_alife_info("esc_trader_experienced") or has_alife_info("esc_trader_newbie")
+	return actor:is_talking() or actor:has_info("esc_trader_experienced") or actor:has_info("esc_trader_newbie")
 end
 
 function see_actor(actor, npc)
@@ -719,8 +685,8 @@ function gar_damaged_bandits(actor, npc)
 end
 
 function gar_angar_sleep(actor,npc)
-	return (gulag_empty(actor,npc,{"gar_seryi_bandits"}) and not has_alife_info("agr_krot_band_start")) or
-	       (gulag_population_le(actor,npc,{"gar_smart_bandit_large_lager",9}) and has_alife_info("agr_krot_band_start"))
+	return (gulag_empty(actor,npc,{"gar_seryi_bandits"}) and actor:dont_has_info("agr_krot_band_start")) or
+	       (gulag_population_le(actor,npc,{"gar_smart_bandit_large_lager",9}) and actor:has_info("agr_krot_band_start"))
 end
 
 function gar_not_damaged_bandits(actor, npc)
@@ -759,7 +725,7 @@ function val_bandits_ci(actor, npc)
 	    sid = enemy:story_id()
 	    for v, i in pairs(ig) do
 		    if sid == i then
-		        if has_alife_info(v) then
+		        if actor:has_info(v) then
 			        return false
 			    end
 			    return true
@@ -785,7 +751,7 @@ function val_bandits_ci_actor(actor, npc, p)
 	    sid = enemy:story_id()
 	    for v, i in pairs(ig) do
 		    if sid == i then
-		        if has_alife_info(v) then
+		        if actor:has_info(v) then
 			        return false
 			    end
 			    return true
@@ -929,7 +895,7 @@ end
 function pri_followers_can_hear(actor, npc)
 	local gulag = xr_gulag.get_gulag(823)
 
-    return not has_alife_info("pri_followers_start") or           
+    return actor:dont_has_info("pri_followers_start") or           
            gulag ~= nil and gulag:get_population() > 0 and
            not gulag:npc_is_enemy_to_anybody(actor)
 end
@@ -982,7 +948,7 @@ function esc_blokpost_night(actor,npc)
 end
 
 function esc_bandits_die(sctor,npc)
-	if has_alife_info("esc_kill_bandits_quest_kill") or has_alife_info("esc_kill_bandits_noquest_kill") then
+	if db.actor:has_info("esc_kill_bandits_quest_kill") or db.actor:has_info("esc_kill_bandits_noquest_kill") then
 		return true
 	end
 	return false
@@ -1069,23 +1035,23 @@ function bar_actor_rank_veteran (actor,npc)
 end
 
 function bar_arena_fight_3_end ()
-	return has_alife_info("bar_arena_fight_3_stalker_1_die") and has_alife_info("bar_arena_fight_3_stalker_2_die")
+	return db.actor:has_info("bar_arena_fight_3_stalker_1_die") and db.actor:has_info("bar_arena_fight_3_stalker_2_die")
 end
 
 function bar_arena_fight_4_end ()
-	return has_alife_info("bar_arena_fight_4_stalker_1_die") and has_alife_info("bar_arena_fight_4_stalker_2_die") and has_alife_info("bar_arena_fight_4_stalker_3_die")
+	return db.actor:has_info("bar_arena_fight_4_stalker_1_die") and db.actor:has_info("bar_arena_fight_4_stalker_2_die") and db.actor:has_info("bar_arena_fight_4_stalker_3_die")
 end
 
 function bar_arena_fight_5_end ()
-	return has_alife_info("bar_arena_fight_5_stalker_1_die") and has_alife_info("bar_arena_fight_5_stalker_2_die")
+	return db.actor:has_info("bar_arena_fight_5_stalker_1_die") and db.actor:has_info("bar_arena_fight_5_stalker_2_die")
 end
 
 function bar_arena_fight_6_end ()
-	return has_alife_info("bar_arena_fight_6_stalker_1_die") and has_alife_info("bar_arena_fight_6_stalker_2_die") and has_alife_info("bar_arena_fight_6_stalker_3_die") and has_alife_info("bar_arena_fight_6_stalker_4_die") and has_alife_info("bar_arena_fight_6_stalker_5_die") and has_alife_info("bar_arena_fight_6_stalker_6_die")
+	return db.actor:has_info("bar_arena_fight_6_stalker_1_die") and db.actor:has_info("bar_arena_fight_6_stalker_2_die") and db.actor:has_info("bar_arena_fight_6_stalker_3_die") and db.actor:has_info("bar_arena_fight_6_stalker_4_die") and db.actor:has_info("bar_arena_fight_6_stalker_5_die") and db.actor:has_info("bar_arena_fight_6_stalker_6_die")
 end
 
 function bar_arena_fight_8_end ()
-	return has_alife_info("bar_arena_fight_8_stalker_1_die") and has_alife_info("bar_arena_fight_8_stalker_2_die") and has_alife_info("bar_arena_fight_8_stalker_3_die") and has_alife_info("bar_arena_fight_8_stalker_4_die")
+	return db.actor:has_info("bar_arena_fight_8_stalker_1_die") and db.actor:has_info("bar_arena_fight_8_stalker_2_die") and db.actor:has_info("bar_arena_fight_8_stalker_3_die") and db.actor:has_info("bar_arena_fight_8_stalker_4_die")
 end
 ------------------------------------------------------------------------------------
 -- Special functions for Military
@@ -1119,7 +1085,7 @@ function cit_combat_ignore(actor, npc, p)
     local enemy = db.storage[npc:id()].enemy
     if enemy and enemy:alive() then
         if enemy:id() == actor:id() then
-            return p[1] ~= nil and not has_alife_info(p[1])
+            return p[1] ~= nil and actor:dont_has_info(p[1])
         elseif enemy:story_id() == 1200 then
             return true
         else
@@ -1143,13 +1109,6 @@ end
 
 function is_wfx_playing (actor, npc)
     return level.is_wfx_playing ()
-end
-
-function agr_nii_pop_check(actor, npc)
-	if (gulag_population_active(actor, npc, {"agr_nii"}) < 6) then
-		return true
-	end
-	return false
 end
 
 
@@ -1205,7 +1164,6 @@ function agr_factory_hold_inactive (actor, npc)
 	end
 	return false
 end
-
 
 function rostok_gulag_2_inactive(actor, npc)
 	 local gulag = xr_gulag.get_gulag_by_name("bar_freedom_chasers_attack")
@@ -1309,13 +1267,4 @@ function actor_in_freedom(actor, npc)
 		return db.actor:character_community() == "actor_freedom"
 	end
 	return false
-end
-
-function actor_on_level(actor, npc, p)
-	return p[1] == level.name()
-end
-
-function treasure_exist(actor, npc, p)
-	--printf("%s %s", actor:name(), npc:name())
-	return true
 end
