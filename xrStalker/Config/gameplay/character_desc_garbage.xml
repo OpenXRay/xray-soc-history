@@ -21,11 +21,13 @@
 		<visual>actors\neytral\stalker_neytral_hood_4</visual>
 		<supplies>
 			[spawn] \n
-			wpn_aksu_anom \n
+			wpn_ak74u \n
 			ammo_5.45x39_fmj \n
 			device_torch \n
 			medkit = 1 \n
 		</supplies>
+		
+#include "gameplay\character_criticals_4.xml"
 		
 		<start_dialog>gar_seriy_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -57,6 +59,7 @@
 			ammo_9x18_fmj = 1 \n
 		</supplies>
 
+#include "gameplay\character_criticals_3.xml"
 	
 		<start_dialog>gar_dramm_novice_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -86,15 +89,15 @@
 		<visual>actors\neytral\stalker_neytral_balon_5</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_pmm \n
-			wpn_ak74 \n
+			wpn_pm \n
+			ammo_9x18_fmj = 1 \n
+			wpn_ak74u \n
 			ammo_5.45x39_fmj \n
 			device_torch \n
-			medkit = 1 \n
-			stalker_outfit \n
 			hand_radio \n
 		</supplies>
+
+#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>gar_hellcar_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -126,6 +129,8 @@
 			device_torch \n
 #include "gameplay\character_food.xml"
 		</supplies>
+		
+#include "gameplay\character_criticals_3.xml"
 					
 		<start_dialog>gar_wounded_bandit</start_dialog>
 	</specific_character>
@@ -148,13 +153,15 @@
 		<visual>actors\bandit\stalker_bandit_master</visual>
 		<supplies>
 			[spawn] \n
-			wpn_hpsa \n
-			ammo_9x19_pbp = 1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
 			wpn_mp5 \n
 			ammo_9x19_pbp = 1 \n
 			device_torch \n
 #include "gameplay\character_drugs.xml"
 		</supplies>
+		
+#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"	
@@ -179,13 +186,14 @@
 		<visual>actors\bandit\stalker_bandit_3</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_fmj = 1 \n
+			wpn_pb \n
+			ammo_9x18_fmj \n
 			device_torch \n
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
-
+		
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -210,12 +218,13 @@
 			wpn_pm \n
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
-			wpn_toz34 \n
+			wpn_bm16 \n
 			ammo_12x70_buck \n
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_food.xml"							
 		</supplies>
 
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -237,13 +246,14 @@
 		<visual>actors\bandit\stalker_bandit_5</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_fmj = 1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
 			device_torch \n
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_food.xml"	
 		</supplies>
-				
+
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 	
@@ -259,7 +269,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>450</rank>
+		<rank>125</rank>
 		<reputation>-126</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -268,9 +278,9 @@
 		<visual>actors\bandit\stalker_bandit_3</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_pmm = 1 \n
-			wpn_toz34 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
+			wpn_bm16 \n
 			ammo_12x70_buck = 1 \n
 			device_torch \n
 #include "gameplay\character_items.xml"	\n	
@@ -278,6 +288,7 @@
 #include "gameplay\character_food.xml"	
 		</supplies>
 
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -290,7 +301,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>381</rank>
+		<rank>124</rank>
 		<reputation>-73</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -299,8 +310,8 @@
 		<visual>actors\bandit\stalker_bandit_4</visual>
 		<supplies>
 			[spawn] \n
-			wpn_hpsa \n
-			ammo_9x19_pbp = 1 \n
+			wpn_pb \n
+			ammo_9x18_fmj \n
 			wpn_mp5 = 1 \n
 			ammo_9x19_fmj = 1 \n
 			device_torch \n
@@ -309,6 +320,7 @@
 #include "gameplay\character_food.xml"		
 		</supplies>
 
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -321,7 +333,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>442</rank>
+		<rank>133</rank>
 		<reputation>-100</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -340,6 +352,7 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 
+#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 	
@@ -366,7 +379,7 @@
 			[spawn] \n
 			wpn_pm \n
 			ammo_9x18_pmm = 1 \n
-			wpn_toz34 \n
+			wpn_bm16 \n
 			ammo_12x70_buck = 1 \n
 			device_torch \n
 #include "gameplay\character_items.xml" \n
@@ -374,7 +387,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 				
-		
+#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -397,8 +410,8 @@
 		
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_pmm = 1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
 			wpn_mp5 \n
 			ammo_9x19_fmj = 1 \n
 			device_torch \n
@@ -407,6 +420,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 				
+#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -439,6 +453,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
+#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -461,8 +476,8 @@
 		<visual>actors\neytral\stalker_neytral_hood_2</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_fmj = 1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_ap = 1 \n
 			device_torch \n
@@ -471,6 +486,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
+#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
@@ -494,8 +510,8 @@
 		
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_pmm \n
+			wpn_pb \n
+			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_fmj \n
 			device_torch \n
@@ -504,6 +520,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
+#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
@@ -526,12 +543,14 @@
 		<visual>actors\neytral\stalker_neytral_hood_2</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_fmj = 1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_ap = 1 \n
 			device_torch \n
 		</supplies>
+
+#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"
@@ -557,16 +576,17 @@
 		<visual>actors\dolg\stalker_do_mask_1</visual>
 		<supplies>
 			[spawn] \n
-			wpn_fort \n
-			ammo_9x18_pmm = 1 \n
-            wpn_ak74 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
+            wpn_ak74u \n
 			ammo_5.45x39_fmj \n
 			device_torch \n			
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"
 		</supplies>
-
+		
+#include "gameplay\character_criticals_6.xml"
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -590,8 +610,8 @@
 		<visual>actors\dolg\stalker_do_balon_8</visual>
 		<supplies>
 			[spawn] \n
-            wpn_hpsa \n
-			ammo_9x19_pbp = 1 \n
+			wpn_pb \n
+			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_ap \n
 			device_torch \n
@@ -600,6 +620,7 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 
+#include "gameplay\character_criticals_6.xml"
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -623,9 +644,9 @@
 		<visual>actors\dolg\stalker_do_balon_8</visual>
 		<supplies>
 			[spawn] \n
-            wpn_hpsa \n
-			ammo_9x19_pbp = 1 \n
-            wpn_ak74 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
+            wpn_ak74u \n
 			ammo_5.45x39_ap \n
 			device_torch \n
 #include "gameplay\character_items.xml" \n
@@ -633,6 +654,7 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 		
+#include "gameplay\character_criticals_6.xml"
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -656,14 +678,16 @@
 		<visual>actors\dolg\stalker_do_balon_4</visual>
 		<supplies>
 			[spawn] \n
-            wpn_fort \n
-			ammo_9x18_pmm = 1 \n
-            wpn_spas12_m1 \n
+			wpn_pm \n
+			ammo_9x18_fmj \n
+			wpn_bm16 \n
 			ammo_12x76_dart \n
 			device_torch \n
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
+
+#include "gameplay\character_criticals_6.xml"
 
 		<start_dialog>gar_dolg_blokpost</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -698,6 +722,8 @@
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
+		
+#include "gameplay\character_criticals_3.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"
@@ -722,6 +748,8 @@
 		<supplies>
 			[spawn] \n
 		</supplies>
+		
+#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"	
