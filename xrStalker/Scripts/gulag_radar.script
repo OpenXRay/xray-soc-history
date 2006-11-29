@@ -1033,10 +1033,7 @@ function load_ltx_bloodsucker(gname, type)
 					"[mob_home@" .. gname .. "_suck" .. i .. "]\n" ..
 					"path_home = home" .. i .. "\n" ..
 					"npc_friendly = true\n"..
-					"path_look = look" .. i .. "\n"..
-					"home_min_radius = 45\n"..
-					"home_max_radius = 60\n"
-					 
+					"path_look = look" .. i .. "\n" 
 	end
 	return res
 end
@@ -1071,9 +1068,9 @@ function load_ltx_snork1(gname, type)
 
 					"[mob_jump@" .. gname  .. i .. "]\n" ..
 					"path_jump = look" .. i .."\n" ..
-					"ph_jump_factor =1.5\n" ..
+					"ph_jump_factor =2.5\n" ..
 					"offset = 0, 0, 0\n" ..
-					"on_signal = jumped | mob_home@2" .. gname  .. i .. " %=bar_arena_hit%\n" ..
+					"on_signal = jumped | mob_home@2" .. gname  .. i .. "\n" ..
 
 					"[mob_home@2" .. gname  .. i .. "]\n" ..
 					"path_home = home" .. i .. "\n" ..
@@ -1094,9 +1091,9 @@ function load_ltx_snork1(gname, type)
 
 					"[mob_jump@" .. gname  .. i .. "]\n" ..
 					"path_jump = look" .. i .."\n" ..
-					"ph_jump_factor =1.5\n" ..
+					"ph_jump_factor =2.5\n" ..
 					"offset = 0, 0, 0\n" ..
-					"on_signal = jumped | mob_home@2" .. gname  .. i .. " %=bar_arena_hit%\n" ..
+					"on_signal = jumped | mob_home@2" .. gname  .. i .. "\n" ..
 
 					"[mob_home@2" .. gname  .. i .. "]\n" ..
 					"path_home = home" .. i .. "\n" ..
