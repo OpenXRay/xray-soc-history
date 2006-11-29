@@ -361,7 +361,7 @@ end
 -- играть звук в голове актёра
 function play_snd(actor, npc, p)
 	if p[1] then
-		local snd_obj = sound_object(p[1])
+		local snd_obj = xr_sound.get_safe_sound_object(p[1])
 		--snd_obj:play(actor, p[2] or 0, sound_object.s2d)
 		snd_obj:play_no_feedback(actor, sound_object.s2d, p[2] or 0, vector(), 1.0)
 	end
@@ -370,7 +370,7 @@ end
 -- играть звук от указанного объекта
 function play_snd_from_obj(actor, npc, p)
 	if p[1] and p[2] then
-		local snd_obj = sound_object(p[2])
+		local snd_obj = xr_sound.get_safe_sound_object(p[2])
 		local obj     = level_object_by_sid(p[1])
         if obj ~= nil then
            printf("can't find object with story id %s", tostring(p[1]))
@@ -451,7 +451,7 @@ function actor_punch(npc)
 	end
 	
 	set_inactivate_input_time(30)
-	local snd_obj = sound_object([[affects\hit_fist]])
+	local snd_obj = xr_sound.get_safe_sound_object([[affects\hit_fist]])
 	snd_obj:play_no_feedback(db.actor, sound_object.s2d, 0, vector(), 1.0)
 
 	level.add_cam_effector("camera_effects\\fusker.anm", 999, false, "")		
@@ -591,7 +591,7 @@ end
 --' Escape
 
 function play_snd_from_radio(actor, npc)
-	local snd_obj	= sound_object([[characters_voice\scenario\escape\wolf_to_rangers_1]])
+	local snd_obj	= xr_sound.get_safe_sound_object([[characters_voice\scenario\escape\wolf_to_rangers_1]])
 	local obj		= npc:object("hand_radio")
 	snd_obj:play_no_feedback(obj, sound_object.s3d, 0, obj:position(), 1.0)	
 end
@@ -603,7 +603,7 @@ function esc_direction_fire(actor, npc)
 end
 
 function esc_fanat_victory(actor, npc)
-	if has_alife_info("escape_lager_killers_die") then
+	if has_alife_info("escape_lager_killers_die") and not has_alife_info("esc_fanat_die") then
 		news_manager.send_tip(actor, "esc_fanat_victory", 0, "stalker", 10000)
 	end
 end
@@ -633,6 +633,10 @@ end
 -- end
 
 --' garbage
+
+function gar_mapspot_blockpost (actor, npc)
+	level_tasks.add_location(115, "green_location", "gar_dolg_blokpost_leader_name")
+end
 
 
 	
@@ -1079,6 +1083,37 @@ function bar_arena_teleport_2 ( actor, npc)
     in_object  = inv_box_2
 		actor:inventory_for_each(transfer_object_item) 
 end
+
+function barman_give_extra_task (actor, npc)
+	if has_alife_info ("agroprom_military_case_done") and not has_alife_info ("bar_darklab_document_start") then
+		db.actor:give_info_portion("barman_job_1")
+		return
+	elseif has_alife_info ("bar_darklab_document_done") and not has_alife_info ("bar_x16_documents_start") then
+		db.actor:give_info_portion("barman_job_2")
+		return
+	elseif has_alife_info ("bar_x16_documents_done") and not has_alife_info ("bar_deactivate_radar_start") then
+		db.actor:give_info_portion("barman_job_3")
+		return
+	end
+	return	
+end
+
+function trader_extra_task (actor, npc)
+	if has_alife_info ("esc_serious_talk") and not has_alife_info ("agroprom_military_case") then
+		db.actor:give_info_portion("trader_job")
+		return
+	end
+	return
+end
+
+function scientist_extra_task (actor, npc)
+	if has_alife_info ("yan_find_scientist_done") and not has_alife_info ("yan_find_vasilyev_start") then
+		db.actor:give_info_portion("scientist_job")
+		return
+	end
+	return
+end
+
 function military_max_dead (actor, npc)
 end
 
@@ -1369,14 +1404,14 @@ function agr_krot_sos_1_2( actor, npc )
 end
 
 function agr_knockdown ()
-	local snd_obj = sound_object([[affects\tinnitus3a]])
+	local snd_obj = xr_sound.get_safe_sound_object([[affects\tinnitus3a]])
 	snd_obj:play_no_feedback(db.actor, sound_object.s2d, 0, vector(), 1.0)
 	level.add_cam_effector("camera_effects\\earthquake.anm", 1974, false, "")
 end
 
 function agr_contuz (actor, npc)
-		local sound_obj_l		= sound_object( [[affects\psy_blackout_l]] )
-        local sound_obj_r		= sound_object( [[affects\psy_blackout_r]] )
+		local sound_obj_l		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_l]] )
+        local sound_obj_r		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_r]] )
         
 		sound_obj_l:play_no_feedback(actor, sound_object.s2d, 0, vector():set(-1, 0, 1), 1.0)
 		sound_obj_r:play_no_feedback(actor, sound_object.s2d, 0, vector():set( 1, 0, 1), 1.0)
@@ -1793,7 +1828,7 @@ end
 
 -- постпроцесс и влияние удара в морду
 function aes_earthshake (npc)
-	local snd_obj = sound_object([[ambient\earthquake]])
+	local snd_obj = xr_sound.get_safe_sound_object([[ambient\earthquake]])
 	snd_obj:play_no_feedback(db.actor, sound_object.s2d, 0, vector(), 1.0)
 	level.add_cam_effector("camera_effects\\earthquake.anm", 1974, false, "")
     --set_postprocess ("scripts\\earthshake.ltx")
@@ -1818,8 +1853,8 @@ function yan_actor_sleep_1 (actor, npc)
 end
 
 function yan_dream_voices (actor, npc)
-        local sound_obj_l		= sound_object( [[characters_voice\scenario\yantar\dream_talk_l]] )
-        local sound_obj_r		= sound_object( [[characters_voice\scenario\yantar\dream_talk_r]] )
+        local sound_obj_l		= xr_sound.get_safe_sound_object( [[characters_voice\scenario\yantar\dream_talk_l]] )
+        local sound_obj_r		= xr_sound.get_safe_sound_object( [[characters_voice\scenario\yantar\dream_talk_r]] )
         
 		sound_obj_l:play_no_feedback(actor, sound_object.s2d, 0, vector():set(-1, 0, 1), 1.0)
 		sound_obj_r:play_no_feedback(actor, sound_object.s2d, 0, vector():set( 1, 0, 1), 1.0)
@@ -1827,8 +1862,8 @@ end
 
 function yan_gluk (actor, npc)
 		
-		local sound_obj_l		= sound_object( [[affects\psy_blackout_l]] )
-        local sound_obj_r		= sound_object( [[affects\psy_blackout_r]] )
+		local sound_obj_l		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_l]] )
+        local sound_obj_r		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_r]] )
         
 		sound_obj_l:play_no_feedback(actor, sound_object.s2d, 0, vector():set(-1, 0, 1), 1.0)
 		sound_obj_r:play_no_feedback(actor, sound_object.s2d, 0, vector():set( 1, 0, 1), 1.0)
@@ -1837,9 +1872,9 @@ function yan_gluk (actor, npc)
 end
 function x18_gluk (actor, npc)
 		level.add_pp_effector ("blink.ppe", 234, false)
-		local sound_obj_l		= sound_object( [[affects\psy_blackout_l]] )
-        local sound_obj_r		= sound_object( [[affects\psy_blackout_r]] )
-        local snd_obj			= sound_object( [[affects\tinnitus3a]] )
+		local sound_obj_l		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_l]] )
+        local sound_obj_r		= xr_sound.get_safe_sound_object( [[affects\psy_blackout_r]] )
+        local snd_obj			= xr_sound.get_safe_sound_object( [[affects\tinnitus3a]] )
 		snd_obj:play_no_feedback(db.actor, sound_object.s2d, 0, vector(), 1.0)
 		sound_obj_l:play_no_feedback(actor, sound_object.s2d, 0, vector():set(-1, 0, 1), 1.0)
 		sound_obj_r:play_no_feedback(actor, sound_object.s2d, 0, vector():set( 1, 0, 1), 1.0)
@@ -1910,6 +1945,9 @@ function end_x18_dream(actor, npc)
 	db.actor:give_info_portion("dar_x18_dream")
 end
 
+function aes_final_movie(actor, npc)
+	game.start_tutorial("mov_refuse_osoznanie")
+end
 ------------------------------------------------------------------------------------
 -- Функции для Радара
 ------------------------------------------------------------------------------------
@@ -2004,6 +2042,10 @@ function esc_init_dialod ()
 	db.actor:run_talk_dialog(trader)
 end
 
+function oso_init_dialod ()
+	-- local oso = level_object_by_sid(1307)
+	-- db.actor:run_talk_dialog(oso)
+end
 -- DELME:only for presentation!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function actor_inventory_by_levels ()
