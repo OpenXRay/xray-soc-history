@@ -435,7 +435,7 @@ function gulag:update_objs()
 			self:object_setup_offline( obj_id )
 		end
 
-		--'obj = cl_obj or npc_info.se_obj
+		obj = cl_obj or npc_info.se_obj
 	end
 end
 
@@ -583,7 +583,7 @@ function gulag:prepare_available_jobs()
 
 			table.insert( Job_avail, job )
 		else
-			--'printf( "job unavailable: %d %s", job.num, job.section )
+			printf( "job unavailable: %d %s", job.num, job.section )
 		end
 	end
 
@@ -950,10 +950,10 @@ end
 -- установить объекту рестрикторы в онлайне.
 -- obj - game_object
 function gulag:set_restrictions(obj, r_out, r_in, r_info)
-	printf( "RESTR [%s] HAVE (IN)  : %s", obj:name(), obj:in_restrictions() )
-	printf( "RESTR [%s] HAVE (OUT) : %s", obj:name(), obj:out_restrictions() )
-	printf( "RESTR [%s] NEED (IN)  : %s", obj:name(), r_in )
-	printf( "RESTR [%s] NEED (OUT) : %s", obj:name(), r_out )
+--'	printf( "RESTR [%s] HAVE (IN)  : %s", obj:name(), obj:in_restrictions() )
+--'	printf( "RESTR [%s] HAVE (OUT) : %s", obj:name(), obj:out_restrictions() )
+--'	printf( "RESTR [%s] NEED (IN)  : %s", obj:name(), r_in )
+--'	printf( "RESTR [%s] NEED (OUT) : %s", obj:name(), r_out )
 
 	-- узнать, какие рестрикторы уже были назначены этим гулагом
 	local restr = self.restrictors[obj:id()]
@@ -1149,6 +1149,8 @@ end
 -- установить логику и сообщить смарту, что объект перешёл в онлайн.
 -- вызывается из net_spawn() объектов
 function setup_gulag_and_logic_on_spawn( obj, st, sobject, stype, loaded )
+--	printf( "setup_gulag_and_logic_on_spawn obj=%s", obj:name() )
+
 	local sim = alife()
 	if sim then
 		local strn_id
@@ -1158,8 +1160,6 @@ function setup_gulag_and_logic_on_spawn( obj, st, sobject, stype, loaded )
 		else
 			strn_id = 65535
 		end
-
-		printf( "setup_gulag_and_logic_on_spawn obj=%s, strn_id=%s", obj:name(), tostring(strn_id) )
 
 		if strn_id ~= 65535 then
 			local strn                   = sim:object( strn_id )

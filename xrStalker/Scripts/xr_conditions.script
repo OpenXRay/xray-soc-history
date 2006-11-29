@@ -186,6 +186,40 @@ function gulag_state(actor, npc, p)
 	return false
 end
 
+function npc_community(actor, npc, p)
+	if p[1] == nil then
+		abort("Wrong number of params in npc_community")
+	end
+
+	if npc:character_community() == p[1] then
+		return true
+	end
+	return false
+end
+
+function npc_rank(actor, npc, p)
+	if p[1] == nil then
+		abort("Wrong number of params in npc_rank")
+	end
+
+	if ranks.get_obj_rank_name(npc) == p[1] then
+		return true
+	end
+	return false
+end
+
+function npc_profile(actor, npc, p)
+	if p[1] == nil then
+		abort("Wrong number of params in npc_profile")
+	end
+	
+	if npc:profile_name() == p[1] then
+		return true
+	end
+	return false
+	
+end
+
 
 -- Проверка того что удар был нанесен кем-то из npc указанных в списке.
 -- Параметры это story_id персонажей. Можно задавать несколько story_id.
@@ -337,9 +371,7 @@ function check_fighting(actor, npc, p)
 	        --printf("_bp: %s.check_fighting(%d)", npc:name(), v)
 		    if type(v) == 'number' and sid == v then
 			    --printf("TRUE")
-			    return true
-		    --else
-			--    printf("FALSE")
+			    return true		   
 		    end
 	    end
 	end
@@ -407,6 +439,47 @@ function gulag_population_active(actor, npc, p)
 	return val
 end
 
+function gulag_inactive(actor, npc, p)
+	 local gulag = xr_gulag.get_gulag_by_name( p[1] )
+
+    if gulag == nil then
+		return false
+	end
+	
+	local val = 0
+	
+	for k,v in pairs(gulag.Object) do
+		if (v == true or ( v:alive() and
+		   not(xr_wounded.is_heavy_wounded_by_id(k) or
+		       xr_wounded.is_psy_wounded_by_id(k)))) and
+			gulag.Object_begin_job[k] == true
+		then
+			val = val + 1
+		end
+	end
+	return val == 0
+end
+
+function gulag_population_active_le(actor, npc, p)
+	 local gulag = xr_gulag.get_gulag_by_name( p[1] )
+
+    if gulag == nil then
+		return false
+	end
+	
+	local val = 0
+	
+	for k,v in pairs(gulag.Object) do
+		if (v == true or ( v:alive() and
+		   not(xr_wounded.is_heavy_wounded_by_id(k) or
+		       xr_wounded.is_psy_wounded_by_id(k)))) and
+			gulag.Object_begin_job[k] == true
+		then
+			val = val + 1
+		end
+	end
+	return val <= p[2]
+end
 
 -- true, если в указанном гулаге потери больше или равны заданным
 function gulag_casualities_ge(actor, npc, p)
@@ -494,7 +567,7 @@ function talking(actor, npc)
 end
 
 function talking_or_tutor(actor, npc)
-	return actor:is_talking() or actor:has_info("esc_trader_experienced") or actor:has_info("esc_trader_newbie")
+	return actor:is_talking() or has_alife_info("esc_trader_experienced") or has_alife_info("esc_trader_newbie")
 end
 
 function see_actor(actor, npc)
@@ -658,15 +731,15 @@ function gar_boars_nest2_dead(actor, npc)
 end
 
 function gar_damaged_bandits(actor, npc)
-	if (gulag_population_active(actor, npc, {"gar_bandit_agr"}) < 5) then
+	if (gulag_population_active(actor, npc, {"gar_bandit_agr"}) <= 5) then
 		return true
 	end
 	return false
 end
 
 function gar_angar_sleep(actor,npc)
-	return (gulag_empty(actor,npc,{"gar_seryi_bandits"}) and actor:dont_has_info("agr_krot_band_start")) or
-	       (gulag_population_le(actor,npc,{"gar_smart_bandit_large_lager",9}) and actor:has_info("agr_krot_band_start"))
+	return (gulag_empty(actor,npc,{"gar_seryi_bandits"}) and not has_alife_info("agr_krot_band_start")) or
+	       (gulag_population_le(actor,npc,{"gar_smart_bandit_large_lager",9}) and has_alife_info("agr_krot_band_start"))
 end
 
 function gar_not_damaged_bandits(actor, npc)
@@ -705,7 +778,7 @@ function val_bandits_ci(actor, npc)
 	    sid = enemy:story_id()
 	    for v, i in pairs(ig) do
 		    if sid == i then
-		        if actor:has_info(v) then
+		        if has_alife_info(v) then
 			        return false
 			    end
 			    return true
@@ -731,7 +804,7 @@ function val_bandits_ci_actor(actor, npc, p)
 	    sid = enemy:story_id()
 	    for v, i in pairs(ig) do
 		    if sid == i then
-		        if actor:has_info(v) then
+		        if has_alife_info(v) then
 			        return false
 			    end
 			    return true
@@ -875,7 +948,7 @@ end
 function pri_followers_can_hear(actor, npc)
 	local gulag = xr_gulag.get_gulag(823)
 
-    return actor:dont_has_info("pri_followers_start") or           
+    return not has_alife_info("pri_followers_start") or           
            gulag ~= nil and gulag:get_population() > 0 and
            not gulag:npc_is_enemy_to_anybody(actor)
 end
@@ -903,7 +976,7 @@ function pri_follower_see_ambush (actor, npc)
 	end
 	
 	for k,v in pairs(gulag.Object) do
-		if v ~= false and (npc:see(v) or (npc:best_enemy() and npc:best_enemy():id() == v:id()))
+		if v ~= nil and npc:best_enemy() and npc:best_enemy():id() == v:id()
 			then
 				-- printf("[plecha] %s see %s or has enemy %s", utils.to_str(npc), utils.to_str(v), utils.to_str(npc:best_enemy()))
 				return true
@@ -928,7 +1001,7 @@ function esc_blokpost_night(actor,npc)
 end
 
 function esc_bandits_die(sctor,npc)
-	if db.actor:has_info("esc_kill_bandits_quest_kill") or db.actor:has_info("esc_kill_bandits_noquest_kill") then
+	if has_alife_info("esc_kill_bandits_quest_kill") or has_alife_info("esc_kill_bandits_noquest_kill") then
 		return true
 	end
 	return false
@@ -1015,23 +1088,23 @@ function bar_actor_rank_veteran (actor,npc)
 end
 
 function bar_arena_fight_3_end ()
-	return db.actor:has_info("bar_arena_fight_3_stalker_1_die") and db.actor:has_info("bar_arena_fight_3_stalker_2_die")
+	return has_alife_info("bar_arena_fight_3_stalker_1_die") and has_alife_info("bar_arena_fight_3_stalker_2_die")
 end
 
 function bar_arena_fight_4_end ()
-	return db.actor:has_info("bar_arena_fight_4_stalker_1_die") and db.actor:has_info("bar_arena_fight_4_stalker_2_die") and db.actor:has_info("bar_arena_fight_4_stalker_3_die")
+	return has_alife_info("bar_arena_fight_4_stalker_1_die") and has_alife_info("bar_arena_fight_4_stalker_2_die") and has_alife_info("bar_arena_fight_4_stalker_3_die")
 end
 
 function bar_arena_fight_5_end ()
-	return db.actor:has_info("bar_arena_fight_5_stalker_1_die") and db.actor:has_info("bar_arena_fight_5_stalker_2_die")
+	return has_alife_info("bar_arena_fight_5_stalker_1_die") and has_alife_info("bar_arena_fight_5_stalker_2_die")
 end
 
 function bar_arena_fight_6_end ()
-	return db.actor:has_info("bar_arena_fight_6_stalker_1_die") and db.actor:has_info("bar_arena_fight_6_stalker_2_die") and db.actor:has_info("bar_arena_fight_6_stalker_3_die") and db.actor:has_info("bar_arena_fight_6_stalker_4_die") and db.actor:has_info("bar_arena_fight_6_stalker_5_die") and db.actor:has_info("bar_arena_fight_6_stalker_6_die")
+	return has_alife_info("bar_arena_fight_6_stalker_1_die") and has_alife_info("bar_arena_fight_6_stalker_2_die") and has_alife_info("bar_arena_fight_6_stalker_3_die") and has_alife_info("bar_arena_fight_6_stalker_4_die") and has_alife_info("bar_arena_fight_6_stalker_5_die") and has_alife_info("bar_arena_fight_6_stalker_6_die")
 end
 
 function bar_arena_fight_8_end ()
-	return db.actor:has_info("bar_arena_fight_8_stalker_1_die") and db.actor:has_info("bar_arena_fight_8_stalker_2_die") and db.actor:has_info("bar_arena_fight_8_stalker_3_die") and db.actor:has_info("bar_arena_fight_8_stalker_4_die")
+	return has_alife_info("bar_arena_fight_8_stalker_1_die") and has_alife_info("bar_arena_fight_8_stalker_2_die") and has_alife_info("bar_arena_fight_8_stalker_3_die") and has_alife_info("bar_arena_fight_8_stalker_4_die")
 end
 ------------------------------------------------------------------------------------
 -- Special functions for Military
@@ -1065,7 +1138,7 @@ function cit_combat_ignore(actor, npc, p)
     local enemy = db.storage[npc:id()].enemy
     if enemy and enemy:alive() then
         if enemy:id() == actor:id() then
-            return p[1] ~= nil and actor:dont_has_info(p[1])
+            return p[1] ~= nil and not has_alife_info(p[1])
         elseif enemy:story_id() == 1200 then
             return true
         else
@@ -1091,6 +1164,13 @@ function is_wfx_playing (actor, npc)
     return level.is_wfx_playing ()
 end
 
+function agr_nii_pop_check(actor, npc)
+	if (gulag_population_active(actor, npc, {"agr_nii"}) < 6) then
+		return true
+	end
+	return false
+end
+
 
 -------------------------------------------------------------------------------------
 -- Special for rostok
@@ -1107,11 +1187,11 @@ function rostok_gulag_inactive(actor, npc)
 	for k,v in pairs(gulag.Object) do
 		local job_prior = gulag.Job[gulag.ObjectJob[k]].prior
 
-		if v == true or 
+		if (v == true or 
 		   (v:alive() and
 		    not xr_wounded.is_heavy_wounded_by_id(k) and
 		    not xr_wounded.is_psy_wounded_by_id(k) and
-			job_prior == 5)
+			job_prior == 5)) and gulag.Object_begin_job[k] == true
 		then
 			val = val + 1
 		end
@@ -1132,9 +1212,10 @@ function agr_factory_hold_inactive (actor, npc)
 	local val = 0
 	
 	for k,v in pairs(gulag.Object) do
-		if v == true or ( v:alive() and
+		if (v == true or ( v:alive() and
 		   not(xr_wounded.is_heavy_wounded_by_id(k) or
-		       xr_wounded.is_psy_wounded_by_id(k)) )
+		       xr_wounded.is_psy_wounded_by_id(k)))) and
+			gulag.Object_begin_job[k] == true
 		then
 			val = val + 1
 		end
@@ -1144,6 +1225,7 @@ function agr_factory_hold_inactive (actor, npc)
 	end
 	return false
 end
+
 
 function rostok_gulag_2_inactive(actor, npc)
 	 local gulag = xr_gulag.get_gulag_by_name("bar_freedom_chasers_attack")
@@ -1155,9 +1237,10 @@ function rostok_gulag_2_inactive(actor, npc)
 	local val = 0
 	
 	for k,v in pairs(gulag.Object) do
-		if v == true or ( v:alive() and
+		if (v == true or ( v:alive() and
 		   not(xr_wounded.is_heavy_wounded_by_id(k) or
-		       xr_wounded.is_psy_wounded_by_id(k)) )
+		       xr_wounded.is_psy_wounded_by_id(k)))) and
+			gulag.Object_begin_job[k] == true
 		then
 			val = val + 1
 		end
@@ -1247,4 +1330,29 @@ function actor_in_freedom(actor, npc)
 		return db.actor:character_community() == "actor_freedom"
 	end
 	return false
+end
+
+function actor_on_level(actor, npc, p)
+	return p[1] == level.name()
+end
+
+function treasure_exist(actor, npc, p)
+	--printf("%s %s", actor:name(), npc:name())
+	return true
+end
+
+function can_send_tutorial(actor, npc, p)
+	if db.actor:is_talking() then
+		return false
+	end
+	if game.has_active_tutorial() then
+		return false
+	end
+	if db.actor:has_info("ui_inventory") then
+		return false
+	end
+	if db.actor:has_info("ui_pda") then
+		return false
+	end
+	return true
 end
