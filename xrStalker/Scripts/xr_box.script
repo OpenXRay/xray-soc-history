@@ -97,10 +97,10 @@ function ph_item_box:spawn_items()
 	--' Доспавниваем необходимое количество итемов:
     --' Необходимо составить список объектов которые могут быть заспавнены для персонажа
     local spawn_items = item_by_community[community]
-	
+	--' Если комьюнити задана не верно, то ставим дефолт и срем в лог.
 	if spawn_items == nil then 
-		printf("xr_box: wrong community -- %s", community)
-		return
+		printf("xr_box: wrong community -- %s setting default "def_box" ", community)
+		local spawn_items = item_by_community["def_box"]
 	end
     
     for k,v in pairs(spawn_items) do		
