@@ -16,11 +16,10 @@ function ph_item_box:__init(obj)
 	self.obj = obj
 	
 
-	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons", "big_box_arsenal"}	
+	local community_list = { "def_box", "small_box_generic", "small_box_ussr", "small_box_nato", "small_box_army", "small_box_science", "big_box_generic", "big_box_dungeons" }	
 	
 	for k,v in pairs(community_list) do
         --' Необходимо заполнить таблицу
-		-- printf("pl: community = %s",v )
         item_by_community[v] = {}
         if death_ini:section_exist(v) then
 		    local n = death_ini:line_count(v)
@@ -28,7 +27,6 @@ function ph_item_box:__init(obj)
 		    for i=0,n-1 do
 			    result, id, value	= death_ini:r_line(v,i,"","")
                 item_by_community[v][id] = 100*tonumber(value)
-				-- printf("PL : id=%s  value=%s",id, value)
 		    end
         end
     end
@@ -85,7 +83,6 @@ function ph_item_box:__init(obj)
 end
 
 function ph_item_box:spawn_items()
-	local spawn_items = {}
 	local ini = self.obj:spawn_ini()
 	local community	= utils.cfg_get_string(ini, "drop_box", "community", self.obj, false, "", "def_box")
 	if r_items(ini, "drop_box", "items") ~= nil then
@@ -100,11 +97,10 @@ function ph_item_box:spawn_items()
 	--' Доспавниваем необходимое количество итемов:
     --' Необходимо составить список объектов которые могут быть заспавнены для персонажа
     local spawn_items = item_by_community[community]
-	--' Если комьюнити задана не верно, то ставим дефолт и срем в лог.
+	
 	if spawn_items == nil then 
-		printf("xr_box: wrong community -- %s setting default def_box ", community)
-		local spawn_items = {}
-        local spawn_items = item_by_community["def_box"]
+		printf("xr_box: wrong community -- %s", community)
+		return
 	end
     
     for k,v in pairs(spawn_items) do		
@@ -119,8 +115,8 @@ end
 function create_items(obj, section, number, rnd)
     printf("create %s of %s", tostring(number), tostring(section))
     if ammo_sections[section] == true then
-		if math.random(100) <= rnd	then
-				
+		if math.random(1,100) < 30	then
+			
 			if number > 0 then
 				local position = vector():set(0,0,0)
 				position.x = obj:position().x + math.random(-30,30)/100
