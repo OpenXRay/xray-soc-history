@@ -213,7 +213,6 @@
         <!-- FIND DOCUMENTS -->
     <info_portion id="bar_darklab_document_start">
 		<task>bar_darklab_documents</task>
-		<article>bar_darklab_documents_art</article>
 		<article>journal_before_darklab_documents</article>
     </info_portion>
 	<info_portion id="bar_darklab_document_gain">
@@ -228,6 +227,7 @@
     </info_portion>
 	<info_portion id="yan_x16_documents_gain"></info_portion>
     <info_portion id="bar_x16_documents_done"></info_portion>
+    <info_portion id="rostok_spawn_dogs_food"></info_portion>
 
 		 <!-- PSIHOPAT -->
 	<info_portion id="bar_psih_come"></info_portion>
@@ -402,6 +402,9 @@
     <info_portion id="ros_zombied_spawn_01"></info_portion>
     <info_portion id="rostok_camera_start"></info_portion>
     <info_portion id="bar_arena_survival"></info_portion>
-
+	
+	<info_portion id="barman_job">
+		<task>bar_barman_job</task>
+	</info_portion>
     
 </game_information_portions>
