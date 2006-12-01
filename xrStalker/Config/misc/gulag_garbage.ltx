@@ -617,7 +617,6 @@ path_look = zoneguard_look1
 meet = meet@zoneguard1
 soundgroup = gar_dolg_zoneguard
 on_info = {+gar_test_info2} walker@gar_dolg_blokpost_zoneguard_no_meet
-danger = danger_condition@gar_angar_seryi
 
 [walker@gar_dolg_blokpost_zoneguard_no_meet]
 path_walk = zoneguard_walk1
@@ -625,7 +624,7 @@ path_look = zoneguard_look1
 meet = no_meet
 soundgroup = gar_dolg_zoneguard
 on_info = {-gar_test_info2} walker@gar_dolg_blokpost_zoneguard1
-danger = danger_condition@gar_angar_seryi
+
 
 [meet@zoneguard1]
 meet_state = 7|{-gar_free_pass} threat@gar_dolg_blokpost, guard@talk_hello
@@ -649,7 +648,7 @@ path_walk = zoneguard_walk2
 path_look = zoneguard_look2
 meet = meet@zoneguard2
 soundgroup = gar_dolg_zoneguard
-danger = danger_condition@gar_angar_seryi
+
 
 [logic@gar_dolg_blokpost_zoneguard3]
 active = walker@gar_dolg_blokpost_zoneguard3
@@ -659,7 +658,6 @@ path_walk = zoneguard_walk3
 path_look = zoneguard_look3
 meet = meet@zoneguard2
 soundgroup = gar_dolg_zoneguard
-danger = danger_condition@gar_angar_seryi
 
 [meet@zoneguard2]
 meet_state = 7|{-gar_free_pass} threat@gar_dolg_blokpost, guard@talk_hello
@@ -1386,8 +1384,8 @@ meet = no_meet
 [remark2@gar_dram_novice]
 target = actor
 anim = wait
-on_actor_dist_le_nvis = 15 | remark3@gar_dram_novice %=gar_dm_bandits_fight%
-on_actor_dist_ge_nvis = 15 | %=gar_dm_bandits_fight%
+on_actor_dist_le_nvis = 7 | remark3@gar_dram_novice %=gar_dm_bandits_fight%
+on_actor_dist_ge = 15 | %=gar_dm_bandits_fight%
 on_info2 = {+gar_dm_bandit1_dead +gar_dm_bandit2_dead +gar_dm_bandit3_dead} remark@after_fight_gar_dram_novice
 on_info3 = {+gar_dm_end} %=gar_dm_bandits_fight%
 on_timer = 15000 | %=gar_dm_bandits_fight%
