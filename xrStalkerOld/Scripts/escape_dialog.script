@@ -157,6 +157,7 @@ end
 --' fox help
 
 function transfer_medikit_to_fox (player, wounded)
+    dialogs.relocate_item_section(wounded, "medkit", "out")   
 	wounded:set_relation(game_object.friend, player)
 	db.actor:give_info_portion("escape_fox_heal")
 end
@@ -315,8 +316,4 @@ function run_tutorial_pda(first_speaker, second_speaker)
 	first_speaker:stop_talk()
     second_speaker:stop_talk()
 	game.start_tutorial("part_1_pda")
-end
-
-function wolf_precond_univ (actor, npc)
-	return has_alife_info("esc_kill_bandits_quest_done") or (has_alife_info("tutorial_wounded_give_info") and not has_alife_info("esc_kill_bandits_quest_have"))
 end
