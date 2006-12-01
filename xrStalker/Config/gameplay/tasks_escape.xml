@@ -5,7 +5,6 @@
 			<text>storyline_escape_eliminate_gunslinger</text>
 			<icon>ui_iconsTotal_storyline_eliminate_gunslinger</icon>
 			<infoportion_fail>cit_fail_first_task</infoportion_fail>
-			<article>storyline_gunslinger</article>
 		</objective>
 		<objective>
 			<text>storyline_escape_find_gunslinger</text>
@@ -36,13 +35,40 @@
 		</objective>
 	</game_task>
 
+	<game_task id="tutorial_help_wounded">
+		<title>tutorial_help_wounded</title>
+		<objective>
+			<text>tutorial_help_wounded_0</text>
+			<icon>ui_iconsTotal_tutorial_help_wounded</icon>
+			<infoportion_complete>esc_serious_talk</infoportion_complete>
+		</objective>
+		<objective>
+			<text>tutorial_help_wounded_1</text>
+			<map_location_type hint="volk">green_location</map_location_type>
+			<object_story_id>Escape_novice_lager_volk</object_story_id>
+			<infoportion_complete>esc_kill_bandits_quest_have</infoportion_complete>
+			<function_fail>escape_tasks.task_volk_fail</function_fail>
+		</objective>
+		<objective>
+			<text>tutorial_help_wounded_2</text>
+			<map_location_type hint="tutorial_wounded">green_location</map_location_type>
+			<map_location_hidden>1</map_location_hidden>
+			<object_story_id>Escape_tutorial_wounded</object_story_id>
+			<infoportion_complete>tutorial_wounded_give_info</infoportion_complete>
+		</objective>
+		<objective>
+			<text>tutorial_help_wounded_3</text>
+			<map_location_type hint="escape_trader">blue_location</map_location_type>
+			<object_story_id>Escape_Trader</object_story_id>
+		</objective>
+	</game_task>
+
 	<game_task id="esc_help_wounded_from_raid" prio="485">
 		<title>esc_help_wounded_from_raid</title>
 		<objective>
 			<text>esc_help_wounded_from_raid_0</text>
 			<icon>ui_iconsTotal_esc_help_wounded_from_raid</icon>
 			<function_complete>escape_tasks.task_fox_complete</function_complete>
-			<article>esc_fox_help</article>
 		</objective>
 		<objective>
 			<text>esc_help_wounded_from_raid_1</text>
@@ -118,7 +144,6 @@
 			<icon>ui_iconsTotal_esc_defend_lager</icon>
 			<function_complete>escape_tasks.task_lager_complete</function_complete>
 			<infoportion_fail>esc_lager_destroyed</infoportion_fail>
-			<function_fail>escape_tasks.is_actor_enemy_lager</function_fail>
 		</objective>
 		<objective>
 			<text>esc_defend_lager_from_killers_1</text>
@@ -141,7 +166,6 @@
 			<text>meet_with_doctor_1</text>
 			<icon>ui_iconsTotal_doctor_meet</icon>
 			<infoportion_complete>esc_find_doctor_done</infoportion_complete>
-			<article>esc_doctor_meet</article>
 		</objective>
 		<objective>
 			<text>meet_with_doctor_2</text>
@@ -156,7 +180,6 @@
 			<text>tutorial_help_wounded</text>
 			<icon>ui_iconsTotal_tutorial_help_wounded</icon>
 			<infoportion_complete>esc_serious_talk</infoportion_complete>
-			<article>esc_flash_task_descr</article>
 		</objective>
 		<objective>
 			<text>tutorial_help_wounded_1</text>
@@ -174,17 +197,17 @@
 			<infoportion_fail>esc_petruha_die</infoportion_fail>
 		</objective>
 		<objective>
-			<text>esc_dinamit_to_volk</text>
-			<map_location_type hint="esc_dinamit_to_volk">green_location</map_location_type>
+			<text>esc_dinamit_to_volk_0</text>
+			<map_location_type hint="esc_dinamit_to_volk_0">green_location</map_location_type>
 			<map_location_hidden>1</map_location_hidden>
 			<object_story_id>esc_bandits_factory</object_story_id>
-			<infoportion_complete>esc_kill_bandits_quest_kill</infoportion_complete>
+			<infoportion_complete>esc_kill_bandits_quest_done</infoportion_complete>
+		<!--			<function_fail>escape_tasks.is_actor_enemy_lager</function_fail> -->
 		</objective>
 		<objective>
 			<text>tutorial_help_wounded_2</text>
 			<map_location_type hint="tutorial_wounded">green_location</map_location_type>
 			<object_story_id>Escape_tutorial_wounded</object_story_id>
-			<map_location_hidden>1</map_location_hidden>
 			<infoportion_complete>tutorial_wounded_give_info</infoportion_complete>
 		</objective>
 		<objective>
@@ -195,34 +218,4 @@
 		</objective>
 	</game_task>
 	
-	<game_task id="esc_trader_job" prio="0">
-		<title>esc_trader_job</title>
-		<objective>
-			<icon>ui_iconsTotal_esc_trader_job</icon>
-			<infoportion_complete>agroprom_military_case</infoportion_complete>
-		</objective>
-		<objective>
-			<text>esc_trader_job_text</text>
-			<map_location_type hint="esc_trader_job_text">blue_location</map_location_type>
-			<object_story_id>Escape_Trader</object_story_id>
-			<infoportion_complete>agroprom_military_case</infoportion_complete>
-		</objective>
-	</game_task>
-
-	<game_task id="find_railroad_passage" prio="386">
-		<title>find_railroad_passage</title>
-		<objective>
-			<icon>ui_iconsTotal_find_railroad_passage</icon>
-			<article>find_railroad_passage_descr</article>
-			<infoportion_complete>esc_find_railroad_passage_done</infoportion_complete>
-		</objective>
-		<objective>
-			<text>find_railroad_passage_1</text>
-			<infoportion_complete>esc_find_railroad_passage_find_stalker</infoportion_complete>
-			<map_location_type hint="find_railroad_passage_1">green_location</map_location_type>
-			<object_story_id>esc_dead_tunel_novice</object_story_id>
-		</objective>
-		<objective>
-			<text>find_railroad_passage_2</text>
-		</objective>
-	</game_task>
+	
