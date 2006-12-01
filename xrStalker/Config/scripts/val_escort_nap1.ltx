@@ -33,19 +33,17 @@ use_wpn        = true
 ;--------------------------------------------------------------------------
 [danger@val_escort_nap1_1]
 ignore_distance_sound     = 10
-ignore_distance_corpse    = 0
+ignore_distance_corpse    = 1
 
 [danger@val_escort_nap1_small]
 ignore_types                    = corpse
 ignore_distance_sound           = 3
 danger_inertion_time_sound      = 1000
 danger_inertion_time_ricochet   = 1000
-ignore_distance_corpse    = 0
 
 [danger@val_escort_nap1_free]
 ignore_types                    = corpse
 ignore_distance_sound           = 10
-ignore_distance_corpse    = 0
 
 ;--------------------------------------------------------------------------
 ; Wounded
@@ -63,11 +61,11 @@ hp_cover        = 0|false
 [walker@val_escort_nap1_begin]
 path_walk           = nap1_walk
 path_look           = nap1_look
-on_info             = {+val_escort_begin !actor_enemy} remark@val_escort_nap1_phrase1
+on_info             = {+val_escort_begin} remark@val_escort_nap1_phrase1
 meet                = no_meet
 danger              = danger@val_escort_nap1_small
 wounded             = wounded@val_escort_nap1
-combat_ignore_cond  = {!actor_enemy}
+combat_ignore_cond  = always ;{=check_fighting(424)}
 
 ;--------------------------------------------------------------------------
 ; начало
@@ -86,10 +84,10 @@ combat_ignore_cond  = always ;{=check_fighting(424)}
 ; фразы: ...Рассказывай, иначе узнаешь, как легко пуля пробивает череп.
 ;--------------------------------------------------------------------------
 [remark@val_escort_nap1_phrase1]
-anim                = threat_heli
+anim                = guard
 snd                 = val_escort_nap1_phrase1
 target              = 424 ;logic@val_escort_wounded_bandit
-on_signal           = sound_end | remark@val_escort_nap1_phrase1_wait %+val_nap1_phrase1_end%
+on_signal           = sound_end | walker@val_escort_nap1_phrase1_wait %+val_nap1_phrase1_end%
 on_info             = {=is_dead_one(424)} remark@val_escort_nap1_phrase3 %+val_nap1_stop_talk_to_bandit%
 meet                = no_meet
 danger              = danger@val_escort_nap1_small
@@ -99,11 +97,9 @@ combat_ignore_cond  = always ;{=check_fighting(424)}
 ;--------------------------------------------------------------------------
 ; ожидание
 ;--------------------------------------------------------------------------
-[remark@val_escort_nap1_phrase1_wait]
-anim                = threat_heli
-target              = 424 ;logic@val_escort_wounded_bandit
-;path_walk           = nap1_walk
-;path_look           = nap1_look
+[walker@val_escort_nap1_phrase1_wait]
+path_walk           = nap1_walk
+path_look           = nap1_look
 on_info             = {+val_halfdead_phrase_end} remark@val_escort_nap1_phrase2
 on_info2            = {=is_dead_one(424)} remark@val_escort_nap1_phrase3 %+val_nap1_stop_talk_to_bandit%
 meet                = no_meet
@@ -300,7 +296,7 @@ on_info2            = {+val_escort_guard1_dead +val_escort_guard2_dead} remark@v
 on_info3            = {+val_escort_captive_dead} follower1@val_escort_nap1_captive_dead
 meet                = no_meet
 wounded             = wounded@val_escort_nap1
-danger				= danger@val_escort_nap1_small 
+
 ;--------------------------------------------------------------------------
 ; гварды убиты
 ;--------------------------------------------------------------------------
