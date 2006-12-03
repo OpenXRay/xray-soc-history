@@ -130,7 +130,7 @@ function send_artefact (npc, actor)
     dialogs.relocate_item_section(npc, "af_cristall", "in")
 end
 
-function send_desert_eagle (actor, npc)
+function send_desert_eagle (npc, actor)
     dialogs.relocate_items_section(npc, "wpn_walther", "in") 
 end
 
@@ -160,10 +160,6 @@ function actor_set_freedom (actor, npc)
     if db.actor then
        db.actor:set_character_community ("actor_freedom", 0, 0)
     end
-end
-
-function mil_leader_dialog_check (actor, npc)
-	return has_alife_info("mil_lukash_delay") or has_alife_info("mil_lukash_dolg_task_complete")
 end
 
 --db.actor:set_character_community("actor_dolg", 0, 0)
