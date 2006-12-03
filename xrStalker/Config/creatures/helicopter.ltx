@@ -40,7 +40,6 @@ safe_altitude				= 3.0					; level_bound+5.0
 
 use_rocket					= true			;              использовать ракеты при атаке
 use_mgun					= true			;              использовать пулемет при атаке
-use_aim_bullet				= false			; Использовать ли первую "Сильную" пулю
 min_mgun_attack_dist		= 15 ;30 ;15.0	;m   мин расстояние при котором можно исп пулемет
 max_mgun_attack_dist		= 150 ;300.0 ;m   макс расстояние при котором можно исп пулемет
 min_rocket_attack_dist		= 100.0	;m   мин расстояние при котором можно исп ракеты
@@ -122,9 +121,9 @@ wound_immunity			= 0.0
 radiation_immunity		= 0.0
 telepatic_immunity		= 0.0
 chemical_burn_immunity	= 0.0
-fire_wound_immunity		= 0.01
+fire_wound_immunity		= 0.0001
 explosion_immunity		= 0.2
-
+use_aim_bullet			= false
 
 [helicopter_missile]
 GroupControlSection		= spawn_group
