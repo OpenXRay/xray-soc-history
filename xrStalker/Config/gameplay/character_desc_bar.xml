@@ -347,14 +347,11 @@
 	
 		<start_dialog>bar_bar_osvedomitel_start</start_dialog>
 		<actor_dialog>bar_bar_osvedomitel_trade_info</actor_dialog>
-		<actor_dialog>tm_mercenary_dialog</actor_dialog>
-		<actor_dialog>tm_mercenary_reward</actor_dialog>
-				
 	</specific_character>	
 
 	<!---------------------------BAR HUNTER---------------------->
 	<specific_character id="bar_bar_hunter" team_default = "1">
-		<name>bar_hunter_name</name>
+		<name>Охотник</name>
 		<icon x="0" y="2"></icon>
 		<map_icon x="0" y="0"></map_icon>
 		<bio>Добродушный весельчак, единственная его проблема это то, что умеет стрелять только из охотничьего ружья. Остальное даже не пробует. Недавно попал в передрягу на Дикой территории и потерял там свое фамильное ружье. Теперь околачивается в баре, надеется, что кто-то вернет ему его ружье.</bio>
@@ -378,8 +375,6 @@
 		<start_dialog>bar_bar_hunter_start</start_dialog>
 		<actor_dialog>bar_bar_hunter_quest_start</actor_dialog>
 		<actor_dialog>bar_bar_hunter_quest_finish</actor_dialog>
-		<actor_dialog>tm_hunter_dialog</actor_dialog>
-		<actor_dialog>tm_hunter_reward</actor_dialog>		
 	</specific_character>	
 
 	<!---------------------------BAR DRUNK DOLG---------------------->
@@ -408,9 +403,6 @@
 		</supplies>
 		
 		<start_dialog>bar_bar_drunk_dolg_start</start_dialog>
-		<actor_dialog>tm_drunk_dolg_dialog</actor_dialog>	
-		<actor_dialog>tm_drunk_dolg_reward</actor_dialog>	
-		
 	</specific_character>	
 
 	<!---------------------------BAR LISIY---------------------->
@@ -437,8 +429,6 @@
 		</supplies>
 		
 		<start_dialog>bar_bar_visitors_14_start</start_dialog>
-		<actor_dialog>tm_lisiy_dialog</actor_dialog>
-		<actor_dialog>tm_lisiy_reward</actor_dialog>
 	</specific_character>	
 
 	<specific_character id="bar_psih" team_default = "1">
@@ -468,9 +458,6 @@
 		<actor_dialog>bar_bar_psih_give_medkit</actor_dialog>
 		<actor_dialog>bar_bar_psih_talk_gorbun</actor_dialog>
 		<actor_dialog>bar_bar_psih_talk_lisiy</actor_dialog>
-		
-		
-		
 	</specific_character>
 
 	<!-- ******************* ARENA ********************** -->
@@ -541,7 +528,7 @@
 		<community>arena_enemy</community>
 		<money min="2000" max="5000" infinitive="0"></money>
 		
-		<rank>930</rank>
+		<rank>658</rank>
 		<reputation>0</reputation>
 
 		<visual>actors\stalker_zombi\zombie_exoskeleton</visual>
@@ -622,11 +609,12 @@
 		</supplies>
 		
 		<start_dialog>bar_dolg_petrenko_start</start_dialog>
-		
-		<actor_dialog>tm_petrenko_dialog</actor_dialog>
-		<actor_dialog>tm_petrenko_reward</actor_dialog>
-
-</specific_character>	
+<!----		
+		<actor_dialog>bar_dolg_petrenko_join</actor_dialog>
+		<actor_dialog>bar_dolg_petrenko_talk</actor_dialog>
+		<actor_dialog>bar_dolg_zavskald_reward</actor_dialog>
+------>
+	</specific_character>	
 
 	<!---------------------------DOLG IVANCOV---------------------->
 	<specific_character id="bar_dolg_ivancov" team_default = "1">
@@ -727,10 +715,6 @@
 		<start_dialog>bar_dolg_zastava</start_dialog>
 		<actor_dialog>bar_dolg_zastava_about_zastava</actor_dialog>
 		<actor_dialog>bar_dolg_zastava_talk</actor_dialog>
-		<actor_dialog>tm_zastava_commander_dialog</actor_dialog>
-		<actor_dialog>tm_zastava_commander_reward</actor_dialog>
-		
-		
 	</specific_character>	
 
 	<!-- ******************* Helicopter scene ********************** -->
@@ -1277,7 +1261,7 @@
 		<community>dolg</community> <terrain_sect>stalker_dolg_terrain</terrain_sect>
 		<money min="2000" max="5000" infinitive="0"></money>
 		
-		<rank>914</rank>
+		<rank>795</rank>
 		<reputation>60</reputation>
 
 		<visual>actors\dolg\stalker_do_exoskeleton</visual>
@@ -1856,7 +1840,7 @@
 		<rank>591</rank>
 		<reputation>0</reputation>
 
-		<visual>actors\neytral\stalker_neytral_hood_8</visual>
+		<visual>actors\neytral\stalker_neytral_exoskeleton</visual>
 		<snd_config>characters_voice\human_03\stalker\</snd_config>
 		<crouch_type>0</crouch_type>
 		<supplies>
