@@ -197,17 +197,9 @@
 			<infoportion_fail>esc_petruha_die</infoportion_fail>
 		</objective>
 		<objective>
-			<text>esc_dinamit_to_volk</text>
-			<map_location_type hint="esc_dinamit_to_volk">green_location</map_location_type>
-			<map_location_hidden>1</map_location_hidden>
-			<object_story_id>esc_bandits_factory</object_story_id>
-			<infoportion_complete>esc_kill_bandits_quest_kill</infoportion_complete>
-		</objective>
-		<objective>
 			<text>tutorial_help_wounded_2</text>
 			<map_location_type hint="tutorial_wounded">green_location</map_location_type>
 			<object_story_id>Escape_tutorial_wounded</object_story_id>
-			<map_location_hidden>1</map_location_hidden>
 			<infoportion_complete>tutorial_wounded_give_info</infoportion_complete>
 		</objective>
 		<objective>
