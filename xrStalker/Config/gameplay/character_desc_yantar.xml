@@ -5,7 +5,7 @@
 <!----------------glavniy ucheniy-------------->
 	<specific_character id="yan_general_ecolog" team_default = "1">
 		<name>yan_saharov_name</name>
-		<icon>ui_npc_u_ucheniy_2</icon>
+		<icon x="4" y="0"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>yan_saharov_bio</bio>
 
@@ -17,7 +17,7 @@
 		<reputation>50</reputation>
 
 		<visual>actors\ucheniy\ucheniy_2</visual>
-		<snd_config>characters_voice\human_03\ecolog\</snd_config>
+		<snd_config>characters_voice\human_03\ecolog</snd_config>
 		<crouch_type>1</crouch_type>
 		<supplies>
 			[spawn] \n
@@ -35,7 +35,7 @@
 <!---------------------------RESCUE_ECOLOG------------------------>
 <specific_character id="yan_ecolog_help" team_default = "1">
 		<name>ros_kruglov_name</name>
-		<icon>ui_npc_u_stalker_ecolog_military</icon>
+		<icon x="8" y="4"></icon>
 		<map_icon x="0" y="6"></map_icon>
 		<bio>yan_kruglov_bio</bio>
 
@@ -47,7 +47,7 @@
 		<reputation>50</reputation>
 
 		<visual>actors\ecolog\stalker_ecolog_military</visual>
-		<snd_config>characters_voice\human_03\ecolog\</snd_config>
+		<snd_config>characters_voice\human_03\eco\</snd_config>
 		<crouch_type>1</crouch_type>
 		<supplies>
 			[spawn] \n
@@ -55,8 +55,6 @@
 			ammo_9x19_fmj \n
 			kruglov_flash \n			
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
 			
 		<start_dialog>yantar_help_scientist</start_dialog>
 		<actor_dialog>dm_help_wounded_medkit_dialog</actor_dialog>
@@ -66,7 +64,7 @@
 
 <specific_character id="yan_Semenov" team_default = "1">
 		<name>yan_semenov_name</name>
-		<icon>ui_npc_u_stalker_ecolog</icon>
+		<icon x="10" y="4"></icon>
 		<map_icon x="0" y="6"></map_icon>
 		<bio>yan_semenov_bio</bio>
 
@@ -78,7 +76,7 @@
 		<reputation>50</reputation>
 
 		<visual>actors\ecolog\stalker_ecolog</visual>
-		<snd_config>characters_voice\human_03\ecolog\</snd_config>
+		<snd_config>characters_voice\human_03\eco\</snd_config>
 		<crouch_type>1</crouch_type>
 		<supplies>
 			[spawn] \n
@@ -86,8 +84,6 @@
 			ammo_9x19_fmj \n
 			kruglov_flash \n			
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
 			
 		<start_dialog>yantar_help_scientist</start_dialog>
 		<actor_dialog>dm_help_wounded_medkit_dialog</actor_dialog>
@@ -95,7 +91,7 @@
 	
 	<specific_character id="yan_ecolog_vasilyev" team_default = "1">
 		<name>yan_vasilyev_name</name>
-		<icon>ui_npc_u_stalker_ecolog</icon>
+		<icon x="10" y="4"></icon>
 		<map_icon x="0" y="6"></map_icon>
 		<bio>yan_semenov_bio</bio>
 
@@ -114,8 +110,6 @@
 			wpn_walther \n
 			ammo_9x19_fmj \n
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
 			
 		<start_dialog>yantar_help_scientist</start_dialog>
 		<actor_dialog>dm_help_wounded_medkit_dialog</actor_dialog>
@@ -125,7 +119,7 @@
 
 <specific_character id="yan_ghost" team_default = "1">
 		<name>yan_ghost_name</name>
-		<icon>ui_npc_u_stalker_prizrak</icon>
+		<icon x="20" y="12"></icon>
 		<map_icon x="0" y="6"></map_icon>
 		<bio>sim_stalker_veteran_bio</bio>
 
@@ -143,15 +137,15 @@
 			[spawn] \n
 			wpn_walther \n
 			ammo_9x19_fmj \n
-			lab_x16_documents \n
-			outfit_stalker_m1 \n
+			lab_x16_documents \n	
+			outfit_stalker_anom2 \n
 		</supplies>
 </specific_character>
 
 <!---------------------------ECOLOG------------------------>
 	<specific_character id="yan_ecolog_default1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_ecolog</icon>
+		<icon x="8" y="4"></icon>
 		<map_icon x="0" y="6"></map_icon>
 		<bio>ros_ecolog_guard_bio</bio>
 
@@ -170,15 +164,14 @@
 			wpn_walther \n
 			ammo_9x19_fmj \n
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"	
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 
 	<specific_character id="yan_ecolog_default2" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_ecolog_military</icon>
+		<icon x="10" y="4"></icon>
 		<map_icon x="1" y="6"></map_icon>
 		<bio>ros_ecolog_guard_bio</bio>
 		
@@ -197,7 +190,6 @@
 			ammo_9x19_fmj \n
 		</supplies>
 				
-#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
@@ -205,7 +197,7 @@
 <!---------------------------ZOMBIED----------------------->
 	<specific_character id="yan_zombied_default1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie1</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 		
@@ -225,13 +217,12 @@
 			device_torch \n
 		</supplies>
 			
-#include "gameplay\character_criticals_1.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default2" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie2</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -250,14 +241,13 @@
 			ammo_9x19_fmj \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default3" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie3</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -278,14 +268,13 @@
 			ammo_9x19_fmj \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default4" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie4</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -306,14 +295,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default5" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie5</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -334,14 +322,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default6" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie7</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -362,14 +349,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_default7" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie8</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -390,15 +376,14 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 <!---------------------------ZOMBIED VETERANS----------------------->
 	<specific_character id="yan_zombied_veteran_default1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie2</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -422,14 +407,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_veteran_default2" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie3</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -450,14 +434,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_veteran_default3" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie4</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -473,19 +456,19 @@
 		<supplies>
 			[spawn] \n
 			wpn_lr300 \n
-			ammo_5.56x45_ss190 = 1 \n
+			ammo_5.56x45_fmj = 1 \n
 			device_torch \n
 			wpn_pm \n
 			ammo_9x18_fmj = 1 \n
 		</supplies>
 			
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_veteran_default4" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie5</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -507,14 +490,13 @@
 			wpn_pm \n
 			ammo_9x18_fmj = 1 \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_veteran_default5" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie6</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -530,13 +512,12 @@
 		<supplies>
 			[spawn] \n
 			wpn_lr300 \n
-			ammo_5.56x45_ss190 = 1 \n
+			ammo_5.56x45_fmj = 1 \n
 			device_torch \n
 			wpn_pm \n
 			ammo_9x18_fmj = 1 \n
 		</supplies>
-		
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -545,7 +526,7 @@
 <!---------------------------ZOMBIED AMBUSH----------------------->
 	<specific_character id="yan_zombied_ambush_default1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie2</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -569,14 +550,13 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 	<specific_character id="yan_zombied_ambush_default2" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie3</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_veteran_bio</bio>
 
@@ -597,8 +577,7 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -606,7 +585,7 @@
 <!---------------------------ZOMBIED MASTER----------------------->
 	<specific_character id="yan_zombied_master_1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie3</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_zombied_master_bio</bio>
 
@@ -628,44 +607,14 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
-#include "gameplay\character_dialogs.xml"
-	</specific_character>
-
-<!---------------------------ZOMBIED dolg----------------------->
-<specific_character id="yan_zombied_dolg" team_default = "1">
-		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_stalker_zombie2</icon>
-		<map_icon x="7" y="0"></map_icon>
-		<bio>sim_zombied_veteran_bio</bio>
-
-		<class>yan_zombied_dolg</class>
-		<community>zombied</community> <terrain_sect>stalker_zombied_terrain</terrain_sect>
-	
-		<rank>100</rank>
-		<reputation>20</reputation>
-
-		<visual>actors\stalker_zombi\stalker_zombie2</visual>
-		<snd_config>characters_voice\human_02\zombied\</snd_config>
-		<crouch_type>0</crouch_type>
-		<supplies>
-			[spawn] \n
-			wpn_abakan \n
-			ammo_5.45x39_fmj \n
-			wpn_walther \n
-			ammo_9x19_fmj \n
-			device_torch \n
-		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 <!---------------------------ÑÂÅÆÅZOMBIED STALKER----------------------->
 	<specific_character id="yan_fresh_Zombied_stalker_1" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_zombie_fresh_0</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_fresh_Zombied_bio</bio>
 
@@ -686,15 +635,14 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 
 	<specific_character id="yan_fresh_Zombied_stalker_2" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_zombie_fresh_0</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_fresh_Zombied_bio</bio>
 
@@ -704,7 +652,7 @@
 		<rank>400</rank>
 		<reputation>-50</reputation>
 
-		<visual>actors\stalker_zombi\zombie_fresh_0</visual>
+		<visual>actors\stalker_zombi\zombie_fresh_1</visual>
 		<snd_config>characters_voice\human_01\zombied\</snd_config>		
 		<crouch_type>0</crouch_type>
 		<supplies>
@@ -715,15 +663,14 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
 
 	<specific_character id="yan_fresh_Zombied_stalker_3" team_default = "1">
 		<name>GENERATE_NAME_stalker</name>
-		<icon>ui_npc_u_zombie_fresh_2</icon>
+		<icon x="20" y="10"></icon>
 		<map_icon x="7" y="0"></map_icon>
 		<bio>sim_fresh_Zombied_bio</bio>
 
@@ -745,8 +692,7 @@
 			ammo_9x18_fmj = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_1.xml"
+			
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
