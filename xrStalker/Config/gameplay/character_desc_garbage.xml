@@ -21,13 +21,11 @@
 		<visual>actors\neytral\stalker_neytral_hood_4</visual>
 		<supplies>
 			[spawn] \n
-			wpn_ak74u \n
+			wpn_aksu_anom \n
 			ammo_5.45x39_fmj \n
 			device_torch \n
 			medkit = 1 \n
 		</supplies>
-		
-#include "gameplay\character_criticals_4.xml"
 		
 		<start_dialog>gar_seriy_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -59,7 +57,6 @@
 			ammo_9x18_fmj = 1 \n
 		</supplies>
 
-#include "gameplay\character_criticals_3.xml"
 	
 		<start_dialog>gar_dramm_novice_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -97,8 +94,6 @@
 			hand_radio \n
 		</supplies>
 
-#include "gameplay\character_criticals_4.xml"
-
 		<start_dialog>gar_hellcar_start</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
 		<actor_dialog>dm_cool_info_dialog</actor_dialog>
@@ -129,8 +124,6 @@
 			device_torch \n
 #include "gameplay\character_food.xml"
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
 					
 		<start_dialog>gar_wounded_bandit</start_dialog>
 	</specific_character>
@@ -160,8 +153,6 @@
 			device_torch \n
 #include "gameplay\character_drugs.xml"
 		</supplies>
-		
-#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"	
@@ -192,8 +183,7 @@
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
+
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -224,7 +214,6 @@
 #include "gameplay\character_food.xml"							
 		</supplies>
 
-#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -252,8 +241,7 @@
 #include "gameplay\character_items.xml" \n
 #include "gameplay\character_food.xml"	
 		</supplies>
-
-#include "gameplay\character_criticals_3.xml"
+				
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 	
@@ -269,7 +257,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>125</rank>
+		<rank>450</rank>
 		<reputation>-126</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -288,7 +276,6 @@
 #include "gameplay\character_food.xml"	
 		</supplies>
 
-#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -301,7 +288,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>124</rank>
+		<rank>381</rank>
 		<reputation>-73</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -320,7 +307,6 @@
 #include "gameplay\character_food.xml"		
 		</supplies>
 
-#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 
@@ -333,7 +319,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>133</rank>
+		<rank>442</rank>
 		<reputation>-100</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -352,7 +338,6 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 
-#include "gameplay\character_criticals_3.xml"
 #include "gameplay\character_dialogs.xml"						
 	</specific_character>
 	
@@ -387,7 +372,7 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 				
-#include "gameplay\character_criticals_4.xml"
+		
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -420,7 +405,6 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 				
-#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -453,7 +437,6 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
-#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 
@@ -486,7 +469,6 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
-#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
@@ -520,7 +502,6 @@
 #include "gameplay\character_food.xml"
 		</supplies>
 
-#include "gameplay\character_criticals_4.xml"
 #include "gameplay\character_dialogs.xml"
 	</specific_character>
 	
@@ -549,8 +530,6 @@
 			ammo_5.45x39_ap = 1 \n
 			device_torch \n
 		</supplies>
-
-#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"
@@ -585,8 +564,7 @@
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"
 		</supplies>
-		
-#include "gameplay\character_criticals_6.xml"
+
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -620,7 +598,6 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 
-#include "gameplay\character_criticals_6.xml"
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -654,7 +631,6 @@
 #include "gameplay\character_food.xml"			
 		</supplies>
 		
-#include "gameplay\character_criticals_6.xml"
 #include "gameplay\character_dialogs.xml"
 		<start_dialog>hello_dialog</start_dialog>
 	</specific_character>
@@ -680,14 +656,12 @@
 			[spawn] \n
 			wpn_pm \n
 			ammo_9x18_fmj \n
-			wpn_bm16 \n
+            wpn_spas12_m1 \n
 			ammo_12x76_dart \n
 			device_torch \n
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
-
-#include "gameplay\character_criticals_6.xml"
 
 		<start_dialog>gar_dolg_blokpost</start_dialog>
 		<start_dialog>dm_hello_dialog</start_dialog>
@@ -722,8 +696,6 @@
 #include "gameplay\character_drugs.xml" \n
 #include "gameplay\character_food.xml"			
 		</supplies>
-		
-#include "gameplay\character_criticals_3.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"
@@ -748,8 +720,6 @@
 		<supplies>
 			[spawn] \n
 		</supplies>
-		
-#include "gameplay\character_criticals_4.xml"
 
 		<start_dialog>hello_dialog</start_dialog>
 #include "gameplay\character_dialogs.xml"	
