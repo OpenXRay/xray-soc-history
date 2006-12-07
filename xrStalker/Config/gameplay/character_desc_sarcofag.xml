@@ -4,7 +4,7 @@
 
 <specific_character id="sar_monolith_specnaz_default1" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -24,17 +24,14 @@
             wpn_fn2000 \n
             ammo_5.56x45_ap = 1 \n
 #include "gameplay\character_food.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_specnaz_default2" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -54,17 +51,14 @@
             wpn_g36 \n
             ammo_5.56x45_ap = 1 \n
 #include "gameplay\character_food.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_specnaz_default3" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -84,17 +78,14 @@
             wpn_val \n
 			ammo_9x39_ap = 1 \n
 #include "gameplay\character_food.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_specnaz_default4" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -114,17 +105,14 @@
             wpn_groza \n
 			ammo_9x39_ap \n
 #include "gameplay\character_food.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_specnaz_default5" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -144,10 +132,7 @@
             wpn_groza \n
 			ammo_9x39_ap \n
 #include "gameplay\character_food.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
@@ -157,7 +142,7 @@
 <!---------------------------- EXO ------------------------->   
     <specific_character id="sar_monolith_exo_default2" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -178,17 +163,14 @@
             wpn_groza \n
 			ammo_9x39_ap \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_exo_default3" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -209,17 +191,14 @@
             wpn_groza \n
 			ammo_9x39_ap \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_exo_default4" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -240,10 +219,7 @@
             wpn_groza \n
 			ammo_9x39_ap \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
@@ -251,7 +227,7 @@
     
     <specific_character id="sar_monolith_exo_default6" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -272,17 +248,14 @@
             wpn_spas12 \n
 			ammo_12x76_zhekan = 1 \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_exo_default7" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -303,17 +276,14 @@
             wpn_spas12 \n
 			ammo_12x76_zhekan = 1 \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_exo_default8" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -334,17 +304,14 @@
             wpn_val \n
 			ammo_9x39_ap = 1 \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar_monolith_exo_crystal_1" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_cristall_bio</bio>
 
@@ -362,20 +329,17 @@
             [spawn] \n
             wpn_usp \n
             ammo_11.43x23_hydro = 1 \n
-            wpn_g36 \n
+            wpn_g36_m1 \n
             ammo_5.56x45_ap = 1 \n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
 
 	<specific_character id="sar_monolith_commander" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_nauchniy</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar_monolith_bio</bio>
 
@@ -394,19 +358,16 @@
             wpn_usp \n
             ammo_11.43x23_hydro = 1 \n
             wpn_gauss \n
-            ammo_gauss = 1 \n
+            ammo_gauss = 1\n
 #include "gameplay\character_drugs.xml"
-#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
         
     <specific_character id="sar2_monolith_regular" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -423,17 +384,14 @@
 			[spawn] \n
 			wpn_groza \n
 			ammo_9x39_ap \n	
-			#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar2_monolith_regular2" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -450,17 +408,14 @@
 			[spawn] \n
 			wpn_groza \n
 			ammo_9x39_ap \n	
-			#include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar2_monolith_specnaz" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -477,17 +432,14 @@
 			[spawn] \n
 			wpn_fn2000 \n
             ammo_5.56x45_ap = 1 \n
-            #include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar2_monolith_specnaz2" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_hood_9</icon>
+        <icon x="6" y="2"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -504,10 +456,7 @@
 			[spawn] \n
 			wpn_fn2000 \n
             ammo_5.56x45_ap = 1 \n
-            #include "gameplay\character_items.xml" \n
         </supplies>
-        
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
@@ -516,7 +465,7 @@
 	
 	<specific_character id="sar2_monolith_exo" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -533,17 +482,14 @@
 			[spawn] \n
 			wpn_g36 \n
             ammo_5.56x45_ap = 1 \n
-            #include "gameplay\character_items.xml" \n
 		</supplies>
-		
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
     
     <specific_character id="sar2_monolith_exo2" team_default = "1">
         <name>GENERATE_NAME_stalker</name>
-        <icon>ui_npc_u_stalker_mo_exo</icon>
+        <icon x="28" y="8"></icon>
         <map_icon x="3" y="0"></map_icon>
         <bio>sar2_bio</bio>
 
@@ -559,11 +505,8 @@
         <supplies>
 			[spawn] \n
 			wpn_gauss \n
-			ammo_gauss = 1 \n
-			#include "gameplay\character_items.xml" \n
+			ammo_gauss = 1\n
 		</supplies>
-		
-#include "gameplay\character_criticals_1.xml"
 					
 		<start_dialog>hello_dialog</start_dialog>
     </specific_character>
