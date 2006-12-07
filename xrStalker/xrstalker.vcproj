@@ -634,6 +634,9 @@
 					RelativePath=".\Config\misc\task_manager.ltx">
 				</File>
 				<File
+					RelativePath=".\Config\misc\treasure_manager.ltx">
+				</File>
+				<File
 					RelativePath=".\Config\misc\trigger.ltx">
 				</File>
 				<File
@@ -2129,6 +2132,9 @@
 				</File>
 				<File
 					RelativePath=".\Config\scripts\gar_dm_novice.ltx">
+				</File>
+				<File
+					RelativePath=".\Config\scripts\gar_dolg_pass_gates.ltx">
 				</File>
 				<File
 					RelativePath=".\config\scripts\postprocess.ltx">
@@ -3739,6 +3745,9 @@
 					</File>
 					<File
 						RelativePath=".\scripts\trade_manager.script">
+					</File>
+					<File
+						RelativePath=".\scripts\treasure_manager.script">
 					</File>
 					<File
 						RelativePath=".\Scripts\xr_box.script">
