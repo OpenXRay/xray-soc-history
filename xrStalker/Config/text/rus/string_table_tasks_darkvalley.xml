@@ -41,7 +41,7 @@
 		<text>Открыть дверь с помощью кода</text>
 	</string>
 	<string id="val_captive_help">
-		<text>Отбить долговца</text>
+		<text>Освободить долговца</text>
 	</string>
 	<string id="val_captive_help_1">
 		<text>Следовать за Пулей к месту засады</text>
@@ -50,7 +50,7 @@
 		<text>Уничтожить бандитов и спасти долговца</text>
 	</string>
 	<string id="val_come_to_trader">
-		<text>Выбраться через южные ворота</text>
+		<text>Вернуться к торговцу</text>
 	</string>
 	<string id="val_come_to_trader_0">
 		<text>Вернуться к торговцу</text>
@@ -62,11 +62,20 @@
 		<text>Показать документы торговцу</text>
 	</string>
 	<string id="val_prisoner_help">
-		<text>Спасти долговца</text>
+		<text>Освободить долговца из тюрьмы</text>
 	</string>
 	<string id="val_prisoner_help_0">
 		<text>Вытащить долговца из плена бандитов</text>
 	</string>
 	<string id="val_prisoner_help_main">
 		<text>Освободить долговца из тюрьмы бандитов</text>
+	</string>
+	<string id="val_sos_help">
+		<text>Помочь сталкеру</text>
+	</string>
+	<string id="val_sos_help_0">
+		<text>Неизвестный сталкер просит о помощи</text>
+	</string>
+	<string id="val_sos_help_main">
+		<text>Помочь сталкеру на заправке</text>
 	</string>
