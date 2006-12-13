@@ -91,7 +91,7 @@
 		</objective>
 	</game_task>
 	
-	<game_task id="mil_mad_job" prio="295">
+	<game_task id="mil_mad_job">
 		<title>mil_take_flash</title>
 		<objective>
 			<text>mil_take_flash</text>
@@ -119,11 +119,11 @@
 		</objective>
 	</game_task>
 	
-	<game_task id="mil_lukash_job" prio="300">
-		<title>mil_lukash_job</title>
+	<game_task id="mil_lukash_job" prio="295">
+		<title>mil_kill_dolg</title>
 		<objective>
 			<text>mil_kill_dolg</text>
-			<icon>ui_iconsTotal_mil_lukash_job</icon>
+			<icon x="0" y="0" width="50" height="50">ui\ui_icons_task</icon>
 			<function_fail>mil_tasks.lukash_job_fail</function_fail>
 			<infoportion_complete>mil_lukash_dolg_task_complete</infoportion_complete>
 			<infoportion_set_complete>mil_lukash_task_dolg_end</infoportion_set_complete>
@@ -160,10 +160,10 @@
 		</objective>
 	</game_task>
 	
-	<game_task id="mil_courier_job" prio="295">
+	<game_task id="mil_courier_job" prio="280">
 		<title>mil_courier_job</title>
 		<objective>
-			<icon>ui_iconsTotal_mil_courier_job</icon>
+			<icon x="0" y="0" width="50" height="50">ui\ui_icons_task</icon>
 			<infoportion_complete>mil_leader_quest2_complete</infoportion_complete>
 			<function_fail>mil_tasks.courier_job_failed</function_fail>
             <function_call_complete>mil_tasks.switch_mutants_online</function_call_complete>
@@ -220,44 +220,48 @@
 		</objective>
 	</game_task>
 	
-	<game_task id="mil_blockpost_job" prio="290">
+	<game_task id="mil_blockpost_job" prio="275">
 		<title>mil_blockpost_help</title>
 		<objective>
 			<text>mil_blockpost_help</text>
-			<icon>ui_iconsTotal_mil_blockpost_job</icon>
-			<infoportion_complete>mil_fblockpost_quest_reward</infoportion_complete>
+			<icon x="0" y="0" width="50" height="50">ui\ui_icons_task</icon>
+			<infoportion_complete>mil_fblockpost_quest_complete</infoportion_complete>
 			<function_fail>mil_tasks.fblockpost_job_failed</function_fail>
 			<article>mil_blockpost_job_descr</article>
 		</objective>
 		<objective>
-			<text>mil_fblockpost_phase3</text>
-			<infoportion_complete>mil_freedom_commander_talk</infoportion_complete>
-			<infoportion_fail>mil_fblockpost_commander_dead</infoportion_fail>
-            <map_location_type hint="mil_cap_hint">blue_location</map_location_type>
-            <object_story_id>Mil_Kap</object_story_id>
-		</objective>
-		<objective>
 			<text>mil_fblockpost_phase2</text>
+			<icon x="0" y="150" width="50" height="50">ui\ui_icons_task</icon>
 			<infoportion_complete>mil_fblockpost_quest_complete</infoportion_complete>
 			<infoportion_fail>mil_fblockpost_quest_fail</infoportion_fail>
 		</objective>
+	</game_task>
+
+	<game_task id="mil_blockpost_job2" prio="275">
+		<title>mil_talk_with_cap</title>
+		<objective>
+			<text>mil_talk_with_cap</text>
+			<icon x="0" y="0" width="50" height="50">ui\ui_icons_task</icon>
+			<infoportion_complete>mil_freedom_commander_talk</infoportion_complete>
+			<function_fail>mil_tasks.fblockpost_job_failed2</function_fail>
+			<article>mil_blockpost_job2_descr</article>
+		</objective>
 		<objective>
 			<text>mil_fblockpost_phase3</text>
-			<infoportion_complete>mil_fblockpost_quest_reward</infoportion_complete>
+			<icon x="400" y="0" width="50" height="50">ui\ui_icons_task</icon>
+			<infoportion_complete>mil_freedom_commander_talk</infoportion_complete>
 			<infoportion_fail>mil_fblockpost_commander_dead</infoportion_fail>
             <map_location_type hint="mil_cap_hint">blue_location</map_location_type>
             <object_story_id>Mil_Kap</object_story_id>
 		</objective>
 	</game_task>
 
-
 	<game_task id="mil_freedom_rg6_task" prio="425">
 		<title>mil_freedom_rg6_task</title>
 		<objective>
 			<text>mil_freedom_rg6_task</text>
-			<icon>ui_iconsTotal_mil_freedom_rg6_task</icon>
+			<icon x="50" y="150" width="50" height="50">ui\ui_icons_task</icon>
 			<infoportion_complete>bar_svoboda_rg6_done</infoportion_complete>
-			<article>mil_freedom_rg6_task_descr</article>
 		</objective>
 		<objective>
 			<text>mil_find_cook</text>
@@ -296,7 +300,7 @@
 	</game_task>
 
 	
-	<game_task id = "mil_hunters_task" prio="300">
+	<game_task id = "mil_hunters_task" prio="275">
 			<title>mil_hunters_task</title>
 		<objective>
 			<icon x="100" y="50" width="50" height="50">ui\ui_icons_task</icon>
@@ -324,7 +328,7 @@
 		</objective>
 	</game_task>
 	
-	<game_task id = "mil_go_to_miser" prio="299">
+	<game_task id = "mil_go_to_miser" prio="275">
 		<title>mil_go_to_miser_task_main</title>
 		<objective>
 			<icon x="100" y="50" width="50" height="50">ui\ui_icons_task</icon>
@@ -342,7 +346,7 @@
 		</objective>
 	</game_task>
 	
-	<game_task id = "mil_kill_controller" prio="300">
+	<game_task id = "mil_kill_controller" prio="275">
 		<title>mil_kill_controller_main</title>
 		<objective>
 			<icon x="100" y="50" width="50" height="50">ui\ui_icons_task</icon>
