@@ -66,6 +66,9 @@ function CTreasure:__init()
 end
 --' ёзание инициатора (возможность выдать тайник)
 function CTreasure:use(npc)
+	if true then
+		return
+	end
 	for k,v in pairs(self.treasure_info) do
 		if xr_logic.pick_section_from_condlist(db.actor, npc, v.condlist) == "true" then
 			printf("TREASURE")
