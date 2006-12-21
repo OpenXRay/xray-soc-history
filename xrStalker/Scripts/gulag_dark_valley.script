@@ -87,39 +87,11 @@ local function checkCommon(npc_community, gulag_type, npc_rank, se_obj, stalker)
 end
 
 function checkStalker(npc_community, gulag_type, npc_rank, se_obj)
-   -- return checkCommon(npc_community, gulag_type, npc_rank, se_obj, true)
-if gulag_type == "val_escort" then
-		return npc_community == "dolg" or npc_community == "bandit"
-	end
-	if gulag_type == "val_sacrifice" then
-		return npc_community == "dolg" or npc_community == "bandit"
-	end
-	if gulag_type == "val_prisoner" then
-		return npc_community == "dolg"
-	end
-	if gulag_type == "val_sos" then
-		return npc_community == "stalker"
-	end
-	if gulag_type == "val_rob" then
-		return npc_community == "stalker"
-	end
-	if gulag_type == "val_lager_bandits" then
-		return npc_community == "bandit"
-	end
-	if gulag_type == "val_watchtower" then
-		return true
-	end
-	if gulag_type == "val_soldiers_raid" then
-		return npc_community == "military"
-	end
-	if gulag_type == "offline_group" then
-		return true
-	end
-	return false
+    return checkCommon(npc_community, gulag_type, npc_rank, se_obj, true)
 end
 
 function checkMonster(npc_community, gulag_type, npc_rank, se_obj)
-    return false
+    return checkCommon(npc_community, gulag_type, npc_rank, se_obj, false)
 end
 
 
@@ -300,21 +272,21 @@ gulags.val_escort.job = function(sj, gname, type, squad, groups)
                "combat_ignore   = combat_ignore\n" ..
 
                "[wounded@" .. gname .. "_halfdead]\n" ..
-               "hp_state        = 0|wounded_heavy@nil\n" ..
-               "hp_state_see    = 0|wounded_heavy@nil\n" ..
-               "hp_cover        = 0|false\n" ..
-               "hp_fight        = 0|false\n" ..
+               "hp_state        = 10|wounded_heavy@nil\n" ..
+               "hp_state_see    = 10|wounded_heavy@nil\n" ..
+               "hp_cover        = 10|false\n" ..
+               "hp_fight        = 10|false\n" ..
 
                "[wounded@" .. gname .. "_halfdead1]\n" ..
-               "hp_state        = 0|wounded_heavy@nil\n" ..
-               "hp_state_see    = 0|wounded_heavy@nil\n" ..
-               "hp_cover        = 0|false\n" ..
-               "hp_fight        = 0|false\n" ..
+               "hp_state        = 1|wounded_heavy@nil\n" ..
+               "hp_state_see    = 1|wounded_heavy@nil\n" ..
+               "hp_cover        = 10|false\n" ..
+               "hp_fight        = 10|false\n" ..
 
                "[remark@" .. gname .. "_halfdead_wait]\n" ..
                "path_walk           = nap1_look\n" ..
                "anim                = wounded_heavy ;wait\n" ..
-               "target              = 406\n" ..
+               --"target              = 406\n" ..
                "on_info             = {+val_nap1_phrase1_end} remark@" .. gname .. "_halfdead_phrase\n" ..
                "wounded             = wounded@" .. gname .. "_halfdead\n" ..
                "combat_ignore_cond  = always\n" ..
@@ -326,16 +298,15 @@ gulags.val_escort.job = function(sj, gname, type, squad, groups)
                "[remark@" .. gname .. "_halfdead_phrase]\n" ..
                "anim                = wounded_heavy ;wait\n" ..
                "snd                 = speech\n" ..
-               "target              = 406\n" ..
+               --"target              = 406\n" ..
                "on_signal           = sound_end | remark@" .. gname .. "_halfdead_end %+val_halfdead_phrase_end%\n" ..
                "wounded             = wounded@" .. gname .. "_halfdead1\n" ..
                "combat_ignore_cond  = always\n" ..
 
                "[remark@" .. gname .. "_halfdead_end]\n" ..
                "anim            = wounded_heavy ;wait\n" ..
-               "target          = 406\n" ..
-               "wounded         = wounded@" .. gname .. "_halfdead\n" ..
-			   "combat_ignore_cond  = always\n"
+               --"target          = 406\n" ..
+               "wounded         = wounded@" .. gname .. "_halfdead\n"
 
     gulags.val_escort.ltx = ltx
 end
@@ -412,7 +383,7 @@ gulags.val_sacrifice.job = function(sj, gname, type, squad, groups)
                 --"on_info = {=hit_by_actor} %+val_sacrifice_plr_detected +val_sacrifice_finish%\n" ..
 
                 "[danger@" .. gname .. "_guard]\n" ..
-                "ignore_distance               = 0\n" ..
+                "ignore_types               = corpse\n" ..
                 --"ignore_distance_sound      = 4\n" ..
                 --"danger_inertion_time_sound = 2000\n" ..
 
@@ -622,7 +593,7 @@ gulags.val_rob.job = function(sj, gname, type, squad, groups)
                 "victim_wpn     = 25| actor\n" ..
                 "use            = true\n" ..
                 "use_wpn        = false\n" ..
-                "zone           = val_rob_warn_zone| {+val_rob_buying} threat@ {+val_rob_buying} val_rob_guard_jeer | val_rob_kill_zone| {+val_rob_buying} true \n" ..
+                "zone           = val_rob_warn_zone| {+val_rob_buying} threat@ {+val_rob_buying} val_rob_guard_jeer | val_rob_kill_zone| {+val_rob_buying} true@ {+val_rob_buying} talk_abuse\n" ..
 
                 "[kamp@" .. gname .. "_kamp]\n" ..
                 "center_point    = kamp\n" ..

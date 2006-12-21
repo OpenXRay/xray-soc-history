@@ -744,7 +744,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --мужик у костра 1    
     t = {section = "logic@mil_fblockpost_stalker",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 1, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -753,7 +753,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --мужик у костра 2
     t = {section = "logic@mil_fblockpost_stalker",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 1, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -762,7 +762,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --мужик у костра 3
     t = {section = "logic@mil_fblockpost_stalker",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 1, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -771,7 +771,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --мужик у костра 4
     t = {section = "logic@mil_fblockpost_stalker",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 1, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -780,7 +780,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --мужик у костра 5
     t = {section = "logic@mil_fblockpost_stalker",
 		idle = 0,
-		prior = 5, state = {0},
+		prior = 1, state = {0},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -789,7 +789,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --командир
     t = {section = "logic@mil_fblockpost_commander",
 		idle = 0,
-		prior = 10, state = {0, 1},
+		prior = 4, state = {0, 1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
 		position_threshold = 100,
@@ -801,7 +801,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --патрульный 1
     t = {section = "logic@mil_fblockpost_patrol1",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 3, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -810,7 +810,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --патрульный 2
     t = {section = "logic@mil_fblockpost_patrol2",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 2, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -819,7 +819,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 1
     t = {section = "logic@mil_fblockpost_camper3",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 2, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -828,7 +828,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 2
     t = {section = "logic@mil_fblockpost_camper6",
 		idle = 0,
-		prior = 5, state = {0, 1},
+		prior = 1, state = {0, 1},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -838,7 +838,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 1
     t = {section = "logic@mil_fblockpost_camper1",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -847,7 +847,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 2
     t = {section = "logic@mil_fblockpost_camper2",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -856,7 +856,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 3
     t = {section = "logic@mil_fblockpost_camper3",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -865,7 +865,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 4
     t = {section = "logic@mil_fblockpost_camper4",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -874,7 +874,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 5
     t = {section = "logic@mil_fblockpost_camper5",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -883,7 +883,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 6
     t = {section = "logic@mil_fblockpost_camper6",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -892,7 +892,7 @@ function load_job_fblockpost (sj, gname, type, squad, groups)
     --кэмпер 7
     t = {section = "logic@mil_fblockpost_camper7",
 		idle = 0,
-		prior = 5, state = {2},
+		prior = 1, state = {2},
 		squad = squad, group = groups[0],
 		position_threshold = 100,
 		in_rest = "", out_rest = ""
@@ -1206,7 +1206,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 13, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg" and info.story_id == 708
 		            end
@@ -1218,7 +1218,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1230,7 +1230,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 12, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg" and info.story_id == 711
 		            end
@@ -1242,7 +1242,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1254,7 +1254,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1266,7 +1266,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1278,7 +1278,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1290,7 +1290,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {0},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1302,7 +1302,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 13, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     if info.community ~= "dolg" then return false end
 		                     if has_alife_info("mil_scull_dead") then return true end
@@ -1316,7 +1316,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1328,7 +1328,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 12, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg" and info.story_id == 711
 		            end
@@ -1340,7 +1340,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1352,7 +1352,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 11, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1364,7 +1364,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 11, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1376,7 +1376,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 11, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1388,7 +1388,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {1},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1400,7 +1400,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 13, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     if info.community ~= "dolg" then return false end
 		                     if has_alife_info("mil_scull_dead") then return true end
@@ -1414,7 +1414,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1426,7 +1426,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 12, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1438,7 +1438,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1450,7 +1450,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1462,7 +1462,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1474,7 +1474,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1486,7 +1486,7 @@ function load_job_dolg (sj, gname, type, squad, groups)
 		prior = 10, state = {2},
 		squad = squad, group = groups[0],
 		in_rest = "", out_rest = "",
-		position_threshold = 400,
+		position_threshold = 100,
 		predicate = function (info)
 		                     return info.community == "dolg"
 		            end
@@ -1501,7 +1501,8 @@ end
 --              2 - Лукаш убит - возвращение на хутор
 --------------------------------------------------------------------------
 function check_dolg_state (gulag)
-      
+    local actor = db.actor
+    
     if has_alife_info("mil_lukash_dead") == true then
        return 2
     end    

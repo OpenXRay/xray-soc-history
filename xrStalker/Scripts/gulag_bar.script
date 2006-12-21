@@ -556,7 +556,6 @@ function load_job(sj, gname, type, squad, groups)
 		t = { section = "logic@bar_ecolog_professor", 
 			idle = 0,
 			prior = 10, state = {0}, squad = squad, group = groups[0],
-			online = true,
 			in_rest = "", out_rest = "",
 			predicate = function(obj_info)
 				         	return obj_info.story_id == 503
@@ -807,13 +806,13 @@ function load_job(sj, gname, type, squad, groups)
 		table.insert(sj, t)
 		t = { section = "logic@bar_freedom_attack_chaser_10", 
 			idle = 0,
-			prior = 5, state = {2,3}, squad = squad, group = groups[0],
+			prior = 2, state = {2,3}, squad = squad, group = groups[0],
 			in_rest = "",position_threshold = 150, out_rest = "rostok_chase_restrictor"
 		}
 		table.insert(sj, t)
 		t = { section = "logic@bar_freedom_attack_chaser_11", 
 			idle = 0,
-			prior = 5, state = {2,3}, squad = squad, group = groups[0],
+			prior = 2, state = {2,3}, squad = squad, group = groups[0],
 			in_rest = "",position_threshold = 150, out_rest = "rostok_chase_restrictor"
 		}
 		table.insert(sj, t)

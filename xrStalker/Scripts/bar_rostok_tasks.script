@@ -26,10 +26,7 @@ function process_info_portion(info_id)
 end
 
 function has_hunter_rifle(task, objective)
-	if db.actor ~= nil then
-		return db.actor:object("hunters_toz") ~= nil
-	end
-	return false
+	return db.actor:object("hunters_toz") ~= nil
 end
 
 function has_lucky_pda(task, objective)
@@ -41,20 +38,13 @@ function has_tiran_pda(task, objective)
 end
 
 function has_x16_documents(task, objective)
-	if db.actor ~= nil then
-		return db.actor:object("lab_x16_documents") ~= nil
-	end
-	return false
+	return db.actor:object("lab_x16_documents") ~= nil
 end
 
 function has_professor_research(task, objective)
-	if db.actor ~= nil then
-		return db.actor:object("bar_ecolog_flash") ~= nil
-	end	
-	return false
+	return db.actor:object("bar_ecolog_flash") ~= nil
 end
 
 function has_dolg_arhive_documents(task, objective)
 	return db.actor:object("dolg_arhive_documents") ~= nil
 end
-
