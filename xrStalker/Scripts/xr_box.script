@@ -181,9 +181,9 @@ end
 function create_obligatory_items(obj, item , count)
 	for i = 1,count do
 				local position = vector():set(0,0,0)
-				position.x = obj:position().x --+ math.random(-30,30)/100
-				position.z = obj:position().z --+ math.random(-30,30)/100
-				position.y = obj:position().y --+ math.random(30,50)/100
+				position.x = obj:position().x + math.random(-30,30)/100
+				position.z = obj:position().z + math.random(-30,30)/100
+				position.y = obj:position().y + math.random(30,50)/100
 
 				alife():create(item,	
 					    position,
