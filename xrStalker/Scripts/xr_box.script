@@ -117,7 +117,7 @@ function create_items(obj, section, number, rnd)
 				position.z = obj:position().z + math.random(-30,30)/100
 				position.y = obj:position().y + math.random(30,50)/100
 
-				alife():create_ammo(section,	
+				create_ammo(section,	
 					    position,
 						obj:level_vertex_id(),	
 						obj:game_vertex_id(),

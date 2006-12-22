@@ -1,8 +1,12 @@
 local treasure_manager = nil
 
 function parse_spawns(line)
+	if line == nil then
+		return {}
+	end
+
 	--' если default-ов больше, чем значений в ini, то забить недостающие последним значением из ini
-	local t = parse_names(line)
+	local t = se_respawn.parse_names(line)
 	local n = table.getn(t)
 		
 	local ret_table = {}
@@ -56,9 +60,12 @@ function CTreasure:__init()
 
 		self.treasure_info[id].target		= utils.cfg_get_number(self.ini, id, "target", nil, true)
 		self.treasure_info[id].name			= utils.cfg_get_string(self.ini, id, "name", nil, true, "")
-		self.treasure_info[id].info			= utils.cfg_get_string(self.ini, id, "info", nil, true, "")
 		self.treasure_info[id].description	= utils.cfg_get_string(self.ini, id, "description", nil, true, "")
 		self.treasure_info[id].items		= parse_spawns(utils.cfg_get_string(self.ini, id, "items", nil, true, ""))
+		if self.treasure_info[id].items == nil then
+			abort("cant find 'items' in %s", id)
+		end
+
 		self.treasure_info[id].condlist		= xr_logic.parse_condlist(db.actor, "treasure_manager", "condlist", utils.cfg_get_string(self.ini, id, "condlist", nil, false, "", ""))
 
 		print_table(self.treasure_info)
@@ -66,35 +73,31 @@ function CTreasure:__init()
 end
 --' Юзание инициатора (возможность выдать тайник)
 function CTreasure:use(npc)
-	if true then
-		return
-	end
 	for k,v in pairs(self.treasure_info) do
 		if xr_logic.pick_section_from_condlist(db.actor, npc, v.condlist) == "true" then
-			printf("TREASURE")
-			--' Занести в пда
-			db.actor:give_info_portion(v.info)
-
 			--' Пометить на карте
 			local obj = alife():story_object(v.target)
-			level.map_add_object_spot(obj.id, "treasure", "to_rostok")
+			if obj ~= nil then
+				level.map_add_object_spot(obj.id, "treasure", v.description)
 
-			--' Сгенерить вещи
-			for kk,vv in pairs(v.items) do
-				if ammo_section[vv.section] == true then
-				    alife():create_ammo(vv.section,	
-							obj.position,
-							obj.m_level_vertex_id,	
-							obj.m_game_vertex_id,
-							obj.id,
-							vv.prob)
-				else
-					for i=1,vv.prob do
-						alife():create(vv.section,
+				printf("TREASURE %s", k)
+				--' Сгенерить вещи
+				for kk,vv in pairs(v.items) do
+					if ammo_section[vv.section] == true then
+						se_respawn.create_ammo(vv.section,	
 								obj.position,
 								obj.m_level_vertex_id,	
 								obj.m_game_vertex_id,
-								obj.id)
+								obj.id,
+								vv.prob)
+					else
+						for i=1,vv.prob do
+							alife():create(vv.section,
+									obj.position,
+									obj.m_level_vertex_id,	
+									obj.m_game_vertex_id,
+									obj.id)
+						end
 					end
 				end
 			end
