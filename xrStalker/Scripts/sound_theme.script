@@ -65,7 +65,11 @@ ph_snd_themes["bomb"] = {"detectors\\bomb_timer"}
 ph_snd_themes["detector"] = {"detectors\\da-2_beep1"}
 
 
-ph_snd_themes["radio_music"] = {"characters_voice\\scenario\\bar\\radio_music\\radio_music_1"}
+ph_snd_themes["radio_music"] = {"characters_voice\\scenario\\bar\\radio_music\\radio_music_4",
+	                        "characters_voice\\scenario\\bar\\radio_music\\radio_music_2",
+	                        "characters_voice\\scenario\\bar\\radio_music\\radio_music_3",
+	                        "characters_voice\\scenario\\bar\\radio_music\\radio_music_1"
+	                        }
 
 ph_snd_themes["dolg_speech"]		= {[[characters_voice\scenario\bar\barman_megafon\megaphone_barman_1]],
 									   [[characters_voice\scenario\bar\barman_megafon\megaphone_barman_2]],
@@ -199,7 +203,6 @@ ph_snd_themes["x16_switch_1"] = {"ambient\\x16\\switch_1"}
 ph_snd_themes["x16_switch_2"] = {"ambient\\x16\\switch_2"}
 
 ph_snd_themes["x18_firedoor"] = {"anomaly\\fireball_idle"}
-ph_snd_themes["mon_poltergeist"] = {"anomaly\\anomaly_gravy_hit1"}
 
 ph_snd_themes["psy_voices"] = {{[[characters_voice\scenario\yantar\psy_voices_1]]}} --' Стерео
 
@@ -234,15 +237,6 @@ function weather_class(avail_types, npc)
 	return type
 end
 
-function combat_class(avail_types, npc)
-	if npc:best_enemy() ~= nil or
-	   npc:best_danger() ~= nil
-	then
-		return ""
-	end
-	return "state"
-end
-
 -------------------------------------------------------------------------
 -- ЗВУКИ СТАЛКЕРОВ
 -------------------------------------------------------------------------
@@ -259,9 +253,7 @@ theme = {
 						 weather_good	= {min_snd = 3, max_snd = 5, rnd = 100, prior = 5, rnd_id = id(), into_id = id(), max_ids = {}} }},
 
 	-- состояния тела
-	state = {	exec = sound_theme.combat_class, 
-				types = {state	= {min_snd = 10, max_snd = 15, rnd = 75, prior = 5, rnd_id = id(), into_id = id(), max_ids = {}}} },
-	
+	state				= {min_snd = 10, max_snd = 15, rnd = 75, prior = 5, rnd_id = id(), into_id = id(), max_ids = {}},
 
 	sleep				= {min_snd = 10, max_snd = 15, rnd = 75, prior = 5, rnd_id = id(), into_id = id(), max_ids = {}},
 
