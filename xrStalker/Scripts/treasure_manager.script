@@ -77,8 +77,9 @@ function CTreasure:use(npc)
 		if xr_logic.pick_section_from_condlist(db.actor, npc, v.condlist) == "true" then
 			--' Пометить на карте
 			local obj = alife():story_object(v.target)
-			if obj ~= nil then
-				level.map_add_object_spot(obj.id, "treasure", v.description)
+			if obj ~= nil then				
+				local text = "%c[255,238,155,23]"..game.translate_string(v.name).."\\n".."%c[default]"..game.translate_string(v.description)
+				level.map_add_object_spot(obj.id, "treasure", text)
 
 				printf("TREASURE %s", k)
 				--' Сгенерить вещи
