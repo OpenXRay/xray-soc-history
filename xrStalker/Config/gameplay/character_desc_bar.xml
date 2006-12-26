@@ -20,7 +20,7 @@
 					
 		<start_dialog>bar_bar_barmen_start</start_dialog>
 		<actor_dialog>bar_bar_barmen_talk_info</actor_dialog>
-		<!--actor_dialog>bar_bar_barmen_jobs</actor_dialog-->
+		<actor_dialog>bar_bar_barmen_jobs</actor_dialog>
 		<!--actor_dialog>bar_bar_barmen_jobs_room</actor_dialog-->
 		<actor_dialog>bar_bar_barman_ecolog_flash_done</actor_dialog>
 		<actor_dialog>bar_bar_barman_veterans_finish</actor_dialog>
@@ -600,7 +600,7 @@
 		<community>dolg</community> <terrain_sect>stalker_dolg_terrain</terrain_sect>
 		<money min="5000" max="10000" infinitive="0"></money>
 
-		<rank>918</rank>
+		<rank>989</rank>
 		<reputation>0</reputation>
  
 		<visual>actors\dolg\stalker_do_komandir</visual>
