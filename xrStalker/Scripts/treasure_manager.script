@@ -96,7 +96,11 @@ function CTreasure:use(npc)
 		end
 	end
 
-	local v = self.treasure_info[avail[math.random(table.getn(avail))]]
+	local num = table.getn(avail)
+	if num == 0 then
+		return
+	end
+	local v = self.treasure_info[avail[math.random(num)]]
 	--' Пометить на карте
 	local obj = alife():story_object(v.target)
 	if obj ~= nil then				
