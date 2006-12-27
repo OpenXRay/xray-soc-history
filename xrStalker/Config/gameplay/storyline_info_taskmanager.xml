@@ -340,6 +340,13 @@
 <article id="barmen_defend_camp_2_descr" name="defend_lager" group="defend_lager/1" article_type="task">
         <text>barmen_defend_camp_2_descr</text>
 </article>
+;------Freedom---------
+<article id="freedom_defend_lager_1_descr" name="defend_lager" group="defend_lager/1" article_type="task">
+        <text>freedom_defend_lager_1_descr</text>
+</article>
+<article id="freedom_defend_lager_2_descr" name="defend_lager" group="defend_lager/1" article_type="task">
+        <text>freedom_defend_lager_2_descr</text>
+</article>
 
 
 <!-- TREASURES -->
@@ -350,7 +357,7 @@
 
 <!-- my -->
 
-<!-- tasks for plichko  -->
+<!-- tasks for zastava_commander  -->
 	
 	<article id="zastava_commander_eliminate_lager_descr" name="eliminate_lager" group="eliminate_lager/1" article_type="task">
 		<text>zastava_commander_eliminate_lager_descr</text>
@@ -398,7 +405,7 @@
 	
 	<!-- tasks for Mercenary -->
 	
-	<article id="Mercenary_kill_stalker_descr" name="kill_stalker" group="kill_stalker/1" article_type="task">
-		<text>Mercenary_kill_stalker_descr</text>
+	<article id="mercenary_kill_stalker_descr" name="kill_stalker" group="kill_stalker/1" article_type="task">
+		<text>mercenary_kill_stalker_descr</text>
 	</article>
 	
