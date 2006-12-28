@@ -107,6 +107,8 @@ function CTreasure:use(npc)
 		local text = "%c[255,238,155,23]"..game.translate_string(v.name).."\\n".."%c[default]"..game.translate_string(v.description)
 		level.map_add_object_spot(obj.id, "treasure", text)
 
+		news_manager.send_treasure(v.name)
+
 		printf("TREASURE %s", v.name)
 		--' —генерить вещи
 		for kk,vv in pairs(v.items) do
