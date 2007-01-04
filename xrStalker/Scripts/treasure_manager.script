@@ -75,6 +75,9 @@ function CTreasure:__init()
 		end
 
 		self.treasure_info[id].condlist		= xr_logic.parse_condlist(db.actor, "treasure_manager", "condlist", utils.cfg_get_string(self.ini, id, "condlist", nil, false, "", ""))
+		
+		--' Отметим тайник как новый
+		self.treasure_info[id].active = false
 
 		--print_table(self.treasure_info)
 	end
@@ -92,13 +95,14 @@ function CTreasure:use(npc)
 		end
 
 		if tonumber(treasure_prob) >= math.random(100) and
-		   v.community[npc:character_community()] == true
+		   v.community[npc:character_community()] == true and
+		   v.active == false
 		then
-			--' Вставить проверку что тайник уже выдан и не пустой
-			--' Вставить проверку что персонаж уже выдавал тайник
-
-
-			table.insert(avail, k)
+			if tonumber(treasure_prob) == 100 then
+				self:give_treasure(k)
+			else
+				table.insert(avail, k)
+			end
 		end
 	end
 
@@ -148,17 +152,33 @@ function CTreasure:give_treasure(k)
 				end
 			end
 		end
+		
+		--' Пометим тайник как выданный
+		self.treasure_info[k].active = true
 	else
 		abort("TREASURE %s, target doesnt exist", k)
 	end
 end
 --' Сохранение
 function CTreasure:save(p)
-
+	--' Сохраняем размер таблицы
+	local size = 0
+	for k,v in pairs(self.treasure_info) do
+		size = size + 1
+	end
+	p:w_u16(size)
+	for k,v in pairs(self.treasure_info) do
+		p:w_stringZ(k)
+		p:w_bool(v.active)
+	end
 end
 --' Загрузка
 function CTreasure:load(p)
-
+	local t = p:r_u16()
+	for i = 1,t do
+		local k = p:r_stringZ()
+		self.treasure_info[k].active = p:r_bool()
+	end
 end
 
 
