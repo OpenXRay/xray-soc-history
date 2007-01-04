@@ -85,7 +85,13 @@ function CTreasure:use(npc)
 	--' Нужно рандомно выбрать один из тайников.
 	local avail = {}
 	for k,v in pairs(self.treasure_info) do
-		if xr_logic.pick_section_from_condlist(db.actor, npc, v.condlist) == "true" and
+		local treasure_prob = xr_logic.pick_section_from_condlist(db.actor, npc, v.condlist)
+
+		if treasure_prob == "" or treasure_prob == nil then
+			treasure_prob = 0
+		end
+
+		if tonumber(treasure_prob) >= math.random(100) and
 		   v.community[npc:character_community()] == true
 		then
 			--' Вставить проверку что тайник уже выдан и не пустой
@@ -100,16 +106,29 @@ function CTreasure:use(npc)
 	if num == 0 then
 		return
 	end
-	local v = self.treasure_info[avail[math.random(num)]]
-	--' Пометить на карте
+
+	--' Выдать тайник
+	self:give_treasure(avail[math.random(num)])
+end
+--' Сохранение
+function CTreasure:check()
+	--' Проверка тайников
+	for k,v in pairs(self.treasure_info) do
+		--' Выдать тайник
+		self:give_treasure(k)
+	end
+end
+--' Выдача тайника
+function CTreasure:give_treasure(k)
+	local v = self.treasure_info[k]
 	local obj = alife():story_object(v.target)
-	if obj ~= nil then				
+	if obj ~= nil then
+		news_manager.send_treasure(v.name)
+
+		--' Пометить на карте		
 		local text = "%c[255,238,155,23]"..game.translate_string(v.name).."\\n".."%c[default]"..game.translate_string(v.description)
 		level.map_add_object_spot_ser(obj.id, "treasure", text)
 
-		news_manager.send_treasure(v.name)
-
-		printf("TREASURE %s", v.name)
 		--' Сгенерить вещи
 		for kk,vv in pairs(v.items) do
 			if ammo_section[vv.section] == true then
@@ -129,42 +148,8 @@ function CTreasure:use(npc)
 				end
 			end
 		end
-	end
-
-end
---' Сохранение
-function CTreasure:check()
-	--' Проверка тайников
-	for k,v in pairs(self.treasure_info) do
-		--' Пометить на карте
-		local obj = alife():story_object(v.target)
-		if obj ~= nil then				
-			local text = "%c[255,238,155,23]"..game.translate_string(v.name).."\\n".."%c[default]"..game.translate_string(v.description)
-			level.map_add_object_spot(obj.id, "treasure", text)
-
-			printf("TREASURE %s", k)
-			--' Сгенерить вещи
-			for kk,vv in pairs(v.items) do
-				if ammo_section[vv.section] == true then
-					se_respawn.create_ammo(vv.section,	
-							obj.position,
-							obj.m_level_vertex_id,	
-							obj.m_game_vertex_id,
-							obj.id,
-							vv.prob)
-				else
-					for i=1,vv.prob do
-						alife():create(vv.section,
-								obj.position,
-								obj.m_level_vertex_id,	
-								obj.m_game_vertex_id,
-								obj.id)
-					end
-				end
-			end
-		else
-			abort("TREASURE %s, target doesnt exist", k)
-		end
+	else
+		abort("TREASURE %s, target doesnt exist", k)
 	end
 end
 --' Сохранение
