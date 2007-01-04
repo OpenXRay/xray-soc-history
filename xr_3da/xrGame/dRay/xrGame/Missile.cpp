@@ -405,8 +405,19 @@ void CMissile::setup_throw_params()
 	trans.identity			();
 	Fvector					FirePos, FireDir;
 	if (this == inventory_owner->inventory().ActiveItem())
+	{
+		CInventoryOwner* io		= smart_cast<CInventoryOwner*>(H_Parent());
+		if(NULL == io->inventory().ActiveItem())
+		{
+				Log("current_state", GetState() );
+				Log("next_state", GetNextState());
+				Log("state_time", m_dwStateTime);
+				Log("item_sect", cNameSect().c_str());
+				Log("H_Parent", H_Parent()->cNameSect().c_str());
+		}
+
 		entity->g_fireParams(this, FirePos, FireDir);
-	else{
+	}else{
 		FirePos				= XFORM().c;
 		FireDir				= XFORM().k;
 	}
@@ -629,6 +640,8 @@ void CMissile::setup_physic_shell	()
 	VERIFY(!m_pPhysicsShell);
 	create_physic_shell();
 	m_pPhysicsShell->Activate	(XFORM(),0,XFORM(),true);
+	CKinematics					*kinematics = smart_cast<CKinematics*>(Visual());
+	VERIFY						(kinematics);
 	kinematics->CalculateBones_Invalidate();
 	kinematics->CalculateBones			();
 }
