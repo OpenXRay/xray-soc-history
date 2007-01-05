@@ -81,6 +81,12 @@ function CTreasure:__init()
 
 		--print_table(self.treasure_info)
 	end
+
+	--' Вспомогательные таблицы для облегчения поиска
+	self.treasure_by_target = {}
+	for k,v in pairs(self.treasure_info) do
+		self.treasure_by_target[v.target] = k	
+	end
 end
 --' Юзание инициатора (возможность выдать тайник)
 function CTreasure:use(npc)
@@ -159,6 +165,15 @@ function CTreasure:give_treasure(k)
 		abort("TREASURE %s, target doesnt exist", k)
 	end
 end
+--' Снимаем отметку с тайника
+function CTreasure:treasure_empty(box, box_story_id)
+	printf("!!! treasure empty")
+
+	local k = self.treasure_by_target[box_story_id]
+
+	self.treasure_info[k].active = false
+	level.map_remove_object_spot(obj:id(), "treasure")
+end
 --' Сохранение
 function CTreasure:save(p)
 	--' Сохраняем размер таблицы
@@ -189,6 +204,12 @@ function get_treasure_manager()
 	return treasure_manager
 end
 
+function take_item_from_box(box, box_story_id)
+	printf("!!! take item from box %s", tostring(box:is_inv_box_empty()))
+	if box:is_inv_box_empty() == true then
+		get_treasure_manager():treasure_empty(box, box_story_id)
+	end
+end
 
 function save(p)
 	get_treasure_manager():save(p)
