@@ -63,7 +63,7 @@ min_view_distance 			= 0.3				; коэффициент, который множится на eye_range, в за
 max_view_distance 			= 0.8				; коэффициент, который множится на eye_range, в зависимости от угла
 visibility_threshold	 	= 150.0				; значение, при достижении суммой которого объект считается видимым
 always_visible_distance 	= 0.1
-time_quant					= 0.05
+time_quant					= 0.01
 decrease_value				= 0.1				; значение, на которое уменьшается вес, если объект попал в фрустум, но отсёкся по каким-то причинам
 velocity_factor		     	= 0.5
 luminocity_factor			= 0.5				; фактор освещения (только для Актёра)
@@ -404,10 +404,8 @@ sound_anomaly_death				= fight\death\anomaly_
 sound_hit						= fight\hit\hit_
 sound_humming					= states\idle\idle_
 sound_alarm						= fight\enemy\enemy_
-sound_attack					= fight\attack\attack_
 sound_backup					= fight\backup\backup_
 sound_detour					= fight\detour\detour_
-sound_search					= fight\searching_enemy\search_
 sound_friendly_fire				= fight\friendly_fire\friendly_fire_
 sound_panic_human				= states\panic_human\panic_
 sound_panic_monster				= states\panic_monster\panic_
@@ -420,6 +418,15 @@ sound_walking_in_danger			= states\breath\breath_2
 sound_kill_wounded				= help\wounded\kill_wounded_
 sound_enemy_critically_wounded	= help\wounded\kill_wounded_
 sound_enemy_killed_or_wounded	= help\wounded\kill_wounded_
+; obsolete after next update
+sound_attack					= fight\attack\attack_
+sound_search					= fight\searching_enemy\search_
+; new after next update
+sound_attack_no_allies				= fight\fire\fire_,fight\threat\threat_distant_
+sound_attack_allies_single_enemy	= fight\attack\attack_,fight\attack\attack_many_,fight\fire\fire_
+sound_attack_allies_several_enemies	= fight\attack\attack_,fight\attack\attack_one_,fight\fire\fire_
+sound_search_no_allies				= fight\threat\threat_distant_
+sound_search_with_allies			= fight\searching_enemy\search_
 
 ;---STEP MANAGER------------------------------------------------------
 LegsCount						= 2
