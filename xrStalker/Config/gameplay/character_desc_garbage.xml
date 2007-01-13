@@ -55,7 +55,7 @@
 		<supplies>
 			[spawn] \n
 			device_torch \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj = 1 \n
 		</supplies>
 
@@ -186,7 +186,7 @@
 		<visual>actors\bandit\stalker_bandit_3</visual>
 		<supplies>
 			[spawn] \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj \n
 			device_torch \n
 #include "gameplay\character_items.xml" \n
@@ -269,7 +269,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>450</rank>
+		<rank>125</rank>
 		<reputation>-126</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -301,7 +301,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>381</rank>
+		<rank>124</rank>
 		<reputation>-73</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -310,7 +310,7 @@
 		<visual>actors\bandit\stalker_bandit_4</visual>
 		<supplies>
 			[spawn] \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj \n
 			wpn_mp5 = 1 \n
 			ammo_9x19_fmj = 1 \n
@@ -333,7 +333,7 @@
 		<class>gar_bandit_general</class>
 		<community>bandit</community> <terrain_sect>stalker_bandit_terrain</terrain_sect>
 		
-		<rank>442</rank>
+		<rank>133</rank>
 		<reputation>-100</reputation>
 		
 		<snd_config>characters_voice\human_02\bandit\</snd_config>
@@ -510,7 +510,7 @@
 		
 		<supplies>
 			[spawn] \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_fmj \n
@@ -610,7 +610,7 @@
 		<visual>actors\dolg\stalker_do_balon_8</visual>
 		<supplies>
 			[spawn] \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj \n
 			wpn_ak74u \n
 			ammo_5.45x39_ap \n
@@ -713,7 +713,7 @@
 		<visual>actors\bandit\stalker_bandit_5</visual>
 		<supplies>
 			[spawn] \n
-			wpn_pb \n
+			wpn_pm \n
 			ammo_9x18_fmj	= 1 \n
 			wpn_mp5 \n
 			ammo_9x19_pbp = 1 \n
