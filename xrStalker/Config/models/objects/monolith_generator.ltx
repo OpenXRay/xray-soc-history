@@ -51,7 +51,7 @@ link                     =  0.0, 0.0, 0.0
 ;-------------------------------------------------------------------------------
 
 [sound]
-break_sound              =  ambient\mon_explosion 
+break_sound              =  material\wood\wood_crash1_hl2
 
 ;-------------------------------------------------------------------------------
 ;--- damage_bones --------------------------------------------------------------
@@ -67,15 +67,14 @@ default                  = 1.0, -1, 0.0
 
 [immunities]
 burn_immunity            = 0.0        ;коэффициенты иммунитета
-strike_immunity          = 0.0
+strike_immunity          = 0.5
 shock_immunity           = 0.0
-wound_immunity           = 0.0
-wound_2_immunity		= 0.0
+wound_immunity           = 0.5
 radiation_immunity       = 0.0
 telepatic_immunity       = 0.0
-chemical_burn_immunity   = 0.0
-explosion_immunity       = 0.0
-fire_wound_immunity      = 0.06
+chemical_burn_immunity   = 1.0
+explosion_immunity       = 0.5
+fire_wound_immunity      = 0.5
 
 ;-------------------------------------------------------------------------------
 ;--- impulse_transition --------------------------------------------------------
