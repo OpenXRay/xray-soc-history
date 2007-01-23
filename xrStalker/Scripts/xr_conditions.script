@@ -208,6 +208,19 @@ function npc_rank(actor, npc, p)
 	return false
 end
 
+function npc_profile(actor, npc, p)
+	if p[1] == nil then
+		abort("Wrong number of params in npc_profile")
+	end
+	
+	if npc:profile_name() == p[1] then
+		return true
+	end
+	return false
+	
+end
+
+
 -- Проверка того что удар был нанесен кем-то из npc указанных в списке.
 -- Параметры это story_id персонажей. Можно задавать несколько story_id.
 function hitted_by(actor, npc, p)
@@ -358,9 +371,7 @@ function check_fighting(actor, npc, p)
 	        --printf("_bp: %s.check_fighting(%d)", npc:name(), v)
 		    if type(v) == 'number' and sid == v then
 			    --printf("TRUE")
-			    return true
-		    --else
-			--    printf("FALSE")
+			    return true		   
 		    end
 	    end
 	end
@@ -448,6 +459,25 @@ function gulag_inactive(actor, npc, p)
 	return val == 0
 end
 
+function gulag_population_active_le(actor, npc, p)
+	 local gulag = xr_gulag.get_gulag_by_name( p[1] )
+
+    if gulag == nil then
+		return false
+	end
+	
+	local val = 0
+	
+	for k,v in pairs(gulag.Object) do
+		if v == true or ( v:alive() and
+		   not(xr_wounded.is_heavy_wounded_by_id(k) or
+		       xr_wounded.is_psy_wounded_by_id(k)) )
+		then
+			val = val + 1
+		end
+	end
+	return val <= p[2]
+end
 
 -- true, если в указанном гулаге потери больше или равны заданным
 function gulag_casualities_ge(actor, npc, p)
@@ -699,7 +729,7 @@ function gar_boars_nest2_dead(actor, npc)
 end
 
 function gar_damaged_bandits(actor, npc)
-	if (gulag_population_active(actor, npc, {"gar_bandit_agr"}) < 5) then
+	if (gulag_population_active(actor, npc, {"gar_bandit_agr"}) <= 5) then
 		return true
 	end
 	return false
@@ -944,7 +974,7 @@ function pri_follower_see_ambush (actor, npc)
 	end
 	
 	for k,v in pairs(gulag.Object) do
-		if v ~= false and (npc:see(v) or (npc:best_enemy() and npc:best_enemy():id() == v:id()))
+		if v ~= nil and npc:best_enemy() and npc:best_enemy():id() == v:id()
 			then
 				-- printf("[plecha] %s see %s or has enemy %s", utils.to_str(npc), utils.to_str(v), utils.to_str(npc:best_enemy()))
 				return true
@@ -1304,5 +1334,9 @@ end
 
 function treasure_exist(actor, npc, p)
 	--printf("%s %s", actor:name(), npc:name())
+	return true
+end
+
+function can_send_tutorial(actor, npc, p)
 	return true
 end
