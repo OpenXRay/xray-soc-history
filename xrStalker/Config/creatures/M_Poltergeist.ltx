@@ -52,12 +52,12 @@ ph_mass 		     = 80						; also it's the food
 destroyed_vis_name	 = physics\Dead_Body\trupik_crash
 
 ;---------------------------------------------------------------------
-ph_skeleton_airr_lin_factor   = 1.1 ;550.0 (изменно из-за того, что убрано домножение коэффициент 0.002 из кода)
+ph_skeleton_airr_lin_factor   = 2.0 ;550.0 (изменно из-за того, что убрано домножение коэффициент 0.002 из кода)
 ph_skeleton_airr_ang_factor   = 0.0 ;0.0 (изменно из-за того, что убрано домножение на коэффициент 0.3 из кода (0.0*0.3=0.0))
-ph_skeleton_hinger_factor1    = 5.0 ;1.0 (изменно из-за того, что убрано домножение на коэффициент 5.0 из кода)
-ph_skeleton_ddelay	     	  = 5.0 ;Время изменения значения трения в суставе с момента создания шелла, сек
+ph_skeleton_hinger_factor1    = 1.0 ;1.0 (изменно из-за того, что убрано домножение на коэффициент 5.0 из кода)
+ph_skeleton_ddelay	     	  = 15.0 ;Время изменения значения трения в суставе с момента создания шелла, сек
 
-ph_skel_fatal_impulse_factor  = 8.0
+ph_skel_fatal_impulse_factor  = 6.0
 ph_after_death_velocity_factor= 0.75
 ph_skel_shot_up_factor        = 0.25
 ;---------------------------------------------------------------------
@@ -447,3 +447,19 @@ time_attack			= 0.3		; fade in
 time_release		= 0.85		; fade out
 
 
+[m_poltergeist_strong_flame]:m_poltergeist_normal_flame
+$spawn               = "monsters\poltergeists\poltergeist_strong_flame"
+
+immunities_sect		= poltergeist_immunities_strong
+flame_hit_value			= 0.7
+
+[poltergeist_immunities_strong]
+burn_immunity 		= 0.3					;коэффициенты иммунитета 
+strike_immunity 	= 0.7
+shock_immunity 		= 0.5
+wound_immunity 		= 0.3
+radiation_immunity 	= 0.0
+telepatic_immunity 	= 1.0
+chemical_burn_immunity 	= 1.0
+explosion_immunity 	= 0.3
+fire_wound_immunity = 0.3
