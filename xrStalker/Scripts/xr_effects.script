@@ -603,7 +603,7 @@ function esc_direction_fire(actor, npc)
 end
 
 function esc_fanat_victory(actor, npc)
-	if has_alife_info("escape_lager_killers_die") then
+	if has_alife_info("escape_lager_killers_die") and not has_alife_info("esc_fanat_die") then
 		news_manager.send_tip(actor, "esc_fanat_victory", 0, "stalker", 10000)
 	end
 end
@@ -633,6 +633,10 @@ end
 -- end
 
 --' garbage
+
+function gar_mapspot_blockpost (actor, npc)
+	level_tasks.add_location(115, "green_location", "gar_dolg_blokpost_leader_name")
+end
 
 
 	
@@ -1941,6 +1945,9 @@ function end_x18_dream(actor, npc)
 	db.actor:give_info_portion("dar_x18_dream")
 end
 
+function aes_final_movie(actor, npc)
+	game.start_tutorial("mov_refuse_osoznanie")
+end
 ------------------------------------------------------------------------------------
 -- Функции для Радара
 ------------------------------------------------------------------------------------
@@ -2022,12 +2029,16 @@ function game_over(actor, npc)
 		return
 	end
 	local c = get_console()
-	c:execute("disconnect")
+--	c:execute("disconnect")
+	printf("main_menu on console command is executed")
+	c:execute("main_menu on")
 end
 
 function pri_game_over(actor, npc)
 	local c = get_console()
-	c:execute("disconnect")
+--	c:execute("disconnect")
+	printf("main_menu on console command is executed")
+	c:execute("main_menu on")
 end
 
 function esc_init_dialod ()
@@ -2082,5 +2093,7 @@ end
 
 function on_tutor_gameover_stop()
 	local c = get_console()
-	c:execute("disconnect")
+--	c:execute("disconnect")
+	printf("main_menu on console command is executed")
+	c:execute("main_menu on")
 end
