@@ -3,13 +3,11 @@
 <game_information_portions>
 
 	<info_portion id="mil_freedom_rg6_task">
-		<article>mil_actor_main_quest</article>
 	</info_portion>
     <info_portion id="mil_freedom_rg6_task_complete"></info_portion>
 
 	<!-- Сообщение в дневник -->
 	<info_portion id="mil_actor_main_quest">
-		<article>mil_actor_main_quest</article>
 	</info_portion>
 
 	<!-- Выключение матюгальника -->
@@ -157,8 +155,12 @@
 	<info_portion id="mil_lukash_final"></info_portion>
 	<info_portion id="mil_lukash_arrive"></info_portion>
 	<info_portion id="mil_lukash_dead"></info_portion>
-	<info_portion id="mil_lukash_blockpost"></info_portion>		
-	<info_portion id="mil_blockpost_free_task"></info_portion>
+	<info_portion id="mil_lukash_blockpost">
+		<task>mil_blockpost_job</task>
+	</info_portion>		
+	<info_portion id="mil_blockpost_free_task">
+		<task>mil_blockpost_job</task>
+	</info_portion>
 	<info_portion id="mil_actor_on_lukash"></info_portion>
 	<info_portion id="mil_bodyguard_talk"></info_portion>
 	<info_portion id="mil_lukash_delay"></info_portion>
@@ -299,7 +301,7 @@
 	<info_portion id="mil_bloodsucker1_dead"></info_portion>
 	<info_portion id="mil_bloodsucker2_dead"></info_portion>
 	<info_portion id="mil_bloodsucker3_dead"></info_portion>
-
+	<info_portion id="mil_bloodsucker4_dead"></info_portion>
 	<!-- Охотнички, мля -->
 	<info_portion id="mil_hunt_ready"></info_portion>
 	<info_portion id="mil_controller_ready">
@@ -348,6 +350,7 @@
 	<info_portion id="mil_scull_message1"></info_portion>
 	<info_portion id="mil_scull_message2"></info_portion>
 	<info_portion id="mil_sniper_payment"></info_portion>
+	<info_portion id="mil_dolg_c_ignore_false"></info_portion>
 	
 	
 </game_information_portions>
