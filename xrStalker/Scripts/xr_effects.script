@@ -1174,7 +1174,7 @@ function mil_bomb_explode (actor, npc)
     end
 
     if source == nil then
-       abort ("Bomb with story id MIL_BOMB not found")
+       --'abort ("Bomb with story id MIL_BOMB not found")
        return
     end
 
@@ -1190,7 +1190,7 @@ function mil_bomb_explode (actor, npc)
 end
 
 function mil_set_alarm (actor, npc)
-
+	printf("pl:millitary base is under attack!!!!!!!")
     actor:give_info_portion ("mil_freedom_under_attack")
     
     local skull = level_object_by_sid (708)
@@ -2033,6 +2033,15 @@ function game_over(actor, npc)
 	printf("main_menu on console command is executed")
 	c:execute("main_menu on")
 end
+
+function after_credits(actor, npc)
+	if db.gameover_credits_started ~= true then
+		return
+	end
+	local c = get_console()
+	c:execute("disconnect")
+end
+
 
 function pri_game_over(actor, npc)
 	local c = get_console()
