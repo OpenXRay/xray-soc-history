@@ -33,17 +33,19 @@ use_wpn        = true
 ;--------------------------------------------------------------------------
 [danger@val_escort_nap1_1]
 ignore_distance_sound     = 10
-ignore_distance_corpse    = 1
+ignore_distance_corpse    = 0
 
 [danger@val_escort_nap1_small]
 ignore_types                    = corpse
 ignore_distance_sound           = 3
 danger_inertion_time_sound      = 1000
 danger_inertion_time_ricochet   = 1000
+ignore_distance_corpse    = 0
 
 [danger@val_escort_nap1_free]
 ignore_types                    = corpse
 ignore_distance_sound           = 10
+ignore_distance_corpse    = 0
 
 ;--------------------------------------------------------------------------
 ; Wounded
@@ -61,11 +63,11 @@ hp_cover        = 0|false
 [walker@val_escort_nap1_begin]
 path_walk           = nap1_walk
 path_look           = nap1_look
-on_info             = {+val_escort_begin} remark@val_escort_nap1_phrase1
+on_info             = {+val_escort_begin !actor_enemy} remark@val_escort_nap1_phrase1
 meet                = no_meet
 danger              = danger@val_escort_nap1_small
 wounded             = wounded@val_escort_nap1
-combat_ignore_cond  = always ;{=check_fighting(424)}
+combat_ignore_cond  = {!actor_enemy}
 
 ;--------------------------------------------------------------------------
 ; начало
@@ -142,7 +144,7 @@ combat_ignore_cond  = always ;{=check_fighting(424)}
 [remark@val_escort_nap1_wait1]
 anim                = guard_na
 target              = actor
-on_actor_dist_le    = 4 | remark@val_escort_nap1_phrase6 ;%+val_escort_task_start%
+on_actor_dist_le_nvis    =  4 | remark@val_escort_nap1_phrase6 ;%+val_escort_task_start%
 on_timer            = 5000 | remark@val_escort_nap1_phrase4
 meet                = no_meet
 danger              = danger@val_escort_nap1_small
@@ -168,7 +170,7 @@ combat_ignore_cond  = always ;{=check_fighting(424)}
 [remark@val_escort_nap1_wait2]
 anim                = guard_na
 target              = actor
-on_actor_dist_le    = 2 | remark@val_escort_nap1_phrase6 ;%+val_escort_task_start%
+on_actor_dist_le_nvis    = 4 | remark@val_escort_nap1_phrase6 ;%+val_escort_task_start%
 on_timer            = 5000 | remark@val_escort_nap1_phrase5
 meet                = no_meet
 danger              = danger@val_escort_nap1_small
@@ -426,5 +428,5 @@ path_look   = leave_look
 commander   = true
 formation   = line
 on_signal   = arrived | %+val_escort_scene_end%
-meet        = meet@val_escort_nap1_talk
+;meet        = meet@val_escort_nap1_talk
 danger      = danger@val_escort_nap1_free
