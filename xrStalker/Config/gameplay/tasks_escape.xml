@@ -42,6 +42,7 @@
 			<text>esc_help_wounded_from_raid_0</text>
 			<icon>ui_iconsTotal_esc_help_wounded_from_raid</icon>
 			<function_complete>escape_tasks.task_fox_complete</function_complete>
+			<infoportion_set_complete>garbage_meetstalker_start</infoportion_set_complete>			
 			<article>esc_fox_help</article>
 		</objective>
 		<objective>
@@ -112,12 +113,13 @@
 	</game_task>
 
 	<game_task id="esc_defend_lager" prio="385">
-		<title>esc_defend_lager_from_killers</title>
+		<title>esc_defend_lager</title>
 		<objective>
 			<text>esc_defend_lager_from_killers_0</text>
 			<icon>ui_iconsTotal_esc_defend_lager</icon>
 			<function_complete>escape_tasks.task_lager_complete</function_complete>
 			<infoportion_fail>esc_lager_destroyed</infoportion_fail>
+			<function_fail>escape_tasks.is_actor_enemy_lager</function_fail>
 		</objective>
 		<objective>
 			<text>esc_defend_lager_from_killers_1</text>
@@ -144,6 +146,8 @@
 		</objective>
 		<objective>
 			<text>meet_with_doctor_2</text>
+			<map_location_type hint="meet_with_doctor_2">green_location</map_location_type>
+			<object_story_id>agr_doctor_spot</object_story_id>			
 		</objective>
 	</game_task>
 	
@@ -198,9 +202,13 @@
 		<title>esc_trader_job</title>
 		<objective>
 			<icon>ui_iconsTotal_esc_trader_job</icon>
+			<infoportion_complete>agroprom_military_case</infoportion_complete>
 		</objective>
 		<objective>
 			<text>esc_trader_job_text</text>
+			<map_location_type hint="esc_trader_job_text">blue_location</map_location_type>
+			<object_story_id>Escape_Trader</object_story_id>
+			<infoportion_complete>agroprom_military_case</infoportion_complete>
 		</objective>
 	</game_task>
 
