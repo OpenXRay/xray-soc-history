@@ -6,14 +6,17 @@
 
 #include "EditMesh.h"
 #include "EditObject.h"
-#include "..\MeshExpUtility.h"
+#include "MeshExpUtility.h"
 
+#include "Exporter.h"
+#include "GameMaterial.h"
 //----------------------------------------------------
 void CEditableMesh::FlipFaces(){
-	for(FaceIt f = m_Faces.begin(); f!=m_Faces.end(); f++){
-		st_FaceVert v = f->pv[0];
-		f->pv[0] = f->pv[2];
-		f->pv[2] = v;
+	VERIFY(m_Faces);
+	for(u32 f = 0; f<GetFCount(); f++){
+		st_FaceVert v = m_Faces[f].pv[0];
+		m_Faces[f].pv[0] = m_Faces[f].pv[2];
+		m_Faces[f].pv[2] = v;
 	}
 }
 //----------------------------------------------------------------------------
@@ -35,79 +38,26 @@ TriObject *CEditableMesh::ExtractTriObject( INode *node, int &deleteIt )
 	}
 }
 //----------------------------------------------------------------------------
-bool CEditableMesh::ExtractTexName( char *dest, Texmap *map ){
-	if( map->ClassID() != Class_ID(BMTEX_CLASS_ID,0) )
-		return false;
-	BitmapTex *bmap = (BitmapTex*)map;
-	_splitpath( bmap->GetMapName(), 0, 0, dest, 0 );
-//	_splitpath( bmap->GetMapName(), 0, 0, 0, dest + strlen(dest) );
-	return true;
-}
-//----------------------------------------------------------------------------
-bool CEditableMesh::ExtractMaterial( CSurface *surf, StdMat *smtl ){
-	NConsole.print( "- Processing material '%s' ...", smtl->GetName() );
-	// ---- color info
-/*	Color ambient		= smtl->GetAmbient(0);
-	Color diffuse		= smtl->GetDiffuse(0);
-	Color specular		= smtl->GetSpecular(0);
-	Color emission		= smtl->GetSelfIllumColor(0);
-	float st			= smtl->GetShinStr(0);
-	float power			= smtl->GetShininess(0)*100.f;
-	
-	dest->m_Mat.ambient.set( ambient.r, ambient.g, ambient.b, 0 );
-	dest->m_Mat.diffuse.set( diffuse.r, diffuse.g, diffuse.b, 1 );
-	dest->m_Mat.specular.set( st*specular.r, st*specular.g, st*specular.b, 1 );
-	dest->m_Mat.emissive.set( emission.r, emission.g, emission.b, 1 );
-	dest->m_Mat.power = power;
-*/	
-	// ------- texture (if exist)
-	char tname[1024];
-	if( smtl->MapEnabled( ID_AM ) ){
-		if( smtl->GetSubTexmap( ID_AM ) ){
-			if (!ExtractTexName( tname, smtl->GetSubTexmap( ID_AM ) )) return false;
-			surf->SetTexture(tname);
-		}else{
-			return false;
-		}
-	}else 
-		if( smtl->MapEnabled( ID_DI ) ){
-			if( smtl->GetSubTexmap( ID_DI ) ){
-				if (!ExtractTexName( tname, smtl->GetSubTexmap( ID_DI ) )) return false;
-				surf->SetTexture(tname);
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-	surf->Set2Sided(smtl->GetTwoSided());
-	if (surf->_2Sided()) NConsole.print( "  - material 2-sided");
-	surf->SetName(m_Parent->GenerateSurfaceName(smtl->GetName()));
-	surf->SetFVF(D3DFVF_XYZ|D3DFVF_NORMAL|(1<<D3DFVF_TEXCOUNT_SHIFT));
-	surf->ED_SetShader("default");
-	surf->SetVMap(surf->_Texture());
-	return true;
-}
-//----------------------------------------------------------------------------
 
-bool CEditableMesh::Convert( INode *node ){
+bool CEditableMesh::Convert( INode *node )
+{
 	// prepares & checks
 	BOOL bDeleteObj;
 	bool bResult = true;
 	TriObject *obj = ExtractTriObject( node, bDeleteObj );
-	
+
 	if( !obj ){
-		NConsole.print( "%s -> Can't convert to TriObject", node->GetName() );
+		ELog.Msg(mtError,"%s -> Can't convert to TriObject", node->GetName() );
 		return false; }
-	
+
 	if( obj->mesh.getNumFaces() <=0 ){
-		NConsole.print( "%s -> There are no faces ?", node->GetName() );
-		if (bDeleteObj) _DELETE(obj);
+		ELog.Msg(mtError,"%s -> There are no faces ?", node->GetName() );
+		if (bDeleteObj) delete (obj);
 		return false; }
-	
+
 	Mtl *pMtlMain = node->GetMtl();
 	DWORD cSubMaterials=0;
-	
+
 	if (pMtlMain){
 		// There is at least one material. We're in case 1) or 2)
 		cSubMaterials = pMtlMain->NumSubMtls();
@@ -116,165 +66,185 @@ bool CEditableMesh::Convert( INode *node ){
 			cSubMaterials = 1;
 		}
 	}
-	
+
 	// build normals
 	obj->mesh.buildRenderNormals();
 
 	// vertices
-	int v_cnt = obj->mesh.getNumVerts();
-	m_Points.resize(v_cnt);
-	m_Adjs.resize(v_cnt);
-	for (int v_i=0; v_i<v_cnt; v_i++){
+	m_VertCount = obj->mesh.getNumVerts();
+	m_Verts = xr_alloc<Fvector>(m_VertCount);
+	for (int v_i=0; v_i<m_VertCount; v_i++){
 		Point3* p = obj->mesh.verts+v_i;
-		m_Points[v_i].set(p->x,p->y,p->z);
+		m_Verts[v_i].set(p->x,p->y,p->z);
 	}
 
+	// set smooth group MAX type
+	m_Flags.set(flSGMask,TRUE);
+
 	// faces
-	int f_cnt = obj->mesh.getNumFaces();
-	m_Faces.resize(f_cnt);
-	if (!U.m_ObjectSuppressSmoothGroup&&!U.m_ObjectNoOptimize) m_PNormals.resize(f_cnt*3);
+	m_FaceCount	= obj->mesh.getNumFaces();
+	m_Faces		= xr_alloc<st_Face>	(m_FaceCount);
+	m_SGs		= xr_alloc<u32>		(m_FaceCount);
 
-	m_VMRefs.reserve(f_cnt*3);
-	VERIFY(obj->mesh.mapFaces(1));
-	CSurface* surf=0;
-	for (int f_i=0; f_i<f_cnt; f_i++){
-		Face*	vf = obj->mesh.faces+f_i;
-		TVFace* tf = obj->mesh.mapFaces(1) + f_i;
-		if (!tf){
-			bResult = false;
-			NConsole.print( "'%s' hasn't UV mapping!",
-				node->GetName(), m_Points.size(), m_Faces.size());
-			break;
-		}
-		for (int k=0; k<3; k++){
-			m_Faces[f_i].pv[k].pindex = vf->v[k];
-			m_VMRefs.push_back(VMapPtSVec());
-            VMapPtSVec&	vm_vec = m_VMRefs.back();
-			DWORD vm_cnt = 1;
-            vm_vec.resize(vm_cnt);
-    	    for (int vm_i=0; vm_i<vm_cnt; vm_i++){
-        		vm_vec[vm_i].vmap_index	= 0;
-            	vm_vec[vm_i].index 		= tf->t[k];
+	m_VMRefs.reserve(m_FaceCount*3);
+	if (0==obj->mesh.mapFaces(1)){
+		bResult = false;
+		ELog.Msg(mtError,"'%s' hasn't UV mapping!", node->GetName());
+	}
+	if (bResult){
+		CSurface* surf=0;
+		for (int f_i=0; f_i<m_FaceCount; f_i++){
+			Face*	vf = obj->mesh.faces+f_i;
+			TVFace* tf = obj->mesh.mapFaces(1) + f_i;
+			if (!tf){
+				bResult = false;
+				ELog.Msg(mtError,"'%s' hasn't UV mapping!", node->GetName());
+				break;
 			}
-            m_Faces[f_i].pv[k].vmref = m_VMRefs.size()-1;
-
-			// normals
-			if (!U.m_ObjectSuppressSmoothGroup&&!U.m_ObjectNoOptimize){
-				int g = vf->getSmGroup(); // smooth group
-				RVertex* r = obj->mesh.getRVertPtr(vf->v[k]);
-				int nbNormals = r->rFlags & NORCT_MASK;
-				Point3* n;
-				if (nbNormals == 1)
-					n = &r->rn.getNormal();
-				else{
-					for (int j = 0; j < nbNormals; j++) {
-						RNormal* rn = &r->ern[j];
-						if (rn->getSmGroup() & g) {
-							n = &rn->getNormal();
-							break;
-						}
-					}
+			m_SGs[f_i]					= vf->getSmGroup();
+			for (int k=0; k<3; k++){
+				m_Faces[f_i].pv[k].pindex = vf->v[k];
+				m_VMRefs.push_back(st_VMapPtLst());
+				st_VMapPtLst&	vm_lst = m_VMRefs.back();
+				vm_lst.count	= 1;
+				vm_lst.pts		= xr_alloc<st_VMapPt>(vm_lst.count);
+				for (DWORD vm_i=0; vm_i<vm_lst.count; vm_i++){
+					vm_lst.pts[vm_i].vmap_index	= 0;
+					vm_lst.pts[vm_i].index 		= tf->t[k];
 				}
-				if (!n){
-					bResult = false;
-					NConsole.print("'%s' can't give normals.",node->GetName());
-					break;
+				m_Faces[f_i].pv[k].vmref	= m_VMRefs.size()-1;
+				if (!bResult) break;
+			}
+			if (pMtlMain){
+				int m_id = obj->mesh.getFaceMtlIndex(f_i);
+				if (cSubMaterials == 1){
+					m_id = 0;
+				}else{
+					// SDK recommends mod'ing the material ID by the valid # of materials, 
+					// as sometimes a material number that's too high is returned.
+					m_id %= cSubMaterials;
 				}
-//				NConsole.print("#%d sm:%d [%3.2f, %3.2f, %3.2f]",k,g,n->x,n->y,n->z);
-				m_PNormals[f_i*3+k].set(n->x,n->y,n->z);
+				surf = m_Parent->CreateSurface(pMtlMain,m_id);
+				if (!surf) bResult = false;
 			}
+			if (!bResult) break;
+			m_SurfFaces[surf].push_back(f_i);
 		}
-		if (pMtlMain){
-			int m_id = obj->mesh.getFaceMtlIndex(f_i);
-			if (cSubMaterials == 1){
-				m_id = 0;
-			}else{
-				// SDK recommends mod'ing the material ID by the valid # of materials, 
-				// as sometimes a material number that's too high is returned.
-				m_id %= cSubMaterials;
-			}
-			surf = m_Parent->CreateSurface(pMtlMain,m_id);
-			VERIFY(surf);
-		}
-		m_SurfFaces[surf].push_back(f_i);
 	}
 
 	// vmaps
 	if( bResult ){
 		int vm_cnt = obj->mesh.getNumTVerts();
 		m_VMaps.resize(1);
-		st_VMap& VM = m_VMaps.back();
+		st_VMap*& VM = m_VMaps.back();
+		VM = xr_new<st_VMap>("Texture",vmtUV,false);
 		for (int tx_i=0; tx_i<vm_cnt; tx_i++){
 			UVVert* tv = obj->mesh.tVerts + tx_i;
-			VM.appendUV(tv->x,1-tv->y);
+			VM->appendUV(tv->x,1-tv->y);
 		}
 	}
 
+	if ((GetVertexCount()<4)||(GetFaceCount()<2))
+	{
+		ELog.Msg(mtError,"Invalid mesh: '%s'. Faces<2 or Verts<4");
+		bResult = false;
+	}
 
 	if (bResult ){
-		NConsole.print( "Model '%s' contains: %d points, %d faces",
-			node->GetName(), m_Points.size(), m_Faces.size());
+		ELog.Msg(mtInformation,"Model '%s' contains: %d points, %d faces",
+			node->GetName(), m_VertCount, m_FaceCount);
 	}
-	
-	if( bResult ){
-		if( pMtlMain ){
-			if( pMtlMain->ClassID() == Class_ID(MULTI_CLASS_ID,0) ){
-				NConsole.print( "'%s' -> multi material '%s' ...", node->GetName(), pMtlMain->GetName() );
-				MultiMtl *mmtl = (MultiMtl*)pMtlMain;
-				
-				for (SurfaceIt s_it=m_Parent->FirstSurface(); s_it!=m_Parent->LastSurface(); s_it++){
-					if ((*s_it)->pMtlMain!=pMtlMain) continue;
-					CSurface* surf = *s_it;
-					if( mmtl->GetSubMtl(surf->mat_id)->ClassID() == Class_ID(DMTL_CLASS_ID,0) ){
-						StdMat *smtl = (StdMat*)mmtl->GetSubMtl(surf->mat_id);
-						if (!ExtractMaterial(surf, smtl)){
-							NConsole.print( " * can't extract material!!!");
-							bResult = false;
-							break;
-						}
-					} else {
-						NConsole.print( "'%s' -> warning: bad submaterial '%s'", 
-							node->GetName(), mmtl->GetSubMtl(surf->mat_id)->GetName() );
-						bResult = false;
-						break;
-					}
-				}
-				//			if (m_Layers.size()!=cnt)
-				//				reverse(m_Layers.begin()+cnt,m_Layers.end());
-			} else if( pMtlMain->ClassID() == Class_ID(DMTL_CLASS_ID,0) ){
-				NConsole.print( "'%s' -> std material '%s' ...", node->GetName(), pMtlMain->GetName() );
-				StdMat *smtl = (StdMat*)pMtlMain;
-				for (SurfaceIt s_it=m_Parent->FirstSurface(); s_it!=m_Parent->LastSurface(); s_it++){
-					if ((*s_it)->pMtlMain!=pMtlMain) continue;
-					CSurface* surf = *s_it;
-					if (!ExtractMaterial( surf, smtl )){
-						NConsole.print( " * can't extract material!!!");
-						bResult = false;
-						break;
-					}
-				}
-			} else {
-				NConsole.print( "'%s' -> unknown material class...", node->GetName() );
-				bResult = false;
-			}
-		} else {
-			NConsole.print( "'%s' -> warning: no material", node->GetName() );
-			bResult = false;
-		}
-	}
-	
+
 	if (bResult){
 		RecomputeBBox();
-		Optimize(U.m_ObjectNoOptimize);
+		Optimize(false);
+		RebuildVMaps();
+		ELog.Msg(mtInformation,"Model '%s' converted: %d points, %d faces",
+			node->GetName(), GetVertexCount(), GetFaceCount());
 	}
-	
-	if (bResult){
-		NConsole.print( "Model '%s' converted: %d points, %d faces",
-			node->GetName(), m_Points.size(), m_Faces.size());
-	}
-	
-	if (bDeleteObj) _DELETE(obj);
+
+	if (bDeleteObj) delete (obj);
 	return bResult;
 }
 //----------------------------------------------------------------------------
 
+bool CEditableMesh::Convert(CExporter* E)
+{
+	bool bResult		= true;
+
+	m_Name				= E->m_MeshNode->GetName();
+
+	// maps
+	// Weight maps 
+	m_VMaps.resize(E->m_Bones.size()+1);
+	for (DWORD b_i=0; b_i<E->m_Bones.size(); b_i++)
+		m_VMaps[b_i]	= xr_new<st_VMap>(E->m_Bones[b_i]->name.c_str(),vmtWeight,false);;
+	// UV map
+	int VM_UV_idx		= m_VMaps.size()-1;
+	st_VMap*& VM_UV		= m_VMaps[VM_UV_idx];
+	VM_UV				= xr_new<st_VMap>("texture",vmtUV,false);
+
+	// points
+	{
+		m_VertCount		= E->m_ExpVertices.size();
+		m_Verts			= xr_alloc<Fvector>(m_VertCount);
+		Fvector* p_it	= m_Verts;
+		for (ExpVertIt ev_it=E->m_ExpVertices.begin(); ev_it!=E->m_ExpVertices.end(); ev_it++,p_it++){
+			p_it->set		((*ev_it)->P);
+			VM_UV->appendUV	((*ev_it)->uv.x,(*ev_it)->uv.y);
+		}
+	}
+	// faces 
+	{
+		// set smooth group MAX type
+		m_Flags.set(flSGMask,TRUE);
+		// reserve space for faces and references
+		m_FaceCount		= E->m_ExpFaces.size();
+		m_Faces			= xr_alloc<st_Face>	(m_FaceCount);
+		m_SGs			= xr_alloc<u32>		(m_FaceCount);
+		m_VMRefs.resize	(m_VertCount);
+
+		int f_id=0;
+		for (ExpFaceIt ef_it=E->m_ExpFaces.begin(); ef_it!=E->m_ExpFaces.end(); ef_it++,f_id++){
+			// FACES
+			m_SGs[f_id]		= (*ef_it)->sm_group;
+			st_Face& F		= m_Faces[f_id];
+			for (int k=0; k<3; k++){
+				int v_idx			= (*ef_it)->v[k];
+				st_FaceVert& vt		= F.pv[k];
+				st_VERT* V			= E->m_ExpVertices[v_idx];
+				vt.pindex			= v_idx;
+				st_VMapPtLst& vm_lst= m_VMRefs[vt.pindex];
+				vm_lst.count		= V->data.size()+1;
+				vm_lst.pts			= xr_alloc<st_VMapPt>(vm_lst.count);
+				vm_lst.pts[0].vmap_index= VM_UV_idx;
+				vm_lst.pts[0].index 	= vt.pindex;
+				for (VDIt vd_it=V->data.begin(); vd_it!=V->data.end(); vd_it++){
+					DWORD idx		= vd_it-V->data.begin()+1;
+					st_VMap* vm		= m_VMaps[vd_it->bone];
+					vm->appendW		(vd_it->weight);
+					vm_lst.pts[idx].vmap_index	= vd_it->bone;
+					vm_lst.pts[idx].index 		= vm->size()-1;
+				}
+				vt.vmref			= vt.pindex;
+			}
+			CSurface* surf = m_Parent->CreateSurface(E->m_MtlMain,(*ef_it)->m_id);
+			if (!surf){
+				bResult = FALSE;
+				break;
+			}
+			m_SurfFaces[surf].push_back(f_id);
+		}
+	}
+	if ((GetVertexCount()<4)||(GetFaceCount()<2))
+	{
+		Log("!Invalid mesh: '%s'. Faces<2 or Verts<4",*Name());
+		bResult = false;
+	}
+	if (bResult){
+		RecomputeBBox();
+		Optimize(true);//false);
+		RebuildVMaps();
+	}
+	return bResult;
+}

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SHADER_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "_X86_" /D "_WIN32" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SHADER_EXPORTS" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_EXPORT" /D "SHADER_EXPORT" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x419 /d "NDEBUG"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"r:\LW7\shader.p"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"R:\plugins\xr_shader.p"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ELSEIF  "$(CFG)" == "shader - Win32 Debug"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SHADER_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_X86_" /D "_WIN32" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SHADER_EXPORTS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_EXPORT" /D "SHADER_EXPORT" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x419 /d "_DEBUG"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"shader.p" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"R:\plugins\xr_shader.p" /pdbtype:sept
 
 !ENDIF 
 
@@ -93,20 +93,15 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\XRShaderDef.h
+SOURCE=.\BlenderListLoader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xrShaderLib.cpp
-# ADD CPP /Yu"stdafx.h"
+SOURCE=.\BlenderListLoader.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\xrShaderLib.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\xrShaderTypes.h
+SOURCE=.\Shader_xrLC.h
 # End Source File
 # End Group
 # Begin Group "Plugin"
@@ -182,11 +177,23 @@ SOURCE=.\_color.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_Faabb.h
+SOURCE=.\_compressed_normal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\_compressed_normal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_d3d_extensions.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\_fbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_fbox2.h
 # End Source File
 # Begin Source File
 
@@ -210,11 +217,11 @@ SOURCE=.\_irect.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_l_vertex.h
+SOURCE=.\_math.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\_lit_vertex.h
+SOURCE=.\_math.h
 # End Source File
 # Begin Source File
 
@@ -234,11 +241,35 @@ SOURCE=.\_plane.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\_quaternion.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\_quaternion.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_tl_vertex.h
+SOURCE=.\_random.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_sphere.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\_sphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_std_extensions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_stl_extensions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\_types.h
 # End Source File
 # Begin Source File
 
@@ -254,21 +285,48 @@ SOURCE=.\_vector4.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_vertex.h
+SOURCE=.\clsid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsid.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cpuid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cpuid.h
 # End Source File
 # End Group
 # Begin Source File
 
-SOURCE=.\FFileOps.cpp
-# ADD CPP /Yu"stdafx.h"
+SOURCE=.\FileSystem.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\FFileOps.h
+SOURCE=.\FileSystem.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\FixedVector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FS.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FS.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Log.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Log.h
 # End Source File
 # Begin Source File
 
@@ -289,6 +347,39 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Xr_ini.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_ini.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_tokens.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_trims.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_trims.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\Engine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Engine.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\stdafx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -296,10 +387,5 @@ SOURCE=.\stdafx.cpp
 
 SOURCE=.\stdafx.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\vector.h
-# End Source File
-# End Group
 # End Target
 # End Project

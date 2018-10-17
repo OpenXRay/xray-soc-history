@@ -32,16 +32,6 @@ Helper::~Helper()
 }
 
 //----------------------------------------------------------------------------//
-// Convert euler angles to a quaternion                                       //
-//----------------------------------------------------------------------------//
-
-void Helper::ConvertEulerToQuaternion(Point3& euler, D3DXQUATERNION& quaternion)
-{
-	D3DXQuaternionRotationYawPitchRoll(
-		&quaternion, euler.y,euler.x,euler.z);
-}
-
-//----------------------------------------------------------------------------//
 // Get the transformation matrix of a bone node                               //
 //----------------------------------------------------------------------------//
 Matrix3 Helper::GetBoneTM(INode *pNode, TimeValue t)
@@ -59,7 +49,7 @@ Matrix3 Helper::GetBoneTM(INode *pNode, TimeValue t)
 //----------------------------------------------------------------------------//
 // Check if the given node is a biped bone                                    //
 //----------------------------------------------------------------------------//
-bool Helper::IsBipedBone(INode *pNode)
+BOOL Helper::IsBipedBone(INode *pNode)
 {
 	// check for invalid and root nodes
 	if((pNode == 0) || pNode->IsRootNode()) return false;
@@ -75,28 +65,33 @@ bool Helper::IsBipedBone(INode *pNode)
 //----------------------------------------------------------------------------//
 // Check if the given node is a bone                                          //
 //----------------------------------------------------------------------------//
-bool Helper::IsBone	(INode *pNode)
+BOOL Helper::IsBone	(INode *pNode, BOOL bAllowDummy)
 {
-	// check for invalid and root nodes
-	if((pNode == 0) || pNode->IsRootNode())	return false;
+	// check for invalid nodes
+	if(pNode == 0) return false;
 
-	// check for bone and dummy nodes
-	ObjectState os = pNode->EvalWorldState(0);
-	if(os.obj->ClassID() == Class_ID(BONE_CLASS_ID, 0))		return true;
-	if(os.obj->ClassID() == Class_ID(DUMMY_CLASS_ID, 0))	return false;
+	// check for root node
+	if(pNode->IsRootNode()) return false;
 
-	// check for biped nodes
+	// check for bone node
+	ObjectState os;
+	os = pNode->EvalWorldState(0);
+	if(os.obj->ClassID() == Class_ID(BONE_CLASS_ID, 0)) return true;
+	if(os.obj->ClassID() == BONE_OBJ_CLASSID) return true;
+	if(os.obj->ClassID() == Class_ID(DUMMY_CLASS_ID, 0)) 
+		return bAllowDummy;
+
+	// check for biped node
 	Control *pControl;
 	pControl = pNode->GetTMController();
 	if((pControl->ClassID() == BIPSLAVE_CONTROL_CLASS_ID) || (pControl->ClassID() == BIPBODY_CONTROL_CLASS_ID)) return true;
-
 	return false;
 }
 
 //----------------------------------------------------------------------------//
 // Check if the given node is a mesh                                          //
 //----------------------------------------------------------------------------//
-bool Helper::IsMesh(INode *pNode)
+BOOL Helper::IsMesh(INode *pNode)
 {
 	// check for invalid and root nodes
 	if((pNode == 0) || pNode->IsRootNode()) return false;
@@ -115,8 +110,7 @@ bool Helper::IsMesh(INode *pNode)
 
 void Helper::SetBipedUniform(INode *pNode, BOOL bUniform, BOOL bFigure)
 {
-	if(IsBipedBone(pNode))
-	{
+	if(IsBipedBone(pNode)){
 		// get the TM controller of the node
 		Control *pControl;
 		pControl = pNode->GetTMController();

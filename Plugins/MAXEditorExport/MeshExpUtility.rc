@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "MeshExpUtility.rh"
 
@@ -26,47 +26,40 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_MWND DIALOG DISCARDABLE  0, 0, 108, 274
-STYLE WS_CHILD | WS_BORDER
-FONT 8, "MS Sans Serif"
+IDD_MWND DIALOGEX 0, 0, 108, 241
+STYLE DS_SETFONT | WS_CHILD | WS_BORDER
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    PUSHBUTTON      "Export As Object...",IDC_OBJECT_EXPORT,4,7,99,12,
-                    BS_FLAT
-    LTEXT           "Selected:",IDC_STATIC,4,90,99,8
-    LISTBOX         IDC_OBJLIST,4,98,99,67,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | 
-                    WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Suppress smooth groups",
-                    IDC_OBJECT_SUPPRESS_SMOOTH_GROUPS,"Button",
-                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,201,92,8
-    PUSHBUTTON      "Export As Skin...",IDC_SKIN_EXPORT,4,20,99,12,BS_FLAT
-    PUSHBUTTON      "End",IDC_CLOSE,4,52,99,12,BS_FLAT
-    PUSHBUTTON      "Export Skeleton Keys...",IDC_SKIN_KEYS_EXPORT,4,34,99,
+    PUSHBUTTON      "Export Editor Object...",IDC_EXPORT_AS_OBJECT,6,26,95,
                     12,BS_FLAT
-    GROUPBOX        "Object",IDC_STATIC,4,168,99,47,BS_FLAT
-    CONTROL         "Flip faces after transform",IDC_OBJECT_FLIPFACES,"Button",
-                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,180,92,8
-    CONTROL         "Don't optimize",IDC_OBJECT_NO_OPTIMIZE,"Button",
-                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,191,92,8
-    GROUPBOX        "Skin",IDC_STATIC,4,217,99,33,BS_FLAT
-    CONTROL         "Suppress smooth groups",IDC_SKIN_SUPPRESS_SMOOTH_GROUPS,
-                    "Button",BS_AUTOCHECKBOX | BS_FLAT | WS_DISABLED | 
-                    WS_TABSTOP,6,227,92,8
-    PUSHBUTTON      "Preview...",IDC_PREVIEW,4,72,99,12,BS_FLAT | 
-                    WS_DISABLED
-    CONTROL         "Make progressive",IDC_SKIN_PROGRESSIVE,"Button",
-                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,238,92,8
+    LISTBOX         IDC_OBJLIST,4,134,99,86,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Export Skin...",IDC_SKIN_EXPORT,6,91,95,12,BS_FLAT
+    PUSHBUTTON      "End",IDC_CLOSE,4,222,99,12,BS_FLAT
+    PUSHBUTTON      "Export Motion...",IDC_SKIN_KEYS_EXPORT,6,105,95,12,
+                    BS_FLAT
+    GROUPBOX        "Object",IDC_STATIC,4,3,99,51,BS_FLAT
+    CONTROL         "Flip faces",IDC_OBJECT_FLIPFACES,"Button",
+                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,14,92,8
+    PUSHBUTTON      "Export LWO...",IDC_EXPORT_AS_LWO,6,40,95,12,BS_FLAT
+    CONTROL         "Flip faces",IDC_SKIN_FLIPFACES,"Button",BS_AUTOCHECKBOX | 
+                    BS_FLAT | WS_TABSTOP,6,67,92,8
+    GROUPBOX        "Skeleton ",IDC_STATIC,4,56,99,63,BS_FLAT
+    CONTROL         "Allow Dummy",IDC_SKIN_ALLOW_DUMMY,"Button",
+                    BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,6,79,92,8
+    LTEXT           "Selected:",IDC_STATIC,4,123,99,8
 END
 
 IDD_CONSOLE DIALOGEX 500, 0, 311, 175
-STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "X-Ray editor export"
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "X-Ray Export"
 FONT 8, "Lucida Console", 0, 0, 0x1
 BEGIN
-    LISTBOX         IDC_MESSAGES,0,0,310,166,NOT LBS_NOTIFY | 
+    LISTBOX         IDC_MESSAGES,0,0,310,163,NOT LBS_NOTIFY | 
                     LBS_NOINTEGRALHEIGHT | NOT WS_BORDER | WS_VSCROLL | 
                     WS_HSCROLL | WS_TABSTOP,WS_EX_STATICEDGE
-    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",PBS_SMOOTH,
-                    0,166,310,9
+    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",0x1,0,163,
+                    310,9
 END
 
 
@@ -76,14 +69,14 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_MWND, DIALOG
     BEGIN
         LEFTMARGIN, 4
         RIGHTMARGIN, 103
         TOPMARGIN, 7
-        BOTTOMMARGIN, 270
+        BOTTOMMARGIN, 235
     END
 
     IDD_CONSOLE, DIALOG
@@ -101,18 +94,18 @@ END
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "MeshExpUtility.rh\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -125,11 +118,11 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Unknown language: 0x22, 0x1 resources
+// Ukrainian resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_UKR)
 #ifdef _WIN32
-LANGUAGE 0x22, 0x1
+LANGUAGE LANG_UKRAINIAN, SUBLANG_DEFAULT
 #pragma code_page(1251)
 #endif //_WIN32
 
@@ -139,7 +132,8 @@ LANGUAGE 0x22, 0x1
 //
 
 IDD_SHADERDIALOG DIALOGEX 0, 0, 227, 95
-STYLE DS_SYSMODAL | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Select shader"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
@@ -159,7 +153,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_SHADERDIALOG, DIALOG
     BEGIN
@@ -171,7 +165,7 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
-#endif    // Unknown language: 0x22, 0x1 resources
+#endif    // Ukrainian resources
 /////////////////////////////////////////////////////////////////////////////
 
 

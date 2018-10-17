@@ -7,13 +7,14 @@
 
 #include "EditObject.h"
 #include "EditMesh.h"
-#include "..\scenscan\objectdb.h"
+#include "scenscan\objectdb.h"
 #include <lwhost.h>
+#include "bone.h"
 
 extern "C"	LWMessageFuncs	*g_msg;
 DEFINE_MAP(void*,int,VMIndexLink,VMIndexLinkIt);
 
-bool CEditObject::Import_LWO(st_ObjectDB *I){
+bool CEditableObject::Import_LWO(st_ObjectDB *I){
 	if (I){
         bool bResult=true;
 
@@ -26,36 +27,34 @@ bool CEditObject::Import_LWO(st_ObjectDB *I){
             {
                 for (int i=0; i<I->nsurfaces; i++){
 		            DBSurface* Isf=&I->surf[i];
-                    st_Surface* Osf = new st_Surface();
+                    CSurface* Osf = new CSurface();
                     m_Surfaces[i] = Osf;
-                    if (Isf->name) strcpy(Osf->name,Isf->name); 
-					else strcpy(Osf->name,"Default");
-                    Osf->sideflag = (Isf->side==3)?TRUE:FALSE;
+					Osf->SetName((Isf->name&&Isf->name[0])?Isf->name:"default");
+                    Osf->Set2Sided(Isf->side==3);
                     // fill texture layers
-					char tex_name[_MAX_FNAME];
-					for (int tex_i=0; tex_i<Isf->tex_cnt; tex_i++){
-						_splitpath( Isf->textures[tex_i], 0, 0, tex_name, 0 );
-						Osf->textures.push_back(tex_name);
-						// get vmap refs
-						Osf->vmaps.push_back("");
-					}
-                    if (!bResult) break;
-                    if (Osf->textures.empty()){
-						g_msg->error("Can't create shader. Textures empty. Invalid surface:. ",Osf->name);
+					string256 tex_name;
+					R_ASSERT(Isf->tex_cnt==1);
+                    _splitpath( Isf->textures[0], 0, 0, tex_name, 0 );
+					Osf->SetTexture(Engine.FS.UpdateTextureNameWithFolder(tex_name));
+					Osf->SetVMap("");
+
+                    if (!Osf->_Texture()||!Osf->_Texture()[0]){
+						g_msg->error("Can't create shader. Textures empty. Invalid surface:. ",Osf->_Name());
                         bResult = false;
                         break;
                     }
                     
-                    Osf->shader = "default";
+                    Osf->ED_SetShader("model");
+                    Osf->SetShaderXRLC("default");
                 
-                    Osf->dwFVF = D3DFVF_XYZ|D3DFVF_NORMAL|(Isf->tex_cnt<<D3DFVF_TEXCOUNT_SHIFT);
+                    Osf->SetFVF(D3DFVF_XYZ|D3DFVF_NORMAL|(Isf->tex_cnt<<D3DFVF_TEXCOUNT_SHIFT));
                 }
 		    }
 			if (bResult){
                 // mesh 
 				do{
                     // create new mesh
-                    CEditMesh* MESH=new CEditMesh(this);
+                    CEditableMesh* MESH=new CEditableMesh(this);
                     m_Meshes[0]=MESH;
 
                     strcpy(MESH->m_Name,"mesh");
@@ -83,9 +82,8 @@ bool CEditObject::Import_LWO(st_ObjectDB *I){
                                 bResult=false;
                                 break;
                             }
-                            MESH->m_VMaps.push_back(st_VMap(vmtUV));
-                            st_VMap* Mvmap=&MESH->m_VMaps.back();
-                            if (Ivmap->name) strcpy(Mvmap->name,Ivmap->name); else strcpy(Mvmap->name,"Default");
+                            MESH->m_VMaps.push_back(new st_VMap(Ivmap->name,vmtUV,*Ivmap->vdpol>=0));
+                            st_VMap* Mvmap=MESH->m_VMaps.back();
                             int vcnt=Ivmap->nverts;
                             // VMap, flip uv
 							for (int vm_i=0; vm_i<Ivmap->nverts; vm_i++)
@@ -99,9 +97,9 @@ bool CEditObject::Import_LWO(st_ObjectDB *I){
                                 bResult=false;
                                 break;
                             }
-                            MESH->m_VMaps.push_back(st_VMap(vmtWeight));
-                            st_VMap* Mvmap=&MESH->m_VMaps.back();
-                            if (Ivmap->name) strcpy(Mvmap->name,Ivmap->name); else strcpy(Mvmap->name,"Default");
+							R_ASSERT(*Ivmap->vdpol==-1);
+                            MESH->m_VMaps.push_back(new st_VMap(Ivmap->name,vmtWeight,FALSE));
+                            st_VMap* Mvmap=MESH->m_VMaps.back();
                             int vcnt=Ivmap->nverts;
                             // VMap
                             Mvmap->copyfrom(*Ivmap->val,vcnt);
@@ -211,18 +209,27 @@ bool CEditObject::Import_LWO(st_ObjectDB *I){
 					// check weight maps
 					if (!m_Bones.empty()){
 						for (BoneIt b_it=m_Bones.begin(); b_it!=m_Bones.end(); b_it++){
-							if ((*b_it)->WMap()[0]&&!MESH->FindVMapByName((*b_it)->WMap(),vmtWeight)){
+							if ((*b_it)->WMap()[0]&&(-1==MESH->FindVMapByName(MESH->m_VMaps,(*b_it)->WMap(),vmtWeight,FALSE))){
 								g_msg->error("Can't find weight map:",(*b_it)->Name());
 								bResult = false;
 								break;
 							}
 						}
 					}
+					if (bResult) MESH->RebuildVMaps();
                 }while(0);
     		}
 		}
     	if (!bResult) g_msg->error("Can't parse LWO object.",0);
-
+		if (bResult){
+			// fill default bone part
+			m_BoneParts.push_back(SBonePart());
+			SBonePart& BP = m_BoneParts.back();
+			BP.alias = "default";
+			for (int b_i=0; b_i<m_Bones.size(); b_i++)
+				BP.bones.push_back(b_i);
+		}
+		
         return bResult;
     }else
     	g_msg->error("Can't export LWO object file.",0);

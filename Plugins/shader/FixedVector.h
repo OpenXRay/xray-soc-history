@@ -5,58 +5,70 @@
 template <class T, const int dim>
 class svector 
 {
-private:
-	T		array[dim];
-	DWORD	count;
 public:
-	typedef T*	iterator;
+	typedef	size_t				size_type;
+	typedef T					value_type;
+	typedef value_type*			iterator;
+	typedef const value_type*	const_iterator;
+	typedef value_type&			reference;
+	typedef const value_type&	const_reference;
 
+private:
+	value_type	array[dim];
+	u32			count;
+
+public:
 	svector() : count(0) 
 	{}
-	svector(T* p, int c) 
+	svector(iterator p, int c) 
 	{ assign(p,c); }
 
-	IC T*		begin()				{ return array;							}
-	IC T*		end	 ()				{ return array+count;					}
-	IC DWORD	size()				{ return count;							}
-	IC void		clear()				{ count=0;								}
-	IC void		resize(int c)		{ VERIFY(c<=dim); count=c;				}
+	IC iterator	begin()						{ return array;							}
+	IC iterator	end	 ()						{ return array+count;					}
+	IC const_iterator	begin()	const		{ return array;							}
+	IC const_iterator	end	 ()	const		{ return array+count;					}
+	IC u32		size()		const			{ return count;							}
+	IC void		clear()						{ count=0;								}
+	IC void		resize(int c)				{ VERIFY(c<=dim); count=c;				}
+	IC void		reserve(int c)				{ }
 
-	IC void		push_back(T e)		{ VERIFY(count<dim); array[count++]=e;	}
-	IC void		pop_back()			{ VERIFY(count); count--;				}
+	IC void		push_back(value_type e)		{ VERIFY(count<dim); array[count++]=e;	}
+	IC void		pop_back()					{ VERIFY(count); count--;				}
 
-	IC T&		operator[] (DWORD id){ VERIFY(id<count); return array[id];	}
+	IC reference		operator[] (u32 id)			{ VERIFY(id<count); return array[id];	}
+	IC const_reference	operator[] (u32 id)	const	{ VERIFY(id<count); return array[id];	}
 
-	IC T&		front()				{ return array[0];						}
-	IC T&		back()				{ return array[count-1];				}
-	IC T&		last()				{ VERIFY(count<dim); return array[count];}
-	IC void		inc	()				{ count++; }
-	IC bool		empty()				{ return 0==count;	}
+	IC reference		front()				{ return array[0];						}
+	IC reference		back()				{ return array[count-1];				}
+	IC reference		last()				{ VERIFY(count<dim); return array[count];}
+	IC const_reference	front() const		{ return array[0];						}
+	IC const_reference	back()  const		{ return array[count-1];				}
+	IC const_reference	last()  const		{ VERIFY(count<dim); return array[count];}
+	IC void		inc	()						{ count++; }
+	IC bool		empty()		const			{ return 0==count;	}
 
-	IC void		erase(DWORD id)		{
+	IC void		erase(u32 id)				{
 		VERIFY(id<count);
 		count--;
-		for (DWORD i=id; i<count; i++)
+		for (u32 i=id; i<count; i++)
 			array[i] = array[i+1];
 	}
-	IC void		erase(T* it)		{ erase(it-begin());	}
+	IC void		erase(iterator it)				{ erase(u32(it-begin()));	}
 
-	IC void		insert(int id, T& V)
+	IC void		insert(u32 id, reference V)
 	{
-		VERIFY(id>=0);
 		VERIFY(id<count);
-		for (int i=count; i>id; i--)
-			array[i] = array[i-1];
+		for (int i=count; i>int(id); i--)	array[i] = array[i-1];
 		count++;
 		array[id] = V;
 	}
-	IC void		assign(T* p, int c) { VERIFY(c>0 && c<dim); CopyMemory(array,p,c*sizeof(T)); count=c; }
-	IC BOOL		equal (svector<T,dim>& base)
+	IC void		assign(iterator p, int c) { VERIFY(c>0 && c<dim); CopyMemory(array,p,c*sizeof(value_type)); count=c; }
+	IC BOOL		equal (const svector<value_type,dim>& base) const
 	{
 		if (size()!=base.size())	return FALSE;
-		for (DWORD cmp=0; cmp<size(); cmp++)	if ((*this)[cmp]!=base[cmp])	return FALSE;
+		for (u32 cmp=0; cmp<size(); cmp++)	if ((*this)[cmp]!=base[cmp])	return FALSE;
 		return TRUE;
 	}
 };
-#endif
 
+#endif

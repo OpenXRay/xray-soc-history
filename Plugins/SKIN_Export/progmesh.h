@@ -24,7 +24,7 @@ class PM_API P_UV {
 public:
 	float u,v;
 
-	IC float dist(P_UV &p)	{ return sqrtf((u-p.u)*(u-p.u) + (v-p.v)*(v-p.v)); }
+	IC float dist(P_UV &p)	{ return _sqrt((u-p.u)*(u-p.u) + (v-p.v)*(v-p.v)); }
 
 };
 #pragma pack(pop)
@@ -43,13 +43,13 @@ struct PM_API Vsplit
 struct PM_API PM_Result
 {
 	WORD*	permutePTR;		// You need to permute vertices according to this
-	DWORD	permuteSIZE;
+	u32	permuteSIZE;
 	Vsplit*	splitPTR;		// Ready to use Vsplit records
-	DWORD	splitSIZE;
+	u32	splitSIZE;
 	WORD*	facefixPTR;		// Ready to use FaceFix records
-	DWORD	facefixSIZE;
+	u32	facefixSIZE;
 
-	DWORD	minVertices;
+	u32	minVertices;
 };
 #pragma pack(pop)
 
@@ -58,11 +58,11 @@ extern "C" {
 // FIRST:
 //			Call following function and...
 //			...then create all of your vertices preserving their order
-PM_API void	__cdecl PM_Options(
-	DWORD	dwRelevantUV, DWORD dwRelevantUVMASK,
-	DWORD	dwMinVertCount, 
-	float	w_UV=0.5f, 
-	float	w_Pos=1.f, 
+PM_API void	__cdecl PM_Init	(
+	u32	dwRelevantUV, u32 dwRelevantUVMASK,
+	u32	dwMinVertCount,
+	float	w_UV=0.5f,
+	float	w_Pos=1.f,
 	float	w_Norm=1.f,
 	float	p_BorderHeuristic=150.f,
 	float	p_BorderHeuristicD=0.07f,
@@ -75,8 +75,8 @@ PM_API void __cdecl PM_CreateVertex(float x, float y, float z,int _id, P_UV *uv)
 //			You need to call this function passing indices (which will be reordered)
 //			...and collaped, so initial model state has minimal number of vertices
 PM_API int __cdecl PM_Convert(
-	WORD*			pIndices,	
-	DWORD			idxCount,
+	WORD*			pIndices,
+	u32			idxCount,
 	PM_Result*		RESULT
 	);
 

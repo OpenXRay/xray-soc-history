@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "UTILITY_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "UTILITY_EXPORTS" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /D "UTILITY_EXPORTS" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_EXPORT" /D "_MAX_EXPORT" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "UTILITY_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /W3 /Gm /Gi /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MAX_EXPORT" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W3 /Gm /Gi /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_EXPORT" /D "_MAX_EXPORT" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -131,10 +131,6 @@ SOURCE=.\_compressed_normal.h
 # Begin Source File
 
 SOURCE=.\_d3d_extensions.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\_Faabb.h
 # End Source File
 # Begin Source File
 
@@ -234,6 +230,14 @@ SOURCE=.\_vector4.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\clsid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsid.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\cpuid.cpp
 # End Source File
 # Begin Source File
@@ -242,12 +246,12 @@ SOURCE=.\cpuid.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\FixedVector.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vector.h
 # End Source File
-# End Group
-# Begin Group "Rapid"
-
-# PROP Default_Filter ""
 # End Group
 # Begin Source File
 
@@ -277,10 +281,42 @@ SOURCE=.\lzhuf.h
 
 SOURCE=.\progmesh.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\Properties.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Xr_ini.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_ini.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_tokens.h
+# End Source File
 # End Group
 # Begin Group "Editor"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\BlenderListLoader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\BlenderListLoader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Engine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Engine.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\FileSystem.cpp
@@ -288,6 +324,14 @@ SOURCE=.\FileSystem.cpp
 # Begin Source File
 
 SOURCE=.\FileSystem.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FS2.CPP
+# End Source File
+# Begin Source File
+
+SOURCE=.\FS2.H
 # End Source File
 # Begin Source File
 
@@ -299,6 +343,10 @@ SOURCE=.\Log.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\lwchunks.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\NetDeviceLog.cpp
 # End Source File
 # Begin Source File
@@ -307,29 +355,15 @@ SOURCE=.\NetDeviceLog.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Shader_xrLC.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\xr_trims.cpp
-
-!IF  "$(CFG)" == "Utility - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Utility - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\xr_trims.h
-
-!IF  "$(CFG)" == "Utility - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Utility - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # End Group
 # End Group
@@ -338,75 +372,79 @@ SOURCE=.\xr_trims.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ExportObject\bone.cpp
+SOURCE=.\bone.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\bone.h
+SOURCE=.\bone.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMesh.cpp
+SOURCE=.\EditMesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMesh.h
+SOURCE=.\EditMesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMeshExportMAX.cpp
+SOURCE=.\EditMeshExportMAX.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMeshIO.cpp
+SOURCE=.\EditMeshIO.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMeshModify.cpp
+SOURCE=.\EditMeshModify.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObject.cpp
+SOURCE=.\EditObject.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObject.h
+SOURCE=.\EditObject.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObjectExportMAX.cpp
+SOURCE=.\EditObjectExportLWO.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObjectIO.cpp
+SOURCE=.\EditObjectExportMAX.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObjectMotions.cpp
+SOURCE=.\EditObjectIO.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\Envelope.cpp
+SOURCE=.\EditObjectMotions.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\envelope.h
+SOURCE=.\Envelope.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\interp.cpp
+SOURCE=.\envelope.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\motion.cpp
+SOURCE=.\interp.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\motion.h
+SOURCE=.\motion.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\SceneClassList.h
+SOURCE=.\motion.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SceneClassList.h
 # End Source File
 # End Group
 # Begin Group "Export Skin"
@@ -414,35 +452,35 @@ SOURCE=.\ExportObject\SceneClassList.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ExportSkin\Exporter.cpp
+SOURCE=.\Exporter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\Exporter.h
+SOURCE=.\Exporter.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\Face.h
+SOURCE=.\Face.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\Helper.cpp
+SOURCE=.\Helper.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\Helper.h
+SOURCE=.\Helper.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\Vert.h
+SOURCE=.\Vert.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\xrSKIN_BUILD.cpp
+SOURCE=.\xrSKIN_BUILD.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportSkin\xrSKIN_BUILD.h
+SOURCE=.\xrSKIN_BUILD.h
 # End Source File
 # End Group
 # Begin Group "Export Skin Keys"
@@ -450,7 +488,7 @@ SOURCE=.\ExportSkin\xrSKIN_BUILD.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ExportSkinKeys\ExportKeys.cpp
+SOURCE=.\ExportKeys.cpp
 # End Source File
 # End Group
 # Begin Source File

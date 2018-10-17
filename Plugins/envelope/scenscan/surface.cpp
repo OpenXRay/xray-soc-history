@@ -48,6 +48,7 @@ void freeObjectSurfs( ObjectDB *odb )
 				if ( odb->surf[ i ].name )
 					free( odb->surf[ i ].name );
 				free( odb->surf );
+				odb->surf = 0;
 				odb->nsurfaces = 0;
 		}
 	}
@@ -105,7 +106,7 @@ int getObjectSurfs( ObjectDB *odb, LWMeshInfo *mesh, GlobalFunc *global )
 		for ( i = 0; i < odb->nsurfaces; i++ ) {
 			odb->surf[ i ].id = surfid[ i ];
 			tag = surff->name( surfid[ i ] );
-			odb->surf[ i ].name = (char*)malloc( strlen( tag ) + 1 );
+			odb->surf[ i ].name = (char*)malloc( xr_strlen( tag ) + 1 );
 			if ( !odb->surf[ i ].name ) {
 				freeObjectSurfs( odb );
 				return 0;
@@ -113,6 +114,11 @@ int getObjectSurfs( ObjectDB *odb, LWMeshInfo *mesh, GlobalFunc *global )
 			strcpy( odb->surf[ i ].name, tag );
 			
 			LWTextureID tid = surff->getTex(surfid[i],SURF_COLR);	
+			if (!tid){
+				g_msg->error("Empty texture in surface:",odb->surf[ i ].name);
+				freeObjectSurfs( odb );
+				return 0;
+			}
 			for (LWTLayerID tlid=txfunc->firstLayer(tid); tlid; tlid=txfunc->nextLayer(tid,tlid)){
 				DWORD imid;
 				int res = txfunc->getParam(tlid,TXTAG_IMAGE,&imid);

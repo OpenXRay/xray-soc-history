@@ -19,6 +19,7 @@ what LWEnvelopeFuncs->evaluate() says.
 #include <lwhost.h>
 #include <lwpanel.h>
 #include <lwsurf.h>
+#include <lwdisplay.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +37,8 @@ LWBoneInfo		*g_boneinfo;
 LWObjectFuncs	*g_objfunc;
 LWObjectInfo	*g_objinfo;
 LWSurfaceFuncs	*g_surff;
+HostDisplayInfo *g_hdi;
+	
 
 static int get_globals( GlobalFunc *global )
 {
@@ -49,6 +52,7 @@ static int get_globals( GlobalFunc *global )
 	g_objfunc	= global( LWOBJECTFUNCS_GLOBAL,		GFUSE_TRANSIENT );
 	g_objinfo	= global( LWOBJECTINFO_GLOBAL,		GFUSE_TRANSIENT );
 	g_surff		= global( LWSURFACEFUNCS_GLOBAL,	GFUSE_TRANSIENT );
+	g_hdi		= global( LWHOSTDISPLAYINFO_GLOBAL, GFUSE_TRANSIENT );
 	
 	return ( g_chinfo && g_envf && g_iteminfo && g_lwsi && g_intinfo && g_msg && g_boneinfo && g_objfunc && g_objinfo && g_surff);
 }

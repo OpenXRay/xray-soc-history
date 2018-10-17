@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ENVELOPE_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LWO_EXPORTS" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_LW_PLUGIN" /D "_LW_EXPORT" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x419 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ENVELOPE_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LWO_EXPORTS" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "_X86_" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_LW_PLUGIN" /D "_LW_EXPORT" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x419 /d "_DEBUG"
@@ -109,6 +109,10 @@ SOURCE=.\scenscan\ptsearch.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\scenscan\scenscan.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\scenscan\surface.cpp
 # End Source File
 # Begin Source File
@@ -141,27 +145,39 @@ SOURCE=.\bone_lw.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMesh.cpp
+SOURCE=.\EditMesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMesh.h
+SOURCE=.\EditMesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditMeshIO.cpp
+SOURCE=.\EditMeshIO.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObject.cpp
+SOURCE=.\EditMeshModify.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObject.h
+SOURCE=.\EditObject.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\EditObjectImport.cpp
+SOURCE=.\EditObject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\EditObjectImport.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\EditObjectIO.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\EditObjectMotions.cpp
 # End Source File
 # Begin Source File
 
@@ -189,11 +205,11 @@ SOURCE=.\motion_lw.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\SceneClassList.h
+SOURCE=.\SceneClassList.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportObject\SceneObject.h
+SOURCE=.\SceneObject.h
 # End Source File
 # End Group
 # Begin Source File
@@ -285,10 +301,6 @@ SOURCE=.\_d3d_extensions.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_Faabb.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\_fbox.h
 # End Source File
 # Begin Source File
@@ -314,14 +326,6 @@ SOURCE=.\_ipoint.h
 # Begin Source File
 
 SOURCE=.\_irect.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\_l_vertex.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\_lit_vertex.h
 # End Source File
 # Begin Source File
 
@@ -377,10 +381,6 @@ SOURCE=.\_stl_extensions.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_tl_vertex.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\_types.h
 # End Source File
 # Begin Source File
@@ -397,7 +397,11 @@ SOURCE=.\_vector4.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\_vertex.h
+SOURCE=.\clsid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsid.h
 # End Source File
 # Begin Source File
 
@@ -412,6 +416,14 @@ SOURCE=.\cpuid.h
 SOURCE=.\vector.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\Engine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Engine.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\FileSystem.cpp
@@ -434,11 +446,39 @@ SOURCE=.\FS.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Log.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Log.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LzHuf.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\lzhuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Xr_ini.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_ini.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_tokens.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_trims.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xr_trims.h
 # End Source File
 # End Group
 # Begin Source File

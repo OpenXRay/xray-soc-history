@@ -93,16 +93,17 @@
 #include <string>
 using namespace std;
 
+#include <commdlg.h>
+#include <sys\utime.h>
+
+#define _FREE(x)		{ if(x) { free(x); (x)=NULL; } }
+#define _DELETE(a)      {delete(a); (a)=NULL;}
+#define _DELETEARRAY(a) {delete[](a); (a)=NULL;}
+
 // Property-set support
 #define PropertyG(a)	__declspec( property( get=a ) )
 #define PropertyP(a)	__declspec( property( put=a ) )
 #define PropertyGP(a,b)	__declspec( property( get=a, put=b ) )
-
-// CLASS ID type
-typedef unsigned __int64	CLASS_ID;
-#define MK_CLSID(a,b,c,d,e,f,g,h) \
-	CLASS_ID(	((CLASS_ID(a)<<CLASS_ID(24))|(CLASS_ID(b)<<CLASS_ID(16))|(CLASS_ID(c)<<CLASS_ID(8))|(CLASS_ID(d)))<<CLASS_ID(32) | \
-				((CLASS_ID(e)<<CLASS_ID(24))|(CLASS_ID(f)<<CLASS_ID(16))|(CLASS_ID(g)<<CLASS_ID(8))|(CLASS_ID(h))) )
 
 // Our headers
 #define NO_XR_NETWORK
@@ -117,21 +118,21 @@ typedef unsigned __int64	CLASS_ID;
 #define R_ASSERT
 #define VERIFY  
 #endif
-#define NODEFAULT 
+#define NODEFAULT
 
-//#include "debugkernel.h"
-#ifndef NO_MMGR
-//#include "fmemorymanager.h"
-#endif
-//#include "defines.h"
-//#include "pure.h"
-#include "math.h"
+#define AnsiString string
+
+enum TMsgDlgType { mtWarning, mtError, mtInformation, mtConfirmation, mtCustom };
+enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
+typedef TMsgDlgBtn TMsgDlgButtons[mbHelp];
+
+#include "clsid.h"
 #include "vector.h"
-#ifndef NO_XRLOG
-//#include "log.h"
-#endif
-//#include "device.h"
-#include "ffileops.h"
+#include "FixedVector.h"
+#include "Log.h"
+
+#include "FileSystem.h"
+#include "FS.h"
 // TODO: reference additional headers your program requires here
 
 #pragma comment( lib, "imagehlp.lib"	)
@@ -145,7 +146,6 @@ typedef unsigned __int64	CLASS_ID;
 #pragma comment( lib, "dinput.lib"		)
 #pragma comment( lib, "dxguid.lib"		)
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+DEFINE_VECTOR(string,AStringVec,AStringIt);
 
 #endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)

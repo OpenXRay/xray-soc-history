@@ -1,27 +1,28 @@
 #include "stdafx.h"
 #include "LW_Shader.h"
-#include "XRShaderDef.h"
-#include "XRShaderLib.h"
+#include "BlenderListLoader.h"
 
-vector<SH_ShaderDef> LIB;
-/*
-void	shLibrary_Sort		(vector<SH_ShaderDef> &LIB);
-DWORD	shLibrary_GetCount	(const char *Name);
-void	shLibrary_Load		(const char *Name, vector<SH_ShaderDef> &LIB);
-void	shLibrary_Save		(const char *Name, vector<SH_ShaderDef> &LIB);
-int		shLibrary_Find		(const char* Name, vector<SH_ShaderDef> &LIB);
-*/
-extern "C" { EShaderList EShaders; }
+extern "C" { EShaderList ENShaders; EShaderList LCShaders; EShaderList GameMtls;}
 
 extern "C" {
 	void __cdecl LoadShaders()
 	{
-		shLibrary_Load("x:\\game\\shaders.xr", LIB);
-		EShaders.count=0;
-		for (int k=0; k<LIB.size(); k++){
-			strcpy(EShaders.Names[EShaders.count],LIB[k].cName);
-			EShaders.count++;
-		}
-		LIB.clear();
+		Core._initialize("XRayPlugin",0,FALSE);
+		FS._initialize	(CLocatorAPI::flScanAppRoot);
+		LPSTRVec lst;
+		ENShaders.count=LoadBlenderList(lst);
+		for (LPSTRIt b_it=lst.begin(); b_it!=lst.end(); b_it++)
+			strcpy(ENShaders.Names[b_it-lst.begin()],*b_it);
+		ClearList(lst);
+
+		LCShaders.count=LoadShaderLCList(lst);
+		for (LPSTRIt c_it=lst.begin(); c_it!=lst.end(); c_it++)
+			strcpy(LCShaders.Names[c_it-lst.begin()],*c_it);
+		ClearList(lst);
+
+		GameMtls.count=LoadGameMtlList(lst);
+		for (LPSTRIt g_it=lst.begin(); g_it!=lst.end(); g_it++)
+			strcpy(GameMtls.Names[g_it-lst.begin()],*g_it);
+		ClearList(lst);
 	}
 };

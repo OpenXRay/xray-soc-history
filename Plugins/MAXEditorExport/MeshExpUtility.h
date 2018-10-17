@@ -7,11 +7,14 @@
 #include "NetDeviceLog.h"
 #include "MeshExpUtility.rh"
 
-#define EXPORTER_VERSION	1
-#define EXPORTER_BUILD		5
+#define EXPORTER_VERSION	2
+#define EXPORTER_BUILD		03
 //using namespace std;
 
-#define	EXP_UTILITY_CLASSID Class_ID(0x69107b71, 0x1d5644be)
+// refs
+class CEditableObject;
+
+#define	EXP_UTILITY_CLASSID 0x507d29c0
 
 class ExportItem {
 public:
@@ -21,6 +24,7 @@ public:
 	~ExportItem(){};
 };
 
+DEFINE_VECTOR(ExportItem,ExportItemVec,ExportItemIt);
 class MeshExpUtility : public UtilityObj {
 public:
 
@@ -28,27 +32,24 @@ public:
 	Interface	*ip;
 
 	HWND		hPanel;
-	HWND		hCtlList;
-protected:
-	char		m_ExportName[MAX_PATH];
-	std::vector<ExportItem> m_Items;
+	HWND		hItemList;
 
-	void		RegRead		();
-	void		RegSave		();
+	INode*		GetExportNode	();
+protected:
+	ExportItemVec m_Items;
 
 	void		RefreshExportList();
 	void		UpdateSelectionListBox();
 
-	bool		SaveAsObject	(const char* n);
-	bool		SaveAsSkin		(const char* n);
-	bool		SaveSkinKeys	(const char* n);
+	BOOL		BuildObject		(CEditableObject*& obj, LPCSTR m_ExportName);
+	BOOL		SaveAsObject	(const char* n);
+	BOOL		SaveAsLWO		(const char* n);
+	BOOL		SaveAsSkin		(const char* n);
+	BOOL		SaveSkinKeys	(const char* n);
 public:
 	int			m_ObjectFlipFaces;
-	int			m_ObjectSuppressSmoothGroup;
-	int			m_ObjectNoOptimize;
-
-	int			m_SkinSuppressSmoothGroup;
-	int			m_SkinProgressive;
+	int			m_SkinFlipFaces;
+	int			m_SkinAllowDummy;
 public:
 				MeshExpUtility	();
 	virtual		~MeshExpUtility	();
@@ -60,8 +61,9 @@ public:
 
 	void		Init			(HWND hWnd);
 	void		Destroy			(HWND hWnd);
-	void		ExportAsObject	();
-	void		ExportAsSkin	();
+	void		ExportObject	();
+	void		ExportLWO		();
+	void		ExportSkin		();
 	void		ExportSkinKeys	();
 };
 

@@ -226,7 +226,7 @@ ObjectDB *getObjectDB( LWItemID id, GlobalFunc *global )
 
    odb->id = id;
    name = objinfo->filename( id );
-   odb->filename = (char*)malloc( strlen( name ) + 1 );
+   odb->filename = (char*)malloc( xr_strlen( name ) + 1 );
    if ( !odb->filename ) goto Finish;
    strcpy( odb->filename, name );
 

@@ -3,57 +3,61 @@
 
 #include "cpuid.h"
 
-#ifdef M_BORLAND
-#define NAKED	__declspec(naked)
-#define BCALL	__fastcall
-#endif
-
 namespace FPU {
-	ENGINE_API extern	u16		_24;
-	ENGINE_API extern	u16		_24r;
-	ENGINE_API extern	u16		_53;
-	ENGINE_API extern 	u16		_53r;
-	ENGINE_API extern 	u16		_64;
-	ENGINE_API extern 	u16		_64r;
-	
-#ifdef M_VISUAL
-	IC void m24	(void)	{	__asm fldcw _24  };
-	IC void m24r(void)	{	__asm fldcw _24r };
-	IC void m53	(void)	{ 	__asm fldcw _53  };
-	IC void m53r(void)	{ 	__asm fldcw _53r };
-	IC void m64	(void)	{ 	__asm fldcw _64  };
-	IC void m64r(void)	{ 	__asm fldcw _64r };
-#endif
-#ifdef M_BORLAND
-	void	BCALL	m24		(u16 p=_24);
-	void	BCALL	m24r	(u16 p=_24r);	
-	void	BCALL	m53		(u16 p=_53);	
-	void	BCALL	m53r	(u16 p=_53r);	
-	void	BCALL	m64		(u16 p=_64);	
-	void	BCALL	m64r	(u16 p=_64r);	
-#endif
+	XRCORE_API void	 m24	(void);
+	XRCORE_API void	 m24r	(void);	
+	XRCORE_API void	 m53	(void);	
+	XRCORE_API void	 m53r	(void);	
+	XRCORE_API void	 m64	(void);	
+	XRCORE_API void	 m64r	(void);	
 };
 namespace CPU {
-	ENGINE_API extern u64				cycles_per_second;
-	ENGINE_API extern u64				cycles_overhead;
-	ENGINE_API extern float				cycles2seconds;
-	ENGINE_API extern float				cycles2milisec;
-	ENGINE_API extern _processor_info	ID;
+	XRCORE_API extern u64				clk_per_second		;
+	XRCORE_API extern u64				clk_per_milisec		;
+	XRCORE_API extern u64				clk_per_microsec	;
+	XRCORE_API extern u64				clk_overhead		;
+	XRCORE_API extern float				clk_to_seconds		;
+	XRCORE_API extern float				clk_to_milisec		;
+	XRCORE_API extern float				clk_to_microsec		;
+	
+	XRCORE_API extern u64				qpc_freq			;
+	XRCORE_API extern u64				qpc_overhead		;
+	XRCORE_API extern u32				qpc_counter			;
+
+	XRCORE_API extern	_processor_info	ID					;
+	XRCORE_API extern	u64				QPC	()				;
 
 #ifdef M_VISUAL
-	#pragma warning(disable:4035)
-	IC u64	GetCycleCount(void)
-	{
-		_asm    _emit 0x0F;
-		_asm    _emit 0x31;
-	}
-	#pragma warning(default:4035)
+	#ifndef _M_AMD64
+		#pragma warning(disable:4035)
+		IC u64	GetCLK(void)	{
+			_asm    _emit 0x0F;
+			_asm    _emit 0x31;
+		}
+		#pragma warning(default:4035)
+	#else
+		IC u64	GetCLK(void)	{
+			return __rdtsc();
+		}
+	#endif
 #endif
+
 #ifdef M_BORLAND
-	u64	BCALL	GetCycleCount(void);
+	XRCORE_API u64 __fastcall	GetCLK				(void);
 #endif
 };
 
-extern void InitMath(void);
+extern XRCORE_API	void	_initialize_cpu			();
+extern XRCORE_API	void	_initialize_cpu_thread	();
+
+// threading
+typedef				void	thread_t				( void * );
+extern XRCORE_API	void	thread_name				( const char* name);
+extern XRCORE_API	void	thread_spawn			(
+	thread_t*	entry,
+	const char*	name,
+	unsigned	stack,
+	void*		arglist 
+	);
 
 #endif //__XR_MATH_H__

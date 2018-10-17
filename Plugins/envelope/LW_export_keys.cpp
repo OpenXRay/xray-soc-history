@@ -7,6 +7,7 @@
 #include "Bone.h"
 #include "Motion.h"
 #include "scenscan\objectdb.h"
+#include <lwdisplay.h>
 
 extern "C"	LWItemInfo		*g_iteminfo;
 extern "C"	LWChannelInfo	*g_chinfo;
@@ -17,6 +18,7 @@ extern "C"	LWMessageFuncs	*g_msg;
 extern "C"	LWBoneInfo		*g_boneinfo;
 extern "C"	LWObjectFuncs	*g_objfunc;
 extern "C"	LWObjectInfo	*g_objinfo;
+extern "C"	HostDisplayInfo *g_hdi;
 
 static CSMotion* m_Motion;
 
@@ -63,32 +65,38 @@ static bool ParseObjectMotion(LWItemID object, int& obj_cnt){
 	return true;
 }
 
-char* ReplaceSpace(char* s){
-	char* lp = s;
-	while(lp[0]){
-		if (lp[0]==' ') lp[0]='_';
-		lp++;
+void ReplaceSpaceAndLowerCase(shared_str& s)
+{
+	if (*s){
+		char* _s	= xr_strdup(*s);
+		char* lp	= _s;
+		while(lp[0]){if (lp[0]==' ') lp[0]='_'; lp++;}
+		xr_strlwr	(_s);
+		s			= _s;
+		xr_free		(_s);
 	}
-	return s;
 }
 
 extern "C" {
 //-----------------------------------------------------------------------------------------
-void __cdecl SaveSkeletonMotion(GlobalFunc *global){
+void __cdecl SaveSkeletonMotion(GlobalFunc *global)
+{
+	Core._initialize("XRayPlugin",ELogCallback,FALSE);
+	FS._initialize	(CLocatorAPI::flScanAppRoot,NULL,"xray_path.ltx");
 	// get bone ID
 	LWItemID		object;
 	bool bErr		= true;
 	
-	char buf[1024];	buf[0] = 0;
-	char name[64];
+	string1024 buf="";
+	string64 name;
 
-	FS.GetSaveName	(&FS.m_SMotion,buf);
+	EFS.GetSaveName	("$smotion$",buf,sizeof(buf));
 
 	if (buf[0]){
 		object		= g_iteminfo->first( LWI_OBJECT, NULL );
 		int obj_cnt = 0;
 		_splitpath( buf, 0, 0, name, 0 );
-		m_Motion	= new CSMotion();
+		m_Motion	= xr_new<CSMotion>();
 		m_Motion->SetName(name);
 		while ( object ) {
 			if(g_intinfo->itemFlags(object)&LWITEMF_SELECTED){
@@ -99,13 +107,12 @@ void __cdecl SaveSkeletonMotion(GlobalFunc *global){
 		}
 		
 		if (!bErr){	
-			m_Motion->SetParam(g_intinfo->previewStart, g_intinfo->previewEnd, g_lwsi->framesPerSecond);
-			m_Motion->SetStartBone(m_Motion->GetRootBone());
+			m_Motion->SetParam(g_intinfo->previewStart, g_intinfo->previewEnd, (float)g_lwsi->framesPerSecond);
 			m_Motion->SaveMotion(buf);
 			g_msg->info	("Export successful.",buf);
 		}else g_msg->error("Export failed.",0);
 		
-		_DELETE(m_Motion);
+		xr_delete(m_Motion);
 	}
 }
 };

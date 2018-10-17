@@ -6,31 +6,8 @@
 #include "MeshExpUtility.h"
 #include "FileSystem.h"
 #include "MeshExpUtility.rh"
-#include "ExportObject\EditObject.h"
-#include "ExportObject\EditMesh.h"
-
-//-------------------------------------------------------------------
-//  to access edit controls
-
-static BOOL CALLBACK SimplEnumChld( HWND hwnd, LPARAM lParam ){
-	HWND* phw = (HWND*)lParam;
-	(*phw) = hwnd;
-	return FALSE;
-}
-
-static HWND L1Child(  HWND control ){
-	if( 0== control )
-		return 0;
-	HWND hwc = 0;
-	EnumChildWindows( control, SimplEnumChld, (LPARAM)&hwc );
-	return hwc;
-}
-
-static HWND L2Child( HWND control ) {
-	return L1Child( L1Child( control ) );
-}
-
-
+#include "EditObject.h"
+#include "EditMesh.h"
 //-------------------------------------------------------------------
 //  Dialog Handler for Utility
 
@@ -53,11 +30,14 @@ static BOOL CALLBACK DefaultDlgProc(
 				case IDC_CLOSE:
 					U.iu->CloseUtility();
 					break;
-				case IDC_OBJECT_EXPORT:
-					U.ExportAsObject();
+				case IDC_EXPORT_AS_OBJECT:
+					U.ExportObject();
+					break;
+				case IDC_EXPORT_AS_LWO:
+					U.ExportLWO();
 					break;
 				case IDC_SKIN_EXPORT:
-					U.ExportAsSkin();
+					U.ExportSkin();
 					break;
 				case IDC_SKIN_KEYS_EXPORT:
 					U.ExportSkinKeys();
@@ -82,12 +62,8 @@ MeshExpUtility::MeshExpUtility()
 	hPanel = 0;
 
 	m_ObjectFlipFaces			= false;
-	m_ObjectNoOptimize			= false;
-	m_ObjectSuppressSmoothGroup = false;
-	m_SkinSuppressSmoothGroup	= true;
-	m_SkinProgressive			= true;
-
-	m_ExportName[0] = 0;
+	m_SkinFlipFaces				= false;
+	m_SkinAllowDummy			= false;
 }
 
 MeshExpUtility::~MeshExpUtility()
@@ -99,10 +75,7 @@ void MeshExpUtility::BeginEditParams(Interface *ip,IUtil *iu)
 {
 	this->iu = iu;
 	this->ip = ip;
-	NConsole.Init( hInstance, 0 );
-
-	RegRead();
-	FS.Init();
+	EConsole.Init( hInstance, 0 );
 
 	hPanel = ip->AddRollupPage(hInstance, MAKEINTRESOURCE(IDD_MWND), DefaultDlgProc, "XRay Export", 0);
 }
@@ -110,14 +83,10 @@ void MeshExpUtility::BeginEditParams(Interface *ip,IUtil *iu)
 void MeshExpUtility::EndEditParams(Interface *ip,IUtil *iu) 
 {
 	m_ObjectFlipFaces			= IsDlgButtonChecked( hPanel, IDC_OBJECT_FLIPFACES );
-	m_ObjectNoOptimize			= IsDlgButtonChecked( hPanel, IDC_OBJECT_NO_OPTIMIZE );
-	m_ObjectSuppressSmoothGroup	= IsDlgButtonChecked( hPanel, IDC_OBJECT_SUPPRESS_SMOOTH_GROUPS );
-	m_SkinSuppressSmoothGroup	= IsDlgButtonChecked( hPanel, IDC_SKIN_SUPPRESS_SMOOTH_GROUPS );
-	m_SkinProgressive			= IsDlgButtonChecked( hPanel, IDC_SKIN_PROGRESSIVE );
+	m_SkinFlipFaces				= IsDlgButtonChecked( hPanel, IDC_SKIN_FLIPFACES );
+	m_SkinAllowDummy			= IsDlgButtonChecked( hPanel, IDC_SKIN_ALLOW_DUMMY );
 
-	RegSave();
-
-	NConsole.Clear();
+	EConsole.Clear();
 	
 	this->iu = 0;
 	this->ip = 0;
@@ -135,13 +104,11 @@ void MeshExpUtility::Init(HWND hWnd)
 {
 	hPanel = hWnd;
 
-	hCtlList = GetDlgItem(hWnd, IDC_OBJLIST);
+	hItemList = GetDlgItem(hWnd, IDC_OBJLIST);
 
 	CheckDlgButton( hPanel, IDC_OBJECT_FLIPFACES,				m_ObjectFlipFaces );
-	CheckDlgButton( hPanel, IDC_OBJECT_NO_OPTIMIZE,				m_ObjectNoOptimize );
-	CheckDlgButton( hPanel, IDC_OBJECT_SUPPRESS_SMOOTH_GROUPS,	m_ObjectSuppressSmoothGroup );
-	CheckDlgButton( hPanel, IDC_SKIN_SUPPRESS_SMOOTH_GROUPS,	m_SkinSuppressSmoothGroup );
-	CheckDlgButton( hPanel, IDC_SKIN_PROGRESSIVE,				m_SkinProgressive );
+	CheckDlgButton( hPanel, IDC_SKIN_FLIPFACES,					m_SkinFlipFaces );
+	CheckDlgButton( hPanel, IDC_SKIN_ALLOW_DUMMY,				m_SkinAllowDummy );
 
 	RefreshExportList();
 	UpdateSelectionListBox();
@@ -161,140 +128,121 @@ void MeshExpUtility::RefreshExportList(){
 	}
 }
 
-void MeshExpUtility::UpdateSelectionListBox(){
-	SendMessage( hCtlList, LB_RESETCONTENT, 0, 0 );
-	std::vector<ExportItem>::iterator i = m_Items.begin();
-	for(;i!=m_Items.end();i++)
-		SendMessage( hCtlList, LB_ADDSTRING,
-			0,(LPARAM) i->pNode->GetName() );
-}
-
-/*
-VOID matrix3_to_nsap ( Matrix3& M, FLOAT n[3], FLOAT s[3], FLOAT a[3], FLOAT p[3] ){
-	Point3	r1				= M.GetRow(0);
-	Point3	r2				= M.GetRow(1);
-	Point3	r3				= M.GetRow(2);
-	Point3	r4				= M.GetRow(3);
-	n[0]=r1.x;	n[1]=r1.z;	n[2]=r1.y;
-	s[0]=r3.x;	s[1]=r3.z;	s[2]=r3.y;
-	a[0]=r2.x;	a[1]=r2.z;	a[2]=r2.y;
-	p[0]=r4.x;	p[1]=r4.z;	p[2]=r4.y;
-}
-VOID matrix_from_nsap ( matrix& m, vector& n, vector& s, vector& a, vector& p ){
-	m.m00 = n.x;		m.m01 = s.x;		m.m02 = a.x;		m.m03 = 0.0f;
-	m.m10 = n.y;		m.m11 = s.y;		m.m12 = a.y;		m.m13 = 0.0f;
-	m.m20 = n.z;		m.m21 = s.z;		m.m22 = a.z;		m.m23 = 0.0f;
-	m.m30 = -dot(p,n);	m.m31 = -dot(p,s);	m.m32 = -dot(p,a);	m.m33 = 1.0f;	
-}
-
-
-VOID matrix3_to_nsap ( Matrix3& M, Fvector& n, Fvector& s, Fvector& a, Fvector& p ){
-	Point3	r1				= M.GetRow(0);
-	Point3	r2				= M.GetRow(1);
-	Point3	r3				= M.GetRow(2);
-	Point3	r4				= M.GetRow(3);
-	n.set(r1.x, r1.z, r1.y);
-	s.set(r3.x, r3.z, r3.y);
-	a.set(r2.x, r2.z, r2.y);
-	p.set(r4.x, r4.z, r4.y);
-}
-/*VOID matrix_from_nsap ( Fmatrix& m, Fvector& n, Fvector& s, Fvector& a, Fvector& p ){
-	m.m[0][0] = n.x;				m.m[0][1] = s.x;				m.m[0][2] = a.x;				m.m[0][3] = 0.0f;
-	m.m[1][0] = n.y;				m.m[1][1] = s.y;				m.m[1][2] = a.y;				m.m[1][3] = 0.0f;
-	m.m[2][0] = n.z;				m.m[2][1] = s.z;				m.m[2][2] = a.z;				m.m[2][3] = 0.0f;
-	m.m[3][0] = -p.dotproduct(n);	m.m[3][1] = -p.dotproduct(s);	m.m[3][2] = -p.dotproduct(a);	m.m[3][3] = 1.0f;	
-}
-static VOID		matr_from_nsap	( Fmatrix& m, Fvector& _n, Fvector& _s, Fvector& _a, Fvector& p ){
-	FLOAT N		= _n.magnitude();//Magnitude	( _n );
-	FLOAT S		= _s.magnitude();//Magnitude	( _s );
-	FLOAT A		= _a.magnitude();//Magnitude	( _a );
-	Fvector n,s,a;
-	n.div(_n,(N*N));
-	s.div(_s,(S*S));
-	a.div(_a,(A*A));
-	m.m[0][0] = n.x;	m.m[1][0] = n.y;	m.m[2][0] = n.z;	m.m[3][0] = -p.dotproduct(n);
-	m.m[0][1] = s.x;	m.m[1][1] = s.y;	m.m[2][1] = s.z;	m.m[3][1] = -p.dotproduct(s);
-	m.m[0][2] = a.x;	m.m[1][2] = a.y;	m.m[2][2] = a.z;	m.m[3][2] = -p.dotproduct(a);
-	m.m[0][3] = 0.0f;	m.m[1][3] = 0.0f;	m.m[2][3] = 0.0f;	m.m[3][3] = 1.0f;	
-}
-*/
-// ================================================== dummyFn()
-// used by 3DS progress bar
-static DWORD WINAPI dummyFn(LPVOID arg)
+void MeshExpUtility::UpdateSelectionListBox()
 {
-    return(0);
+	SendMessage( hItemList, LB_RESETCONTENT, 0, 0 );
+	ExportItemIt it = m_Items.begin();
+	for(;it!=m_Items.end();it++)
+		SendMessage( hItemList, LB_ADDSTRING,
+			0,(LPARAM) it->pNode->GetName() );
 }
 //-------------------------------------------------------------------
 
-bool MeshExpUtility::SaveAsObject(const char* m_ExportName){
+BOOL MeshExpUtility::BuildObject(CEditableObject*& exp_obj, LPCSTR m_ExportName)
+{
 	bool bResult = true;
 
 	if (m_ExportName[0]==0) return false;
 
-	NConsole.print( "Exporting..." );
-	NConsole.print( "-------------------------------------------------------" );
-
+	ELog.Msg(mtInformation,"Building object..." );
 	char fname[256]; _splitpath( m_ExportName, 0, 0, fname, 0 );
-	CEditableObject* exp_obj = new CEditableObject(fname);	
+	exp_obj = xr_new<CEditableObject>(fname);	
+	exp_obj->SetVersionToCurrent(TRUE,TRUE);
 
-	std::vector<ExportItem>::iterator it = m_Items.begin();
+	ExportItemIt it = m_Items.begin();
 	for(;it!=m_Items.end();it++){
-		CEditableMesh *submesh = new CEditableMesh(exp_obj);
+		CEditableMesh *submesh = xr_new<CEditableMesh>(exp_obj);
+		ELog.Msg(mtInformation,"Converting node '%s'...", it->pNode->GetName());
 		if( submesh->Convert(it->pNode) ){
 			// transform
 			Matrix3 mMatrix;
 			mMatrix = it->pNode->GetNodeTM(0)*Inverse(it->pNode->GetParentNode()->GetNodeTM(0));
-			
-			Fvector n,s,a,p;
-			Fmatrix m;	m.identity();
 
 			Point3	r1	= mMatrix.GetRow(0);
 			Point3	r2	= mMatrix.GetRow(1);
 			Point3	r3	= mMatrix.GetRow(2);
 			Point3	r4	= mMatrix.GetRow(3);
-			n.set(r1.x, r1.z, r1.y);
-			s.set(r2.x, r2.z, r2.y);
-			a.set(r3.x, r3.z, r3.y);
-			p.set(r4.x, r4.z, r4.y);
-
-			m.i.set(n);
-			m.j.set(s);
-			m.k.set(a);
-			m.c.set(p);
-
+			Fmatrix m;	m.identity();
+			m.i.set(r1.x, r1.z, r1.y);
+			m.j.set(r2.x, r2.z, r2.y);
+			m.k.set(r3.x, r3.z, r3.y);
+			m.c.set(r4.x, r4.z, r4.y);
+			
 			submesh->Transform( m );
 			// flip faces
-			Fvector v; v.crossproduct(s, a);
-			if(v.dotproduct(n)<0.f) submesh->FlipFaces();
-			if(m_ObjectFlipFaces)	submesh->FlipFaces();
+			Fvector v; v.crossproduct(m.j, m.k);
+			if(v.dotproduct(m.i)<0.f)	submesh->FlipFaces();
+			if(m_ObjectFlipFaces)		submesh->FlipFaces();
 			submesh->RecomputeBBox();
 			// append mesh
-			strcpy(submesh->GetName(),it->pNode->GetName());
-			exp_obj->m_Meshes.push_back(submesh);
+			submesh->SetName			(it->pNode->GetName());
+			exp_obj->m_Meshes.push_back	(submesh);
 		}else{
-			NConsole.print( "'%s' object can't convert", it->pNode->GetName());
-			delete submesh;
+			ELog.Msg(mtError,"! can't convert", it->pNode->GetName());
+			xr_delete(submesh);
 			bResult = false;
 			break;
 		}
-		NConsole.print( "-------------------------------------------------------" );
 	}
 
 	if (bResult){
 		exp_obj->UpdateBox		();
 		exp_obj->VerifyMeshNames();
-		NConsole.print			("Object saving...");
-		exp_obj->SaveObject		(m_ExportName);
-		NConsole.print			("Object '%s' contains: %d points, %d faces",
+		ELog.Msg				(mtInformation,"Object '%s' contains: %d points, %d faces",
 								exp_obj->GetName(), exp_obj->GetVertexCount(), exp_obj->GetFaceCount());
+	}else{
+		xr_delete(exp_obj);
+	}
+//-------------------------------------------------------------------
+	return bResult;
+}
+//-------------------------------------------------------------------
+
+BOOL MeshExpUtility::SaveAsObject(const char* m_ExportName)
+{
+	BOOL bResult = TRUE;
+
+	if (m_ExportName[0]==0) return FALSE;
+
+	ELog.Msg(mtInformation,"Exporting..." );
+	ELog.Msg(mtInformation,"-------------------------------------------------------" );
+	CEditableObject* exp_obj=0;	
+	if (bResult=BuildObject(exp_obj,m_ExportName)){
+		ELog.Msg				(mtInformation,"Saving object...");
+		for (SurfaceIt s_it=exp_obj->FirstSurface(); s_it!=exp_obj->LastSurface(); s_it++){
+			LPSTR t=(LPSTR)(*s_it)->_Texture();
+			if (strext(t)) *strext(t)=0;
+		}
+		exp_obj->Optimize		();
+		exp_obj->SaveObject		(m_ExportName);
 	}
 
-	delete exp_obj;
+	xr_delete(exp_obj);
 
 	return bResult;
 }
 //-------------------------------------------------------------------
 
+BOOL MeshExpUtility::SaveAsLWO(const char* m_ExportName)
+{
+	BOOL bResult = TRUE;
+
+	if (m_ExportName[0]==0) return FALSE;
+
+	ELog.Msg(mtInformation,"Exporting..." );
+	ELog.Msg(mtInformation,"-------------------------------------------------------" );
+	CEditableObject* exp_obj=0;	
+	if (bResult=BuildObject(exp_obj,m_ExportName)){
+		ELog.Msg				(mtInformation,"Object saved...");
+		exp_obj->Optimize		();
+		exp_obj->ExportLWO		(m_ExportName);
+	}
+
+	xr_delete(exp_obj);
+
+	return bResult;
+}
+//-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 //     registry access
@@ -306,117 +254,129 @@ const char *g_rNoOptimizeVal	= "Object No Optimize";
 const char *g_rSkinSuppressSMVal= "Skin Suppress SM";
 const char *g_rSkinProgressive	= "Skin Progressive";
 
-void MeshExpUtility::RegRead(){
-
-	HKEY hk;
-	DWORD keytype = REG_SZ;
-	DWORD keysize = MAX_PATH;
-
-
-	if( ERROR_SUCCESS==RegOpenKey( HKEY_LOCAL_MACHINE,g_rOptionsKey,&hk ) ){
-		char keyvalue[32]="";
-		
-		keytype = REG_SZ;
-		keysize = 32;
-		RegQueryValueEx(hk,g_rObjFlipFacesVal,0,&keytype,(LPBYTE)keyvalue, &keysize );
-		m_ObjectFlipFaces = !!atoi(keyvalue);
-		RegQueryValueEx(hk,g_rObjSuppressSMVal,0,&keytype,(LPBYTE)keyvalue, &keysize );
-		m_ObjectSuppressSmoothGroup = !!atoi(keyvalue);
-		RegQueryValueEx(hk,g_rNoOptimizeVal,0,&keytype,(LPBYTE)keyvalue, &keysize );
-		m_ObjectNoOptimize = !!atoi(keyvalue);
-		RegQueryValueEx(hk,g_rSkinSuppressSMVal,0,&keytype,(LPBYTE)keyvalue, &keysize );
-		m_SkinSuppressSmoothGroup = !!atoi(keyvalue);
-		RegQueryValueEx(hk,g_rSkinProgressive,0,&keytype,(LPBYTE)keyvalue, &keysize );
-		m_SkinProgressive = !!atoi(keyvalue);
-
-		RegCloseKey( hk );
-	}
-}
-
-void MeshExpUtility::RegSave(){
-
-	HKEY hk;
-
-	if( ERROR_SUCCESS==RegCreateKey( HKEY_LOCAL_MACHINE,g_rOptionsKey,&hk ) ){
-		char keyvalue[32]="";
-
-		sprintf(keyvalue,"%d",m_ObjectFlipFaces);
-		RegSetValueEx(hk,g_rObjFlipFacesVal,0,REG_SZ,(LPBYTE)keyvalue, strlen(keyvalue)+1 );
-		sprintf(keyvalue,"%d",m_ObjectSuppressSmoothGroup);
-		RegSetValueEx(hk,g_rObjSuppressSMVal,0,REG_SZ,(LPBYTE)keyvalue, strlen(keyvalue)+1 );
-		sprintf(keyvalue,"%d",m_ObjectNoOptimize);
-		RegSetValueEx(hk,g_rNoOptimizeVal,0,REG_SZ,(LPBYTE)keyvalue, strlen(keyvalue)+1 );
-		sprintf(keyvalue,"%d",m_SkinSuppressSmoothGroup);
-		RegSetValueEx(hk,g_rSkinSuppressSMVal,0,REG_SZ,(LPBYTE)keyvalue, strlen(keyvalue)+1 );
-		sprintf(keyvalue,"%d",m_SkinProgressive);
-		RegSetValueEx(hk,g_rSkinProgressive,0,REG_SZ,(LPBYTE)keyvalue, strlen(keyvalue)+1 );
-
-		RegCloseKey( hk );
-	}
-}
-
 //-------------------------------------------------------------------------------------------------
-void MeshExpUtility::ExportAsObject(){
-	bool bResult = true;
+void MeshExpUtility::ExportObject()
+{
+	BOOL bResult = FALSE;
 
 	if( m_Items.empty() ){
-		NConsole.print( "Nothing selected" );
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtError,"Nothing selected" );
+		ELog.Msg(mtError,"-------------------------------------------------------" );
 		return; 
 	}
 
 	m_ObjectFlipFaces			= IsDlgButtonChecked( hPanel, IDC_OBJECT_FLIPFACES );
-	m_ObjectNoOptimize			= IsDlgButtonChecked( hPanel, IDC_OBJECT_NO_OPTIMIZE );
-	m_ObjectSuppressSmoothGroup	= IsDlgButtonChecked( hPanel, IDC_OBJECT_SUPPRESS_SMOOTH_GROUPS );
 
 	char m_ExportName[MAX_PATH];
 	m_ExportName[0]=0;
-	if( !FS.GetSaveName(&FS.m_Import,m_ExportName) ){
-		NConsole.print( "Export cancelled" );
+	if( !EFS.GetSaveName("$import$",m_ExportName,MAX_PATH,0,0) ){
+		ELog.Msg(mtInformation,"Export cancelled" );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 		return;
 	}
-
+	EConsole.StayOnTop(TRUE);
+	if (strext(m_ExportName)) *strext(m_ExportName)=0;
+	strcat(m_ExportName,".object");
 	bResult						= SaveAsObject(m_ExportName);
 
-	NConsole.print( "-------------------------------------------------------" );
-	if (bResult) NConsole.print( "Export completed" );
-	else		 NConsole.print( "Export failed***********************" );
-	NConsole.print( "-------------------------------------------------------" );
+	ELog.Msg					(mtInformation,bResult?". Export succesfully completed.":"! Export failed.");
+	ELog.Msg					(mtInformation,"-------------------------------------------------------" );
+	EConsole.StayOnTop(FALSE);
 }
 //-------------------------------------------------------------------------------------------------
 
-
-void MeshExpUtility::ExportAsSkin(){
-	bool bResult = true;
+void MeshExpUtility::ExportLWO()
+{
+	BOOL bResult = FALSE;
 
 	if( m_Items.empty() ){
-		NConsole.print( "Nothing selected." );
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtError,"Nothing selected" );
+		ELog.Msg(mtError,"-------------------------------------------------------" );
+		return; 
+	}
+
+	m_ObjectFlipFaces			= IsDlgButtonChecked( hPanel, IDC_OBJECT_FLIPFACES );
+
+	char m_ExportName[MAX_PATH];
+	m_ExportName[0]=0;
+	if( !EFS.GetSaveName("$import$",m_ExportName,MAX_PATH,0,1) ){
+		ELog.Msg(mtInformation,"Export cancelled" );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
+		return;
+	}
+	if (strext(m_ExportName)) *strext(m_ExportName)=0;
+	strcat(m_ExportName,".lwo");
+	EConsole.StayOnTop(TRUE);
+	bResult						= SaveAsLWO(m_ExportName);
+
+	ELog.Msg					(mtInformation,bResult?". Export succesfully completed.":"! Export failed.");
+	ELog.Msg					(mtInformation,"-------------------------------------------------------" );
+	EConsole.StayOnTop(FALSE);
+}
+//-------------------------------------------------------------------------------------------------
+
+void MeshExpUtility::ExportSkin()
+{
+	BOOL bResult = true;
+
+	if( m_Items.empty() ){
+		ELog.Msg(mtError,"Nothing selected." );
+		ELog.Msg(mtError,"-------------------------------------------------------" );
 		return; 
 	}
 	if( m_Items.size()>1 ){
-		NConsole.print( "More than one object selected." );
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtInformation,"More than one object selected." );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 		return; 
 	}
 
-	m_SkinSuppressSmoothGroup	= IsDlgButtonChecked( hPanel, IDC_SKIN_SUPPRESS_SMOOTH_GROUPS );
-	m_SkinProgressive			= IsDlgButtonChecked( hPanel, IDC_SKIN_PROGRESSIVE	 );
+	m_SkinFlipFaces				= IsDlgButtonChecked( hPanel, IDC_SKIN_FLIPFACES );
+	m_SkinAllowDummy			= IsDlgButtonChecked( hPanel, IDC_SKIN_ALLOW_DUMMY );
 
-	char m_ExportName[MAX_PATH];
+	string256 m_ExportName;
 	m_ExportName[0]=0;
-	if( !FS.GetSaveName(&FS.m_GameMeshes,m_ExportName) ){
-		NConsole.print( "Export cancelled" );
-		NConsole.print( "-------------------------------------------------------" );
+	if( !EFS.GetSaveName("$import$",m_ExportName,sizeof(m_ExportName),0,0) ){
+		ELog.Msg(mtInformation,"Export cancelled" );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 		return;
 	}
 
+	EConsole.StayOnTop(TRUE);
 	bResult						= SaveAsSkin(m_ExportName);
-
-	NConsole.print( "-------------------------------------------------------" );
-	if (bResult) NConsole.print( "Export completed" );
-	else		 NConsole.print( "Export failed***********************" );
-	NConsole.print( "-------------------------------------------------------" );
+	ELog.Msg					(mtInformation,bResult?". Export succesfully completed.":"! Export failed.");
+	ELog.Msg					(mtInformation,"-------------------------------------------------------" );
+	EConsole.StayOnTop(FALSE);
 }
-//-------------------------------------------------------------------------------------------------
+
+void MeshExpUtility::ExportSkinKeys()
+{
+	BOOL bResult = true;
+
+	if( m_Items.empty() ){
+		ELog.Msg(mtError,"Nothing selected." );
+		ELog.Msg(mtError,"-------------------------------------------------------" );
+		return; 
+	}
+	if( m_Items.size()>1 ){
+		ELog.Msg(mtInformation,"More than one object selected." );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
+		return; 
+	}
+	m_SkinFlipFaces				= IsDlgButtonChecked( hPanel, IDC_SKIN_FLIPFACES );
+	m_SkinAllowDummy			= IsDlgButtonChecked( hPanel, IDC_SKIN_ALLOW_DUMMY );
+
+	string256 m_ExportName;
+	m_ExportName[0]=0;
+	if( !EFS.GetSaveName("$smotion$",m_ExportName,sizeof(m_ExportName),0) ){
+		ELog.Msg(mtInformation,"Export cancelled" );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
+		return;
+	}
+
+	EConsole.StayOnTop(TRUE);
+	bResult						= SaveSkinKeys(m_ExportName);
+	ELog.Msg					(mtInformation,bResult?". Export succesfully completed.":"! Export failed.");
+	ELog.Msg					(mtInformation,"-------------------------------------------------------" );
+	EConsole.StayOnTop(FALSE);
+}
 

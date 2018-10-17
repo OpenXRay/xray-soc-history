@@ -76,7 +76,7 @@ VertMapDB *getVertMapDB( GlobalFunc *global )
 		vmdb->vmap[ j ].type = objf->vmapType( j );
 		vmdb->vmap[ j ].dim = objf->vmapDim( 0, j );
 		name = objf->vmapName( 0, j );
-		vmdb->vmap[ j ].name = (char*)malloc( strlen( name ) + 1 );
+		vmdb->vmap[ j ].name = (char*)malloc( xr_strlen( name ) + 1 );
 		if ( !vmdb->vmap[ j ].name ) {
 			freeVertMapDB( vmdb );
 			return NULL;
@@ -227,7 +227,7 @@ int getObjectVMaps( ObjectDB *odb, LWMeshInfo *mesh, GlobalFunc *global )
 		
 		/* initialize the vmap info */
 		
-		odb->vmap[ i ].name = (char*)malloc( strlen( vmdb->vmap[ i ].name ) + 1 );
+		odb->vmap[ i ].name = (char*)malloc( xr_strlen( vmdb->vmap[ i ].name ) + 1 );
 		if ( !odb->vmap[ i ].name ) goto Finish;
 		strcpy( odb->vmap[ i ].name, vmdb->vmap[ i ].name );
 		odb->vmap[ i ].type = vmdb->vmap[ i ].type;

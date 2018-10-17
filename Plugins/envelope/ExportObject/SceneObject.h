@@ -31,7 +31,7 @@ struct st_ObjVer{
 class SceneObject {
 protected:
 	EObjClass m_ClassID;
-	char m_Name[MAX_OBJ_NAME];
+	string64 m_Name;
 
 	BOOL m_Selected;
 	BOOL m_Visible;

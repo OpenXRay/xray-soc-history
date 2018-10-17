@@ -9,7 +9,7 @@
 #define NLOG_CONSOLE_OUT
 // -------
 
-class NetDeviceConsole{
+class CExportConsole{
 protected:
 
 	bool m_Valid;
@@ -31,10 +31,10 @@ public:
 	class _ConsoleMsg{
 	public:
 		char buf[1024];
-		_ConsoleMsg(){ buf[0] = 0; }
-		_ConsoleMsg(_ConsoleMsg*_S){strcpy(buf,_S->buf);} };
+		_ConsoleMsg(LPCSTR b){ strcpy(buf,b); }
+	};
 		
-		std::list<_ConsoleMsg> m_Messages;
+	std::list<_ConsoleMsg> m_Messages;
 
 	float fMaxVal, fStatusProgress;
 public:
@@ -42,10 +42,8 @@ public:
 	bool Init( HINSTANCE _Inst, HWND _Window );
 	void Clear();
 
-	void print	(const char *_Mesage, ...);
+	void print	(TMsgDlgType mt, const char *buf);
 
-//	bool in( char *_Buffer );
-//	bool cmdtest( char *_Buffer );
 	bool valid();
 
 	void ProgressStart(float max_val, const char* text=0);
@@ -53,11 +51,13 @@ public:
 	void ProgressInc();
 	void ProgressUpdate(float val);
 
-	NetDeviceConsole();
-	~NetDeviceConsole();
+	void StayOnTop	(BOOL flag);
+
+	CExportConsole();
+	~CExportConsole();
 };
 
-extern NetDeviceConsole NConsole;
+extern CExportConsole EConsole;
 
 #endif /*_INCDEF_NETDEVICELOG_H_*/
 

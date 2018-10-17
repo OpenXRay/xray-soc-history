@@ -29,7 +29,7 @@ struct st_VMapPt{
 class st_VMap{
     FloatVec    	vm;			// u,v - координаты или weight
 public:
-	char			name[MAX_OBJ_NAME];	// vertex uv map name
+	string64		name;		// vertex uv map name
     BYTE			dim;
     EVMType			type;
 public:
@@ -85,7 +85,7 @@ class CEditMesh {
     friend class CPortalUtils;
     friend class SceneBuilder;
     
-	char m_Name[MAX_OBJ_NAME];
+	string64 m_Name;
 
     CEditObject*	m_Parent;
 

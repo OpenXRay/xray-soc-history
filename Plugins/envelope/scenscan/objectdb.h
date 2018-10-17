@@ -53,6 +53,14 @@ typedef struct st_DBPolygon {
    DBPolVert   *v;               // vertex array
 } DBPolygon;
 
+typedef struct st_lwPlugin {
+   struct st_lwPlugin *next, *prev;
+   char          *ord;
+   char          *name;
+   int            flags;
+   void          *data;
+} lwPlugin;
+
 typedef struct st_DBSurface {
    LWSurfaceID  id;              // surface ID
    char			*name;           // surface name
@@ -87,6 +95,8 @@ typedef struct st_DBSurface {
    int          line;            // render outlines
    LWImageID    rimg;            // reflection image
    LWImageID    timg;            // refraction image
+   lwPlugin		*shader;         // linked list of shaders
+   int			nshaders;
 } DBSurface;
 
 typedef struct st_ObjectDB {

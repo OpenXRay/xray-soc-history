@@ -1,25 +1,31 @@
 #include "stdafx.h"
 #include <lwrender.h>
 #include <lwhost.h>
-#include "scenscan\objectdb.h"
-#include "exportobject\editobject.h"
+#include "editobject.h"
 #include "FileSystem.h"
 #include "FS.h"
+#include "bone.h"
+#include <lwdisplay.h>
+#include <lwserver.h>
 
 extern "C" LWItemInfo		*g_iteminfo;
 extern "C" LWMessageFuncs	*g_msg;
 extern "C" LWInterfaceInfo	*g_intinfo;
+extern "C" HostDisplayInfo  *g_hdi;
+extern "C" LWObjectInfo		*g_objinfo;
 
 static BoneVec* m_LWBones=0;
 
-static void AppendBone(LWItemID bone){
-	m_LWBones->push_back(new CBone());
+static void AppendBone(LWItemID bone)
+{
+	m_LWBones->push_back(xr_new<CBone>());
 	CBone* B = m_LWBones->back();
 	B->SetName(g_iteminfo->name(bone));
 	B->ParseBone(bone);
 }
 
-static void RecurseBone(LWItemID parent){
+static void RecurseBone(LWItemID parent)
+{
 	LWItemID bone = g_iteminfo->firstChild(parent);
 	while (bone!=LWITEM_NULL){
 		if (g_iteminfo->type(bone)==LWI_BONE){
@@ -30,7 +36,8 @@ static void RecurseBone(LWItemID parent){
 	}
 }
 
-static bool ParseObjectBones(LWItemID object, int& obj_cnt){
+static bool ParseObjectBones(LWItemID object, int& obj_cnt)
+{
 	LWItemID	bone, parent;
 	bone		= g_iteminfo->first( LWI_BONE, object );
 
@@ -63,59 +70,82 @@ static bool ParseObjectBones(LWItemID object, int& obj_cnt){
 }
 
 extern "C" {
-//-----------------------------------------------------------------------------------------
-void __cdecl SaveObject(GlobalFunc *global){
-	// get bone ID
-	LWItemID		object;
-	bool bErr		= true;
+	//-----------------------------------------------------------------------------------------
+	void __cdecl SaveObject(GlobalFunc *global)
+	{
+		Core._initialize("XRayPlugin",ELogCallback,FALSE);
+		FS._initialize	(CLocatorAPI::flScanAppRoot,NULL,"xray_path.ltx");
 
-	char buf[1024];	buf[0] = 0;
-	if (FS.GetSaveName(&FS.m_Import,buf)){
-		object		= g_iteminfo->first( LWI_OBJECT, NULL );
-		int obj_cnt = 0;
+		// get bone ID
+		LWItemID		object;
+		bool bErr		= true;
+
+		string1024 buf	="";
+		object			= g_iteminfo->first( LWI_OBJECT, NULL );
+		int obj_cnt		= 0;
+		bool bObjSel	= false;
 
 		while (object){
 			if(g_intinfo->itemFlags(object)&LWITEMF_SELECTED){
-				ObjectDB	*odb = getObjectDB(object,global);
-				if (!odb){ 
-					object = g_iteminfo->next( object );
-					bErr = true;
-					continue;
+				bObjSel = true;
+				if (EFS.GetSaveName("$import$",buf,sizeof(buf),0,0)){
+					bErr = false;
+
+					char name[1024];
+					_splitpath( buf, 0, 0, name, 0 );
+
+					CEditableObject* obj = xr_new<CEditableObject>(name);
+					obj->SetVersionToCurrent(TRUE,TRUE);
+
+					// parse bone if exist
+					bool bBoneExists=false;
+					if (g_iteminfo->first( LWI_BONE, object )){
+						m_LWBones = &obj->Bones();
+						bBoneExists = true;
+						if (!ParseObjectBones(object,obj_cnt)) bErr = true;
+						if (bErr){
+							// default bone part
+							obj->BoneParts().push_back(SBonePart());
+							SBonePart& BP = obj->BoneParts().back();
+							BP.alias = "default";
+							for (int b_i=0; b_i<(int)obj->Bones().size(); b_i++)
+								BP.bones.push_back(obj->Bones()[b_i]->Name());
+						}
+					}
+					if (!bErr){
+						LPCSTR lwo_nm=g_objinfo->filename(object);
+						{// append path
+							string_path		path,dr,di;
+							_splitpath		(lwo_nm,dr,di,0,0);
+							strconcat		(path,dr,di);                                       
+							if (!FS.path_exist(path)) FS.append_path(path,path,0,FALSE);
+						}
+						if (FS.exist(lwo_nm)){
+							if (!obj->Import_LWO(lwo_nm,false)) bErr = true;
+							else{ 
+								obj->m_Flags.set(CEditableObject::eoDynamic,TRUE);
+								obj->Optimize	();
+								obj->SaveObject	(buf);
+							}
+						}else
+							bErr = true;
+					}
+					// перенести выше или проверить не перетерает ли инфу о костях
+
+					if (bErr)	g_msg->error("Export failed.",0);
+					else		g_msg->info	("Export successful.",buf);
+					bErr = false;
+
+					xr_delete(obj);
+					m_LWBones = 0;
+					//				freeObjectDB(odb);
+					break;
 				}
-				
-				bErr = false;
-				
-				char name[1024];
-				_splitpath( buf, 0, 0, name, 0 );
-				
-				CEditObject* obj = new CEditObject(name,true);
-				
-				// parse bone if exist
-				bool bBoneExists=false;
-				if (g_iteminfo->first( LWI_BONE, object )){
-					m_LWBones = &obj->GetBones();
-					bBoneExists = true;
-					if (!ParseObjectBones(object,obj_cnt)) bErr = true;
-				}
-				if (!bErr){
-					if (obj->Import_LWO(odb)){ 
-						obj->SaveObject(buf);
-						g_msg->info	("Export successful.",buf);
-					}else bErr = true;
-				}
-				
-				if (bErr) g_msg->error("Export failed.",0);
-				bErr = false;
-				
-				_DELETE(obj);
-				m_LWBones = 0;
-				freeObjectDB(odb);
-				break;
 			}
 			object = g_iteminfo->next( object );
 		}
+		if (!bObjSel)	g_msg->error("Select object at first.",0);
+		else if (bErr)	g_msg->error("Export failed.",0);
 	}
-	if (bErr) g_msg->error("Export failed.",0);
-}
 //-----------------------------------------------------------------------------------------
 };

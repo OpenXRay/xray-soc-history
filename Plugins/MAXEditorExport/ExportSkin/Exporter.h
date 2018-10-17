@@ -1,15 +1,17 @@
-// Exporter.h: interface for the CExporter class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_EXPORTER_H__9EB217E3_917D_4286_97F6_DE0C32EF38E9__INCLUDED_)
-#define AFX_EXPORTER_H__9EB217E3_917D_4286_97F6_DE0C32EF38E9__INCLUDED_
 #pragma once
 
 #include "helper.h"
+#include "bonedef.h"
+#include "face.h"
 
-inline void ERR(const char *s) { Log("---------- Error: ",s);}
-IC int CGINTM(int r)
+DEFINE_VECTOR(INode*,INodeVec,INodeIt);
+
+//-----------------------------------------------------------------------------
+IC void ERR(LPCSTR s, LPCSTR dop="") 
+{ 
+	Msg("!Error: %s%s",s,dop);
+}
+IC int CGINTM(INode* node, int r)
 {
 	char* msg = 0;
 	switch (r) {
@@ -18,122 +20,79 @@ IC int CGINTM(int r)
 	case NO_MATRIX_SAVED:		msg = "NO_MATRIX_SAVED"; break;
 	case INVALID_MOD_POINTER:	msg = "INVALID_MOD_POINTER"; break;
 	}
-
-	if (msg) {
-		Msg("*** ERROR: GetInitNodeTM failed (%s)",msg);
-	}
+	if (msg)
+		Msg("* '%s': GetInitNodeTM failed (%s)",node->GetName(),msg);
 	return r;
 }
-
 //-----------------------------------------------------------------------------
-class CVertexDef
-{
-public:
-	Fvector			P;
-	Fvector			O;
-	DWORD			bone;
-	
-	void SetPosition(Point3 &p)
-	{	P.set		(p.x,p.z,p.y);	}
-	void SetOffset	(Point3 &p)
-	{	O.set		(p.x,p.z,p.y);	}
-	void SetBone	(DWORD B)
-	{	bone = B;	}
-};
 
 //-----------------------------------------------------------------------------
 class CExporter  
 {
+	enum EStyle{
+		eExportUndef,
+		eExportSkin,
+		eExportMotion
+	};
+	EStyle			m_Style;
+	BOOL			m_bHasError;
 public:
-	BOOL bCaptured;
-	std::vector<CBoneDef*>		g_bones;
-	std::vector<INode*>			g_all_bones;
-	std::vector<CVertexDef*>	g_vertices;
-	
+	BOOL			m_bFindMesh;
+	INodeVec		m_AllBones;
+	BoneDefVec		m_Bones;
+	VertexDefVec	m_Vertices;
+
+	Mtl*			m_MtlMain;
+	INode*			m_MeshNode;
+
+	// prepared 
+	ExpVertVec		m_ExpVertices;
+	ExpFaceVec		m_ExpFaces;
+
+	// global scale
+	float			m_fGlobalScale;
 private:
-	//-----------------------------------------------------------------------------
-	CVertexDef* AddVertex()
+	void			ScanBones	(INode *pNode);
+	void			ScanMesh	(INode *pNode);
+	BOOL			Capture		();
+	int				AddVert		(const st_VERT& pTestV)
 	{
-		CVertexDef* V = new CVertexDef;
-		g_vertices.push_back(V);
+		for (ExpVertIt vI=m_ExpVertices.begin(); vI!=m_ExpVertices.end(); vI++)
+			if ((*vI)->similar(pTestV)) return vI-m_ExpVertices.begin();
+
+		st_VERT* V	= xr_new<st_VERT>();
+		*V			= pTestV;
+		m_ExpVertices.push_back(V);
+		return m_ExpVertices.size()-1;
+	}
+public:
+	//-----------------------------------------------------------------------------
+	CVertexDef*		AddVertex	()
+	{
+		CVertexDef* V = xr_new<CVertexDef>();
+		m_Vertices.push_back(V);
 		return V;
 	}
 	//-----------------------------------------------------------------------------
-	void ComputeInitialTM(IPhysiqueExport* pExport, INode* pNode, Matrix3& tm)
+	CBoneDef*		FindBone	(LPCSTR name)
 	{
-		R_ASSERT(isBone(pNode));
-		Matrix3 T = pNode->GetNodeTM(0);
-
-		if(Helper::IsBipedBone(pNode))	{
-			Helper::SetBipedUniform(pNode, TRUE, TRUE);
-			// tm = pNode->GetNodeTM(0);
-			
-			int rval = CGINTM(pExport->GetInitNodeTM(pNode, tm));
-			if (rval) {
-				ERR(pNode->GetName());
-				tm.IdentityMatrix();
-			}
-			Helper::SetBipedUniform(pNode, FALSE, FALSE);
-		} else {
-			int rval = CGINTM(pExport->GetInitNodeTM(pNode, tm));
-			if (rval) {
-				ERR(pNode->GetName());
-				tm.IdentityMatrix();
-			} 
-		}
+		if (name&&name[0]){
+			string nm = Helper::ConvertSpace(string(name));
+			for (BoneDefIt it=m_Bones.begin(); it!=m_Bones.end(); it++)
+				if ((*it)->name==nm) return *it;
+			return 0;
+		}else
+			return 0;
 	}
-	DWORD	AddBone(INode* pNode, Matrix3 &matMesh, IPhysiqueExport* pExport)
+	void			UpdateParenting()
 	{
-		R_ASSERT(isBone(pNode));
-		
-		for (DWORD I=0; I<g_bones.size(); I++) {
-			if (g_bones[I]->isEqual(pNode)) return I;
-		}
-		
-		CBoneDef*	pBone= new CBoneDef(pNode);
-		ComputeInitialTM(pExport, pNode, pBone->matInit);
-		pBone->matOffset = matMesh * Inverse(pBone->matInit);
-		g_bones.push_back	(pBone);
-		
-		return g_bones.size()-1;
+		for (BoneDefIt it=m_Bones.begin(); it!=m_Bones.end(); it++)
+			(*it)->parent = FindBone((*it)->GetParentName());
 	}
-	//-----------------------------------------------------------------------------
-	BOOL isBone(INode* pNode)
-	{
-		if (0==pNode)	return FALSE;
-		Object* obj = pNode->EvalWorldState(0).obj;
-		if (0==obj)		return FALSE;
-		
-		const DWORD BIP_BONE_CLASS_ID =	0x00009125;
-		if( (obj->ClassID() == Class_ID(BONE_CLASS_ID,0)) || 
-			(obj->ClassID() == Class_ID(BIP_BONE_CLASS_ID, 0)) )
-		{
-			Control *pControl = pNode->GetTMController();
-			if (
-				/* (pControl->ClassID() == BIPBODY_CONTROL_CLASS_ID) || */
-				(pControl->ClassID() == FOOTPRINT_CLASS_ID)) return FALSE;
-
-			return TRUE;
-		}
-		return FALSE;
-	}
-	//-----------------------------------------------------------------------------
-	BOOL GetTName(StdMat2 *_Mstd, DWORD _Tid, char *name) {
-		if( !_Mstd->MapEnabled( _Tid ) )				return FALSE;
-		Texmap *map = 0;
-		if(0==(map = _Mstd->GetSubTexmap(_Tid)) )		return FALSE;
-		if(map->ClassID() != Class_ID(BMTEX_CLASS_ID,0))return FALSE;
-		BitmapTex *bmap = (BitmapTex*)map;
-		_splitpath( bmap->GetMapName(), 0, 0, name, 0 );
-		return TRUE;
-	}
-	//-----------------------------------------------------------------------------
+	int				AddBone(INode* pNode, Matrix3 &matMesh, IPhysiqueExport* pExport);
 public:
-	VOID CAPTURE(INode *pNode);
-	
-	CExporter() {
-		bCaptured = FALSE;
-	};
+					CExporter	(){	m_bHasError=FALSE; m_MtlMain=0; m_Style=eExportUndef; m_bFindMesh = FALSE; m_fGlobalScale=1.f; m_MeshNode=0;};
+	virtual			~CExporter	();
+	BOOL			ExportSkin	(INode *pNode, LPCSTR fname);
+	BOOL			ExportMotion(INode *pNode, LPCSTR fname);
 };
-
-#endif // !defined(AFX_EXPORTER_H__9EB217E3_917D_4286_97F6_DE0C32EF38E9__INCLUDED_)

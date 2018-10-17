@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #pragma hdrstop
 
-#include "..\MeshExpUtility.h"
-#include "..\FS.h"
-#include "..\FileSystem.h"
+#include "MeshExpUtility.h"
 #include "notetrck.h"
 
 #define BIP_BONE_CLASS_ID	0x00009125
@@ -67,10 +65,11 @@ SceneEnumProc::SceneEnumProc(INode *root_node, TimeValue t, Interface *ip) {
 	}
 }
 
-SceneEnumProc::~SceneEnumProc() {
+SceneEnumProc::~SceneEnumProc() 
+{
 	while(head) {
 		SceneEntry *next = head->next;
-		delete head;
+		xr_delete(head);
 		head = next;
 	}
 	head = tail = NULL;
@@ -142,7 +141,7 @@ int SceneEnumProc::callback(INode *node)
 
 
 void SceneEnumProc::Append(INode *node, Object *obj, int type) {
-	SceneEntry *entry = new SceneEntry(node, obj, type);
+	SceneEntry *entry = xr_new<SceneEntry>(node, obj, type);
 	
 	if(tail)
 		tail->next = entry;
@@ -188,10 +187,11 @@ ObjectList::ObjectList(SceneEnumProc &scene) {
 	}
 }
 
-ObjectList::~ObjectList() {
+ObjectList::~ObjectList() 
+{
 	while(head) {
 		ObjectEntry *next = head->next;
-		delete head;
+		xr_delete(head);
 		head = next;
 	}
 	head = tail = NULL;
@@ -248,7 +248,7 @@ ObjectEntry *ObjectList::Contains(INode *node) {
 }
 
 void ObjectList::Append(SceneEntry *e) {
-	ObjectEntry *entry = new ObjectEntry(e);
+	ObjectEntry *entry = xr_new<ObjectEntry>(e);
 	if(tail)
 		tail->next = entry;
 	tail = entry;
@@ -279,10 +279,11 @@ public:
 	void		MakeUnique(TSTR &n);
 };
 
-ObjNameList::~ObjNameList() {
+ObjNameList::~ObjNameList() 
+{
 	while(head) {
 		ObjName *next = head->next;
-		delete head;
+		xr_delete(head);
 		head = next;
 	}
 	head = tail = NULL;
@@ -302,7 +303,7 @@ int ObjNameList::Contains(TSTR &n) {
 }
 
 void ObjNameList::Append(TSTR &n) {
-	ObjName *entry = new ObjName(n);
+	ObjName *entry = xr_new<ObjName>(n);
 	if(tail)
 		tail->next = entry;
 	tail = entry;
@@ -402,7 +403,7 @@ bool MeshExpUtility::SaveSkinKeys(const char* n){
 
 	sprintf(S, "Number of Bones = %d", NumBones);
 	F.Wstring(S);
-	NConsole.print(S);
+	ELog.Msg(mtInformation,S);
 
 	//-----------------------------------------------------------------------
 	// Write out necessary data for motion keys
@@ -435,7 +436,7 @@ bool MeshExpUtility::SaveSkinKeys(const char* n){
 
 		sprintf(S, "Node: %s", node->GetName());
 		F.Wstring(S);
-		NConsole.print(S);
+		ELog.Msg(mtInformation,S);
 
 		// Print notetrack info
 		{
@@ -520,7 +521,7 @@ bool MeshExpUtility::SaveSkinKeys(const char* n){
 
 	sprintf(S, "Key Data Complete");
 	F.Wstring(S);
-	NConsole.print(S);
+	ELog.Msg(mtInformation,S);
 
 	F.SaveTo(n,0);
 
@@ -534,8 +535,8 @@ void MeshExpUtility::ExportSkinKeys(){
 	// Ask the scene to enumerate all its nodes so we can determine if there are any we can use
 	INode *root_node = ip->GetRootNode();
 	if(!root_node){
-		NConsole.print( "Scene empty." );
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtError,"Scene empty." );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 		return;
 	}
 
@@ -543,16 +544,16 @@ void MeshExpUtility::ExportSkinKeys(){
 
 	// Any useful nodes?
 	if(!myScene.Count()){
-		NConsole.print( "Scene has no useful nodes." );
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtError,"Scene has no useful nodes." );
+		ELog.Msg(mtError,"-------------------------------------------------------" );
 		return;
 	}
 
 	char m_ExportName[MAX_PATH];
 	m_ExportName[0]=0;
-	if( !FS.GetSaveName(&FS.m_GameKeys,m_ExportName) ){
-		NConsole.print( "Export cancelled" );
-		NConsole.print( "-------------------------------------------------------" );
+	if( !Engine.FS.GetSaveName(Engine.FS.m_GameKeys,m_ExportName,MAX_PATH,0) ){
+		ELog.Msg(mtInformation,"Export cancelled" );
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 		return;
 	}
 
@@ -565,9 +566,9 @@ void MeshExpUtility::ExportSkinKeys(){
 
 	bResult  = SaveSkinKeys(m_ExportName);
 
-	NConsole.print( "-------------------------------------------------------" );
-	if (bResult) NConsole.print( "Export completed" );
-	else		 NConsole.print( "Export failed***********************" );
-	NConsole.print( "-------------------------------------------------------" );
+	ELog.Msg(mtInformation,"-------------------------------------------------------" );
+	if (bResult) ELog.Msg(mtInformation,"Export completed" );
+	else		 ELog.Msg(mtError,"Export failed***********************" );
+	ELog.Msg(mtInformation,"-------------------------------------------------------" );
 }
 

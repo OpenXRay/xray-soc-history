@@ -11,43 +11,36 @@
 
 class MeshExpUtilityClassDesc : public ClassDesc {
 	public:
-	int 			IsPublic()					{ return TRUE; }
+	int 			IsPublic()					{ return 1; }
 	void *			Create( BOOL loading )		{ return &U; }
 	const TCHAR *	ClassName()					{ return "XRay Export"; }
 	SClass_ID		SuperClassID()				{ return UTILITY_CLASS_ID; }
-	Class_ID 		ClassID()					{ return EXP_UTILITY_CLASSID; }
+	Class_ID 		ClassID()					{ return Class_ID(EXP_UTILITY_CLASSID,0); }
 	const TCHAR* 	Category()					{ return "XRay Export";  }
-	void ResetClassParams (BOOL fileReset);
 };
 
 MeshExpUtility U;
 MeshExpUtilityClassDesc MeshExpUtilityClassDescCD;
 
-// Reset all the utility values on File/Reset
-void MeshExpUtilityClassDesc::ResetClassParams (BOOL fileReset) 
-{
-}
-
-
 //-------------------------------------------------------------------
 // DLL interface
-
-
 HINSTANCE hInstance;
 int controlsInit = FALSE;
 
 
-BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved) {
-
+BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved) 
+{
 	hInstance = hinstDLL;
-	
+
 	if ( !controlsInit ) {
 		controlsInit = TRUE;
+		Core._initialize("XRayPlugin",ELogCallback,FALSE);
+		FS._initialize	(CLocatorAPI::flScanAppRoot,NULL,"xray_path.ltx");
+		FPU::m64r	(); // нужно чтобы макс не сбрасывал контрольки в 0
 		InitCustomControls(hInstance);
 		InitCommonControls();
-		InitMath();
-		NConsole.print("X-Ray Object Export (ver. %d.%04d)",EXPORTER_VERSION,EXPORTER_BUILD);
-		NConsole.print( "-------------------------------------------------------" );
+		ELog.Msg(mtInformation,"X-Ray Object Export (ver. %d.%02d)",EXPORTER_VERSION,EXPORTER_BUILD);
+		ELog.Msg(mtInformation,"-------------------------------------------------------" );
 	}
 
 	switch(fdwReason) {
@@ -60,6 +53,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL,ULONG fdwReason,LPVOID lpvReserved) {
 			break;
 
 		case DLL_PROCESS_DETACH:
+			Core._destroy();
 			break;
 		}
 	return(TRUE);
@@ -84,7 +78,9 @@ __declspec( dllexport ) ClassDesc* LibClassDesc(int i) {
 }
 
 
-__declspec( dllexport ) ULONG LibVersion() {
-	return VERSION_3DSMAX; }
+__declspec( dllexport ) ULONG LibVersion() 
+{
+	return VERSION_3DSMAX; 
+}
 
 
