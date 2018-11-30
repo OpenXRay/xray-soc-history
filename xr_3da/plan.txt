@@ -1,0 +1,115 @@
+Deleted items in $/xr_3da/DLL/object_actor:
+Actor.cpp
+
+
+* Редактор:
++ перевод на BCB;
++ ускорение работы;
++ dynamic degradation;
++ возможность ложить несколько текстур (смесители по условию);
+? авторастановка групп выбранных объектов;
++ генерация прогрессивных mesh'ей для всего;
++ установка источников света(range, brightness, sharpness, color)+spotlight;
++ переработка расчета lightmap'ов(генерация разверток);
+? задание игрового материала;
++ Portal clip planes:
+	- редактирование их свойств(позиция, ориентация, материал(только для звука))
++ Collision Detection:
+	- vertex adjacement information (обтягивание объектов);
+	- tri - env-material info.
+? Расстановка respawn points.
+
+* Plugins:
++ переработка экспорта скелетной анимации;
++ Collision Detection:
+	- vertex adjacement information (обтягивание объектов)
+	- tri - env-material info
+
+? OGF-export shadow forms: 
+	- convex hulls;
+	- разбивка на несколько форм;
+
+* Engine:
+- Collision Detection:
+	- collision responce;
+	+ optimize RayPick;
+	+ deep mathematic optimization;
+	+ vertex adjacement information (обтягивание объектов);
+	- tri - env-material info.
++ Culling:
+	- add OBB & AABB culling
+	- advanced intersection test
+? Portal clip planes:
+	- учет материалов при отсечении/затухании звука;
+	- учитывать clip plane для отсечения;
+? Network support:
+	- корректная синхронизация;
+	- предсказания.
+? Компьютерный игрок:
+	- AI - врага;
+	- AI - сопровождения.
+? Эффекты (доводка):
+	- небо;
+	- выстрелы;
+	- оружие(видимость на экране, перезарядка и т.д.);
+	- вода;
++ Скелетная анимация (оптимизация);
+
+
+*** ВЫЛАВЛИВАНИЕ ТАРАКАНОВ :) ***
+
+
+Что сделано:
+* Engine:
+	O+++	 Скрипты (доводка)
+         even more objective - constructor/destructor/operator handling,
+         functions returning struct,
+         function differencing (functions with same name but different
+         parameters are different, like in C++),
+         static variables in functions,
+         reference type (e.g. int &),
+         default initializers implemented ( e.g. int c(int a,int b=1) ),
+         bit-negation operator ~,
+         unsigned implemented,
+         can use both :: and . in member function declaration,
+         struct declaration nesting,
+         script type for easy accessing variables and functions of other script,
+         const modifier implemented,
+         typeof operator implemented,
+         StdLib internal header (string and vector classes - now you can
+         easly operate on them),
+         in compiled script only actually used import symbols are
+         stored (not all, like in earlier versions),
+         BIG code optimizations,
+         EXPR opcode separates expressions/statements,
+
+	O+++	Эмуляция lightmap, 4х проходное текстурение;
+		Поддержка до 15ти текстур(текстурных проходов)
+		Опитмальная разворотка шейдеров для использования Multi-Texturing'а
+		  Пример:
+			На GeForce2 - 15 текстур развернутся в 4 прохода,
+			на TNT(1/2) - в 8 проходов
+			на Voodoo 1 - в 15 проходов :)))
+		  (!) Реально не рекомендуется использовать больше 8ми текстур
+		Программипуемые шейдеры записанные в виде скриптов (C/C++)
+		Оптимизировано для HW T&L - для софтового трансформа возможна более оптимальная реализация
+		Авто конвертация форматов вертексов в зависимости от шейдеров/к-ва текстур
+			- понизились требования к памяти
+			- ускоренная трансформация
+			- уменьшение требования к AGP-bandwidth на T&L видяхах
+
+
+	O+++	Culling
+		Ускорен SphericalCulling
+
+	O+++	Внутренние изменения Engine
+		Полностью переделан механизм "Engine-SelfChecking"
+		Идеальный Stack-Unrolling - для ускорения поиска ошибок
+			(Может не работать на Win9x)
+
+	O+++	Для ускорения работы худ. текстуры читаются из стандартных 
+			.TGA (Targa) файлов - 24/32 bpp - раньше из спец. формата .Т
+
+TODO:
+	- Оружие на экране
+	- ClipPlane cull

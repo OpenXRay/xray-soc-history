@@ -1,0 +1,664 @@
+// State blocks declaration
+// State blocks recording
+void CRenderDevice::sbRecord(void)
+{
+}
+
+// State blocks releasing
+void CRenderDevice::sbRelease(void)
+{
+}
+
+// Enable by mask
+ENGINE_API void __fastcall __EnableMode(DWORD dwMask)
+{
+    switch(dwMask&63) {
+        case    0:		//
+            return;
+        case    1:		// vSpecular
+            EnableSpecular();
+            return;
+        case    2:		// vLight
+            EnableLight();
+            return;
+        case    3:		// vSpecular|vLight
+            EnableSpecular();
+            EnableLight();
+            return;
+        case    4:		// vAlpha
+            EnableAlpha();
+            return;
+        case    5:		// vSpecular|vAlpha
+            EnableSpecular();
+            EnableAlpha();
+            return;
+        case    6:		// vLight|vAlpha
+            EnableLight();
+            EnableAlpha();
+            return;
+        case    7:		// vSpecular|vLight|vAlpha
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            return;
+        case    8:		// vFog
+            EnableFog();
+            return;
+        case    9:		// vSpecular|vFog
+            EnableSpecular();
+            EnableFog();
+            return;
+        case   10:		// vLight|vFog
+            EnableLight();
+            EnableFog();
+            return;
+        case   11:		// vSpecular|vLight|vFog
+            EnableSpecular();
+            EnableLight();
+            EnableFog();
+            return;
+        case   12:		// vAlpha|vFog
+            EnableAlpha();
+            EnableFog();
+            return;
+        case   13:		// vSpecular|vAlpha|vFog
+            EnableSpecular();
+            EnableAlpha();
+            EnableFog();
+            return;
+        case   14:		// vLight|vAlpha|vFog
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            return;
+        case   15:		// vSpecular|vLight|vAlpha|vFog
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            return;
+        case   16:		// vZTest
+            EnableZTest();
+            return;
+        case   17:		// vSpecular|vZTest
+            EnableSpecular();
+            EnableZTest();
+            return;
+        case   18:		// vLight|vZTest
+            EnableLight();
+            EnableZTest();
+            return;
+        case   19:		// vSpecular|vLight|vZTest
+            EnableSpecular();
+            EnableLight();
+            EnableZTest();
+            return;
+        case   20:		// vAlpha|vZTest
+            EnableAlpha();
+            EnableZTest();
+            return;
+        case   21:		// vSpecular|vAlpha|vZTest
+            EnableSpecular();
+            EnableAlpha();
+            EnableZTest();
+            return;
+        case   22:		// vLight|vAlpha|vZTest
+            EnableLight();
+            EnableAlpha();
+            EnableZTest();
+            return;
+        case   23:		// vSpecular|vLight|vAlpha|vZTest
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableZTest();
+            return;
+        case   24:		// vFog|vZTest
+            EnableFog();
+            EnableZTest();
+            return;
+        case   25:		// vSpecular|vFog|vZTest
+            EnableSpecular();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   26:		// vLight|vFog|vZTest
+            EnableLight();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   27:		// vSpecular|vLight|vFog|vZTest
+            EnableSpecular();
+            EnableLight();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   28:		// vAlpha|vFog|vZTest
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   29:		// vSpecular|vAlpha|vFog|vZTest
+            EnableSpecular();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   30:		// vLight|vAlpha|vFog|vZTest
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   31:		// vSpecular|vLight|vAlpha|vFog|vZTest
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            return;
+        case   32:		// vZWrite
+            EnableZWrite();
+            return;
+        case   33:		// vSpecular|vZWrite
+            EnableSpecular();
+            EnableZWrite();
+            return;
+        case   34:		// vLight|vZWrite
+            EnableLight();
+            EnableZWrite();
+            return;
+        case   35:		// vSpecular|vLight|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableZWrite();
+            return;
+        case   36:		// vAlpha|vZWrite
+            EnableAlpha();
+            EnableZWrite();
+            return;
+        case   37:		// vSpecular|vAlpha|vZWrite
+            EnableSpecular();
+            EnableAlpha();
+            EnableZWrite();
+            return;
+        case   38:		// vLight|vAlpha|vZWrite
+            EnableLight();
+            EnableAlpha();
+            EnableZWrite();
+            return;
+        case   39:		// vSpecular|vLight|vAlpha|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableZWrite();
+            return;
+        case   40:		// vFog|vZWrite
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   41:		// vSpecular|vFog|vZWrite
+            EnableSpecular();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   42:		// vLight|vFog|vZWrite
+            EnableLight();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   43:		// vSpecular|vLight|vFog|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   44:		// vAlpha|vFog|vZWrite
+            EnableAlpha();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   45:		// vSpecular|vAlpha|vFog|vZWrite
+            EnableSpecular();
+            EnableAlpha();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   46:		// vLight|vAlpha|vFog|vZWrite
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   47:		// vSpecular|vLight|vAlpha|vFog|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   48:		// vZTest|vZWrite
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   49:		// vSpecular|vZTest|vZWrite
+            EnableSpecular();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   50:		// vLight|vZTest|vZWrite
+            EnableLight();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   51:		// vSpecular|vLight|vZTest|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   52:		// vAlpha|vZTest|vZWrite
+            EnableAlpha();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   53:		// vSpecular|vAlpha|vZTest|vZWrite
+            EnableSpecular();
+            EnableAlpha();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   54:		// vLight|vAlpha|vZTest|vZWrite
+            EnableLight();
+            EnableAlpha();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   55:		// vSpecular|vLight|vAlpha|vZTest|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   56:		// vFog|vZTest|vZWrite
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   57:		// vSpecular|vFog|vZTest|vZWrite
+            EnableSpecular();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   58:		// vLight|vFog|vZTest|vZWrite
+            EnableLight();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   59:		// vSpecular|vLight|vFog|vZTest|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   60:		// vAlpha|vFog|vZTest|vZWrite
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   61:		// vSpecular|vAlpha|vFog|vZTest|vZWrite
+            EnableSpecular();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   62:		// vLight|vAlpha|vFog|vZTest|vZWrite
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   63:		// vSpecular|vLight|vAlpha|vFog|vZTest|vZWrite
+            EnableSpecular();
+            EnableLight();
+            EnableAlpha();
+            EnableFog();
+            EnableZTest();
+            EnableZWrite();
+            return;
+    }
+}
+
+// Disable by mask
+ENGINE_API void __fastcall __DisableMode(DWORD dwMask)
+{
+    switch(dwMask&63) {
+        case    0:		//
+            return;
+        case    1:		// vSpecular
+            DisableSpecular();
+            return;
+        case    2:		// vLight
+            DisableLight();
+            return;
+        case    3:		// vSpecular|vLight
+            DisableSpecular();
+            DisableLight();
+            return;
+        case    4:		// vAlpha
+            DisableAlpha();
+            return;
+        case    5:		// vSpecular|vAlpha
+            DisableSpecular();
+            DisableAlpha();
+            return;
+        case    6:		// vLight|vAlpha
+            DisableLight();
+            DisableAlpha();
+            return;
+        case    7:		// vSpecular|vLight|vAlpha
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            return;
+        case    8:		// vFog
+            DisableFog();
+            return;
+        case    9:		// vSpecular|vFog
+            DisableSpecular();
+            DisableFog();
+            return;
+        case   10:		// vLight|vFog
+            DisableLight();
+            DisableFog();
+            return;
+        case   11:		// vSpecular|vLight|vFog
+            DisableSpecular();
+            DisableLight();
+            DisableFog();
+            return;
+        case   12:		// vAlpha|vFog
+            DisableAlpha();
+            DisableFog();
+            return;
+        case   13:		// vSpecular|vAlpha|vFog
+            DisableSpecular();
+            DisableAlpha();
+            DisableFog();
+            return;
+        case   14:		// vLight|vAlpha|vFog
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            return;
+        case   15:		// vSpecular|vLight|vAlpha|vFog
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            return;
+        case   16:		// vZTest
+            DisableZTest();
+            return;
+        case   17:		// vSpecular|vZTest
+            DisableSpecular();
+            DisableZTest();
+            return;
+        case   18:		// vLight|vZTest
+            DisableLight();
+            DisableZTest();
+            return;
+        case   19:		// vSpecular|vLight|vZTest
+            DisableSpecular();
+            DisableLight();
+            DisableZTest();
+            return;
+        case   20:		// vAlpha|vZTest
+            DisableAlpha();
+            DisableZTest();
+            return;
+        case   21:		// vSpecular|vAlpha|vZTest
+            DisableSpecular();
+            DisableAlpha();
+            DisableZTest();
+            return;
+        case   22:		// vLight|vAlpha|vZTest
+            DisableLight();
+            DisableAlpha();
+            DisableZTest();
+            return;
+        case   23:		// vSpecular|vLight|vAlpha|vZTest
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableZTest();
+            return;
+        case   24:		// vFog|vZTest
+            DisableFog();
+            DisableZTest();
+            return;
+        case   25:		// vSpecular|vFog|vZTest
+            DisableSpecular();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   26:		// vLight|vFog|vZTest
+            DisableLight();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   27:		// vSpecular|vLight|vFog|vZTest
+            DisableSpecular();
+            DisableLight();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   28:		// vAlpha|vFog|vZTest
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   29:		// vSpecular|vAlpha|vFog|vZTest
+            DisableSpecular();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   30:		// vLight|vAlpha|vFog|vZTest
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   31:		// vSpecular|vLight|vAlpha|vFog|vZTest
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            return;
+        case   32:		// vZWrite
+            DisableZWrite();
+            return;
+        case   33:		// vSpecular|vZWrite
+            DisableSpecular();
+            DisableZWrite();
+            return;
+        case   34:		// vLight|vZWrite
+            DisableLight();
+            DisableZWrite();
+            return;
+        case   35:		// vSpecular|vLight|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableZWrite();
+            return;
+        case   36:		// vAlpha|vZWrite
+            DisableAlpha();
+            DisableZWrite();
+            return;
+        case   37:		// vSpecular|vAlpha|vZWrite
+            DisableSpecular();
+            DisableAlpha();
+            DisableZWrite();
+            return;
+        case   38:		// vLight|vAlpha|vZWrite
+            DisableLight();
+            DisableAlpha();
+            DisableZWrite();
+            return;
+        case   39:		// vSpecular|vLight|vAlpha|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableZWrite();
+            return;
+        case   40:		// vFog|vZWrite
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   41:		// vSpecular|vFog|vZWrite
+            DisableSpecular();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   42:		// vLight|vFog|vZWrite
+            DisableLight();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   43:		// vSpecular|vLight|vFog|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   44:		// vAlpha|vFog|vZWrite
+            DisableAlpha();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   45:		// vSpecular|vAlpha|vFog|vZWrite
+            DisableSpecular();
+            DisableAlpha();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   46:		// vLight|vAlpha|vFog|vZWrite
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   47:		// vSpecular|vLight|vAlpha|vFog|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   48:		// vZTest|vZWrite
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   49:		// vSpecular|vZTest|vZWrite
+            DisableSpecular();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   50:		// vLight|vZTest|vZWrite
+            DisableLight();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   51:		// vSpecular|vLight|vZTest|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   52:		// vAlpha|vZTest|vZWrite
+            DisableAlpha();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   53:		// vSpecular|vAlpha|vZTest|vZWrite
+            DisableSpecular();
+            DisableAlpha();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   54:		// vLight|vAlpha|vZTest|vZWrite
+            DisableLight();
+            DisableAlpha();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   55:		// vSpecular|vLight|vAlpha|vZTest|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   56:		// vFog|vZTest|vZWrite
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   57:		// vSpecular|vFog|vZTest|vZWrite
+            DisableSpecular();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   58:		// vLight|vFog|vZTest|vZWrite
+            DisableLight();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   59:		// vSpecular|vLight|vFog|vZTest|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   60:		// vAlpha|vFog|vZTest|vZWrite
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   61:		// vSpecular|vAlpha|vFog|vZTest|vZWrite
+            DisableSpecular();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   62:		// vLight|vAlpha|vFog|vZTest|vZWrite
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   63:		// vSpecular|vLight|vAlpha|vFog|vZTest|vZWrite
+            DisableSpecular();
+            DisableLight();
+            DisableAlpha();
+            DisableFog();
+            DisableZTest();
+            DisableZWrite();
+            return;
+    }
+}

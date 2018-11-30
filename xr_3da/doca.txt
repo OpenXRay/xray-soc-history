@@ -1,0 +1,135 @@
+
+Иерархия классов:
+
+			     -------------- Basic
+			   /				  |
+			 /					  |
+			|					  |
+		 Camera					Object------>ObjectList
+		    |					  |
+	  Cameras_Array				  |
+								  |
+								  |
+			  -----------------------------------------
+			/	|	   |		|		 |		|		\
+		 Hero  Key	 Bridge	 Teleport	Bird   ...		...
+
+
+
+CXR_App
+|
+|
+ - CD3DFramework7
+|
+|
+ - CXR_Input
+|  ( устр-во ввода )
+|
+ - CXR_Inifile
+|  ( ини файл системы )
+|
+ - CXR_Textrloader
+|  ( загрузка и управление текстурами )
+|
+ - CXR_SoundManager
+|  ( загрузка и управление звуками )
+ \
+
+
+CXR_Creator
+|  ( контейнер для одного уровня: создается и уничтожается для каждого уровня отдельно)
+|
+ - FStaticRender
+|  ( загружает, содержит и рендерит всю статику которая раз загружается
+|	 и в процессе не изменяется )
+ - CXR_Render
+|  ( рендерит все остальное )
+|
+ - CXR_EffectManager
+|  ( эффекты )
+|
+ - CXR_Meshloader
+|  ( загрузка объектов )
+|
+ - CXR_Cameras_Array
+|  ( камеры уровня )
+|
+ - CXR_Console
+|  ( консоль вывода на экран )
+|
+ - CXR_Inifile
+|  ( ини файл уровня )
+|
+ - !!! CXR_Space			- заменить на CXR_ObjectSpace
+|  ( назначение определение столкновения между объектами.
+|	 загружает и содержит Collision Forms для всей статики.
+|    добавляет, удаляет и перемещает формы для динамических объектов.
+|
+ - !!! CXR_Stationary_Array	- убрать за ненадобностью
+|
+ - !!! CXR_Mobile_Array		- заменить на CXR_ObjectList
+|
+ - CXR_Command_List
+|  ( список событий )
+ \
+
+
+Sounds
+
+[snd]
+fname		= file.wav
+autorun		= on/off
+b3d			= on/off
+loopmode	= on/off
+loopcount	= раз
+volume		= -10000..0
+mindist		= 1.0 м
+maxdist		= 100.0 м
+pos			= 95.0, 2.0, 123.0
+random		= с какой максимальной периодичностью запускать - мсек
+dir			= вектор направления
+in_angle	= 0..360 градусов
+out_angle	= 0..360 градусов
+out_volume	= -10000..0
+
+
+fname		= имя ф-ла
+b3d			= on/off - звук 3d или нет
+random		= интервал между запусками (мсек)
+loopmode	= on/off - зациклен или нет
+loopcount	= если он зациклен то сколько раз может проиграть если 0 - бесконечно
+autorun		= on/off - после загрузки автоматически сам запускается
+volume		= -10000..0 - громкость (0-максимум)
+pos			= x,y,z - позиция
+dir			= x,y,z - направление если в виде конуса
+mindist		= мин. дистанция от которой громкость уменьшается
+maxdist		= макс. дистанция до которой слышно звук
+in_angle	= внутренний угол (радиан)
+out_angle	= внешний угол (радиан)
+out_volume	= -10000..0 - громкость за внешним углом
+
+[default]
+fname		= ????
+autorun		= off
+b3d			= off
+loopmode	= off
+loopcount	= 0
+volume		= 0
+mindist		= 1.0 м
+maxdist		= 100.0 м
+pos			= 0.0, 0.0, 0.0
+random		= 0
+dir			= 0,0,1
+in_angle	= 2 Pi
+out_angle	= 2* Pi
+out_volume	= 0
+
+
+[static_sounds]
+ambient					= s_ambient
+
+[s_ambient]
+fname                   = ambient\ambient7.wav
+loopmode				= on
+loopcount				= 0
+autorun					= on

@@ -1,0 +1,10 @@
+#define vSpecular                      1
+#define vLight                         2
+#define vAlpha                         4
+#define vFog                           8
+#define vZTest                         16
+#define vZWrite                        32
+#define vfMASK_ALL                     63
+#define vfMAX                          32
+
+#define vMATRIX							(vfMAX*2)

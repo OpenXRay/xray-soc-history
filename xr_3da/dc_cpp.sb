@@ -1,0 +1,1103 @@
+// State blocks declaration
+DWORD dwSB_07_E=0, dwSB_0B_E=0, dwSB_0D_E=0, dwSB_0E_E=0, dwSB_0F_E=0;
+DWORD dwSB_13_E=0, dwSB_15_E=0, dwSB_16_E=0, dwSB_17_E=0, dwSB_19_E=0;
+DWORD dwSB_1A_E=0, dwSB_1B_E=0, dwSB_1C_E=0, dwSB_1D_E=0, dwSB_1E_E=0;
+DWORD dwSB_1F_E=0, dwSB_23_E=0, dwSB_25_E=0, dwSB_26_E=0, dwSB_27_E=0;
+DWORD dwSB_29_E=0, dwSB_2A_E=0, dwSB_2B_E=0, dwSB_2C_E=0, dwSB_2D_E=0;
+DWORD dwSB_2E_E=0, dwSB_2F_E=0, dwSB_31_E=0, dwSB_32_E=0, dwSB_33_E=0;
+DWORD dwSB_34_E=0, dwSB_35_E=0, dwSB_36_E=0, dwSB_37_E=0, dwSB_38_E=0;
+DWORD dwSB_39_E=0, dwSB_3A_E=0, dwSB_3B_E=0, dwSB_3C_E=0, dwSB_3D_E=0;
+DWORD dwSB_3E_E=0, dwSB_3F_E=0, dwSB_07_D=0, dwSB_0B_D=0, dwSB_0D_D=0;
+DWORD dwSB_0E_D=0, dwSB_0F_D=0, dwSB_13_D=0, dwSB_15_D=0, dwSB_16_D=0;
+DWORD dwSB_17_D=0, dwSB_19_D=0, dwSB_1A_D=0, dwSB_1B_D=0, dwSB_1C_D=0;
+DWORD dwSB_1D_D=0, dwSB_1E_D=0, dwSB_1F_D=0, dwSB_23_D=0, dwSB_25_D=0;
+DWORD dwSB_26_D=0, dwSB_27_D=0, dwSB_29_D=0, dwSB_2A_D=0, dwSB_2B_D=0;
+DWORD dwSB_2C_D=0, dwSB_2D_D=0, dwSB_2E_D=0, dwSB_2F_D=0, dwSB_31_D=0;
+DWORD dwSB_32_D=0, dwSB_33_D=0, dwSB_34_D=0, dwSB_35_D=0, dwSB_36_D=0;
+DWORD dwSB_37_D=0, dwSB_38_D=0, dwSB_39_D=0, dwSB_3A_D=0, dwSB_3B_D=0;
+DWORD dwSB_3C_D=0, dwSB_3D_D=0, dwSB_3E_D=0, dwSB_3F_D=0;
+
+// State blocks recording
+void CRenderDevice::sbRecord(void)
+{
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_07_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0B_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0D_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0E_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0F_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_13_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_15_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_16_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_17_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_19_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1A_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1B_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1C_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1D_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1E_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1F_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_23_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_25_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_26_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_27_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_29_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2A_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2B_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableAlpha();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2C_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2D_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2E_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2F_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_31_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_32_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_33_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableAlpha();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_34_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_35_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_36_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_37_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_38_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_39_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3A_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3B_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3C_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3D_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3E_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        EnableSpecular();
+        EnableLight();
+        EnableAlpha();
+        EnableFog();
+        EnableZTest();
+        EnableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3F_E));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_07_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0B_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0D_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0E_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_0F_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_13_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_15_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_16_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_17_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_19_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1A_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1B_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1C_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1D_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1E_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_1F_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_23_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_25_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_26_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_27_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_29_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2A_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2B_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableAlpha();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2C_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2D_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2E_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_2F_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_31_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_32_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_33_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableAlpha();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_34_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_35_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_36_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_37_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_38_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_39_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3A_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3B_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3C_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3D_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3E_D));
+
+    CHK_DX(HW.pDevice->BeginStateBlock());
+        DisableSpecular();
+        DisableLight();
+        DisableAlpha();
+        DisableFog();
+        DisableZTest();
+        DisableZWrite();
+    CHK_DX(HW.pDevice->EndStateBlock(&dwSB_3F_D));
+
+}
+
+// State blocks releasing
+void CRenderDevice::sbRelease(void)
+{
+    if (dwSB_07_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_07_E)); dwSB_07_E=0; }
+    if (dwSB_0B_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0B_E)); dwSB_0B_E=0; }
+    if (dwSB_0D_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0D_E)); dwSB_0D_E=0; }
+    if (dwSB_0E_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0E_E)); dwSB_0E_E=0; }
+    if (dwSB_0F_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0F_E)); dwSB_0F_E=0; }
+    if (dwSB_13_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_13_E)); dwSB_13_E=0; }
+    if (dwSB_15_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_15_E)); dwSB_15_E=0; }
+    if (dwSB_16_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_16_E)); dwSB_16_E=0; }
+    if (dwSB_17_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_17_E)); dwSB_17_E=0; }
+    if (dwSB_19_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_19_E)); dwSB_19_E=0; }
+    if (dwSB_1A_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1A_E)); dwSB_1A_E=0; }
+    if (dwSB_1B_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1B_E)); dwSB_1B_E=0; }
+    if (dwSB_1C_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1C_E)); dwSB_1C_E=0; }
+    if (dwSB_1D_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1D_E)); dwSB_1D_E=0; }
+    if (dwSB_1E_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1E_E)); dwSB_1E_E=0; }
+    if (dwSB_1F_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1F_E)); dwSB_1F_E=0; }
+    if (dwSB_23_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_23_E)); dwSB_23_E=0; }
+    if (dwSB_25_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_25_E)); dwSB_25_E=0; }
+    if (dwSB_26_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_26_E)); dwSB_26_E=0; }
+    if (dwSB_27_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_27_E)); dwSB_27_E=0; }
+    if (dwSB_29_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_29_E)); dwSB_29_E=0; }
+    if (dwSB_2A_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2A_E)); dwSB_2A_E=0; }
+    if (dwSB_2B_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2B_E)); dwSB_2B_E=0; }
+    if (dwSB_2C_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2C_E)); dwSB_2C_E=0; }
+    if (dwSB_2D_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2D_E)); dwSB_2D_E=0; }
+    if (dwSB_2E_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2E_E)); dwSB_2E_E=0; }
+    if (dwSB_2F_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2F_E)); dwSB_2F_E=0; }
+    if (dwSB_31_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_31_E)); dwSB_31_E=0; }
+    if (dwSB_32_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_32_E)); dwSB_32_E=0; }
+    if (dwSB_33_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_33_E)); dwSB_33_E=0; }
+    if (dwSB_34_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_34_E)); dwSB_34_E=0; }
+    if (dwSB_35_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_35_E)); dwSB_35_E=0; }
+    if (dwSB_36_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_36_E)); dwSB_36_E=0; }
+    if (dwSB_37_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_37_E)); dwSB_37_E=0; }
+    if (dwSB_38_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_38_E)); dwSB_38_E=0; }
+    if (dwSB_39_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_39_E)); dwSB_39_E=0; }
+    if (dwSB_3A_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3A_E)); dwSB_3A_E=0; }
+    if (dwSB_3B_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3B_E)); dwSB_3B_E=0; }
+    if (dwSB_3C_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3C_E)); dwSB_3C_E=0; }
+    if (dwSB_3D_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3D_E)); dwSB_3D_E=0; }
+    if (dwSB_3E_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3E_E)); dwSB_3E_E=0; }
+    if (dwSB_3F_E) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3F_E)); dwSB_3F_E=0; }
+    if (dwSB_07_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_07_D)); dwSB_07_D=0; }
+    if (dwSB_0B_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0B_D)); dwSB_0B_D=0; }
+    if (dwSB_0D_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0D_D)); dwSB_0D_D=0; }
+    if (dwSB_0E_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0E_D)); dwSB_0E_D=0; }
+    if (dwSB_0F_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_0F_D)); dwSB_0F_D=0; }
+    if (dwSB_13_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_13_D)); dwSB_13_D=0; }
+    if (dwSB_15_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_15_D)); dwSB_15_D=0; }
+    if (dwSB_16_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_16_D)); dwSB_16_D=0; }
+    if (dwSB_17_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_17_D)); dwSB_17_D=0; }
+    if (dwSB_19_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_19_D)); dwSB_19_D=0; }
+    if (dwSB_1A_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1A_D)); dwSB_1A_D=0; }
+    if (dwSB_1B_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1B_D)); dwSB_1B_D=0; }
+    if (dwSB_1C_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1C_D)); dwSB_1C_D=0; }
+    if (dwSB_1D_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1D_D)); dwSB_1D_D=0; }
+    if (dwSB_1E_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1E_D)); dwSB_1E_D=0; }
+    if (dwSB_1F_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_1F_D)); dwSB_1F_D=0; }
+    if (dwSB_23_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_23_D)); dwSB_23_D=0; }
+    if (dwSB_25_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_25_D)); dwSB_25_D=0; }
+    if (dwSB_26_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_26_D)); dwSB_26_D=0; }
+    if (dwSB_27_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_27_D)); dwSB_27_D=0; }
+    if (dwSB_29_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_29_D)); dwSB_29_D=0; }
+    if (dwSB_2A_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2A_D)); dwSB_2A_D=0; }
+    if (dwSB_2B_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2B_D)); dwSB_2B_D=0; }
+    if (dwSB_2C_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2C_D)); dwSB_2C_D=0; }
+    if (dwSB_2D_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2D_D)); dwSB_2D_D=0; }
+    if (dwSB_2E_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2E_D)); dwSB_2E_D=0; }
+    if (dwSB_2F_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_2F_D)); dwSB_2F_D=0; }
+    if (dwSB_31_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_31_D)); dwSB_31_D=0; }
+    if (dwSB_32_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_32_D)); dwSB_32_D=0; }
+    if (dwSB_33_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_33_D)); dwSB_33_D=0; }
+    if (dwSB_34_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_34_D)); dwSB_34_D=0; }
+    if (dwSB_35_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_35_D)); dwSB_35_D=0; }
+    if (dwSB_36_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_36_D)); dwSB_36_D=0; }
+    if (dwSB_37_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_37_D)); dwSB_37_D=0; }
+    if (dwSB_38_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_38_D)); dwSB_38_D=0; }
+    if (dwSB_39_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_39_D)); dwSB_39_D=0; }
+    if (dwSB_3A_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3A_D)); dwSB_3A_D=0; }
+    if (dwSB_3B_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3B_D)); dwSB_3B_D=0; }
+    if (dwSB_3C_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3C_D)); dwSB_3C_D=0; }
+    if (dwSB_3D_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3D_D)); dwSB_3D_D=0; }
+    if (dwSB_3E_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3E_D)); dwSB_3E_D=0; }
+    if (dwSB_3F_D) { CHK_DX(HW.pDevice->DeleteStateBlock(dwSB_3F_D)); dwSB_3F_D=0; }
+}
+
+// Enable by mask
+ENGINE_API void __fastcall __EnableMode(DWORD dwMask)
+{
+    switch(dwMask&63) {
+        case    0:		//
+            return;
+        case    1:		// vSpecular
+            EnableSpecular();
+            return;
+        case    2:		// vLight
+            EnableLight();
+            return;
+        case    3:		// vSpecular|vLight
+            EnableSpecular();
+            EnableLight();
+            return;
+        case    4:		// vAlpha
+            EnableAlpha();
+            return;
+        case    5:		// vSpecular|vAlpha
+            EnableSpecular();
+            EnableAlpha();
+            return;
+        case    6:		// vLight|vAlpha
+            EnableLight();
+            EnableAlpha();
+            return;
+        case    7:		// vSpecular|vLight|vAlpha
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_07_E));
+            return;
+        case    8:		// vFog
+            EnableFog();
+            return;
+        case    9:		// vSpecular|vFog
+            EnableSpecular();
+            EnableFog();
+            return;
+        case   10:		// vLight|vFog
+            EnableLight();
+            EnableFog();
+            return;
+        case   11:		// vSpecular|vLight|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0B_E));
+            return;
+        case   12:		// vAlpha|vFog
+            EnableAlpha();
+            EnableFog();
+            return;
+        case   13:		// vSpecular|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0D_E));
+            return;
+        case   14:		// vLight|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0E_E));
+            return;
+        case   15:		// vSpecular|vLight|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0F_E));
+            return;
+        case   16:		// vZTest
+            EnableZTest();
+            return;
+        case   17:		// vSpecular|vZTest
+            EnableSpecular();
+            EnableZTest();
+            return;
+        case   18:		// vLight|vZTest
+            EnableLight();
+            EnableZTest();
+            return;
+        case   19:		// vSpecular|vLight|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_13_E));
+            return;
+        case   20:		// vAlpha|vZTest
+            EnableAlpha();
+            EnableZTest();
+            return;
+        case   21:		// vSpecular|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_15_E));
+            return;
+        case   22:		// vLight|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_16_E));
+            return;
+        case   23:		// vSpecular|vLight|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_17_E));
+            return;
+        case   24:		// vFog|vZTest
+            EnableFog();
+            EnableZTest();
+            return;
+        case   25:		// vSpecular|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_19_E));
+            return;
+        case   26:		// vLight|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1A_E));
+            return;
+        case   27:		// vSpecular|vLight|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1B_E));
+            return;
+        case   28:		// vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1C_E));
+            return;
+        case   29:		// vSpecular|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1D_E));
+            return;
+        case   30:		// vLight|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1E_E));
+            return;
+        case   31:		// vSpecular|vLight|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1F_E));
+            return;
+        case   32:		// vZWrite
+            EnableZWrite();
+            return;
+        case   33:		// vSpecular|vZWrite
+            EnableSpecular();
+            EnableZWrite();
+            return;
+        case   34:		// vLight|vZWrite
+            EnableLight();
+            EnableZWrite();
+            return;
+        case   35:		// vSpecular|vLight|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_23_E));
+            return;
+        case   36:		// vAlpha|vZWrite
+            EnableAlpha();
+            EnableZWrite();
+            return;
+        case   37:		// vSpecular|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_25_E));
+            return;
+        case   38:		// vLight|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_26_E));
+            return;
+        case   39:		// vSpecular|vLight|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_27_E));
+            return;
+        case   40:		// vFog|vZWrite
+            EnableFog();
+            EnableZWrite();
+            return;
+        case   41:		// vSpecular|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_29_E));
+            return;
+        case   42:		// vLight|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2A_E));
+            return;
+        case   43:		// vSpecular|vLight|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2B_E));
+            return;
+        case   44:		// vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2C_E));
+            return;
+        case   45:		// vSpecular|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2D_E));
+            return;
+        case   46:		// vLight|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2E_E));
+            return;
+        case   47:		// vSpecular|vLight|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2F_E));
+            return;
+        case   48:		// vZTest|vZWrite
+            EnableZTest();
+            EnableZWrite();
+            return;
+        case   49:		// vSpecular|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_31_E));
+            return;
+        case   50:		// vLight|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_32_E));
+            return;
+        case   51:		// vSpecular|vLight|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_33_E));
+            return;
+        case   52:		// vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_34_E));
+            return;
+        case   53:		// vSpecular|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_35_E));
+            return;
+        case   54:		// vLight|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_36_E));
+            return;
+        case   55:		// vSpecular|vLight|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_37_E));
+            return;
+        case   56:		// vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_38_E));
+            return;
+        case   57:		// vSpecular|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_39_E));
+            return;
+        case   58:		// vLight|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3A_E));
+            return;
+        case   59:		// vSpecular|vLight|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3B_E));
+            return;
+        case   60:		// vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3C_E));
+            return;
+        case   61:		// vSpecular|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3D_E));
+            return;
+        case   62:		// vLight|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3E_E));
+            return;
+        case   63:		// vSpecular|vLight|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3F_E));
+            return;
+    }
+}
+
+// Disable by mask
+ENGINE_API void __fastcall __DisableMode(DWORD dwMask)
+{
+    switch(dwMask&63) {
+        case    0:		//
+            return;
+        case    1:		// vSpecular
+            DisableSpecular();
+            return;
+        case    2:		// vLight
+            DisableLight();
+            return;
+        case    3:		// vSpecular|vLight
+            DisableSpecular();
+            DisableLight();
+            return;
+        case    4:		// vAlpha
+            DisableAlpha();
+            return;
+        case    5:		// vSpecular|vAlpha
+            DisableSpecular();
+            DisableAlpha();
+            return;
+        case    6:		// vLight|vAlpha
+            DisableLight();
+            DisableAlpha();
+            return;
+        case    7:		// vSpecular|vLight|vAlpha
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_07_D));
+            return;
+        case    8:		// vFog
+            DisableFog();
+            return;
+        case    9:		// vSpecular|vFog
+            DisableSpecular();
+            DisableFog();
+            return;
+        case   10:		// vLight|vFog
+            DisableLight();
+            DisableFog();
+            return;
+        case   11:		// vSpecular|vLight|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0B_D));
+            return;
+        case   12:		// vAlpha|vFog
+            DisableAlpha();
+            DisableFog();
+            return;
+        case   13:		// vSpecular|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0D_D));
+            return;
+        case   14:		// vLight|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0E_D));
+            return;
+        case   15:		// vSpecular|vLight|vAlpha|vFog
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_0F_D));
+            return;
+        case   16:		// vZTest
+            DisableZTest();
+            return;
+        case   17:		// vSpecular|vZTest
+            DisableSpecular();
+            DisableZTest();
+            return;
+        case   18:		// vLight|vZTest
+            DisableLight();
+            DisableZTest();
+            return;
+        case   19:		// vSpecular|vLight|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_13_D));
+            return;
+        case   20:		// vAlpha|vZTest
+            DisableAlpha();
+            DisableZTest();
+            return;
+        case   21:		// vSpecular|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_15_D));
+            return;
+        case   22:		// vLight|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_16_D));
+            return;
+        case   23:		// vSpecular|vLight|vAlpha|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_17_D));
+            return;
+        case   24:		// vFog|vZTest
+            DisableFog();
+            DisableZTest();
+            return;
+        case   25:		// vSpecular|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_19_D));
+            return;
+        case   26:		// vLight|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1A_D));
+            return;
+        case   27:		// vSpecular|vLight|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1B_D));
+            return;
+        case   28:		// vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1C_D));
+            return;
+        case   29:		// vSpecular|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1D_D));
+            return;
+        case   30:		// vLight|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1E_D));
+            return;
+        case   31:		// vSpecular|vLight|vAlpha|vFog|vZTest
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_1F_D));
+            return;
+        case   32:		// vZWrite
+            DisableZWrite();
+            return;
+        case   33:		// vSpecular|vZWrite
+            DisableSpecular();
+            DisableZWrite();
+            return;
+        case   34:		// vLight|vZWrite
+            DisableLight();
+            DisableZWrite();
+            return;
+        case   35:		// vSpecular|vLight|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_23_D));
+            return;
+        case   36:		// vAlpha|vZWrite
+            DisableAlpha();
+            DisableZWrite();
+            return;
+        case   37:		// vSpecular|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_25_D));
+            return;
+        case   38:		// vLight|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_26_D));
+            return;
+        case   39:		// vSpecular|vLight|vAlpha|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_27_D));
+            return;
+        case   40:		// vFog|vZWrite
+            DisableFog();
+            DisableZWrite();
+            return;
+        case   41:		// vSpecular|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_29_D));
+            return;
+        case   42:		// vLight|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2A_D));
+            return;
+        case   43:		// vSpecular|vLight|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2B_D));
+            return;
+        case   44:		// vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2C_D));
+            return;
+        case   45:		// vSpecular|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2D_D));
+            return;
+        case   46:		// vLight|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2E_D));
+            return;
+        case   47:		// vSpecular|vLight|vAlpha|vFog|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_2F_D));
+            return;
+        case   48:		// vZTest|vZWrite
+            DisableZTest();
+            DisableZWrite();
+            return;
+        case   49:		// vSpecular|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_31_D));
+            return;
+        case   50:		// vLight|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_32_D));
+            return;
+        case   51:		// vSpecular|vLight|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_33_D));
+            return;
+        case   52:		// vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_34_D));
+            return;
+        case   53:		// vSpecular|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_35_D));
+            return;
+        case   54:		// vLight|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_36_D));
+            return;
+        case   55:		// vSpecular|vLight|vAlpha|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_37_D));
+            return;
+        case   56:		// vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_38_D));
+            return;
+        case   57:		// vSpecular|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_39_D));
+            return;
+        case   58:		// vLight|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3A_D));
+            return;
+        case   59:		// vSpecular|vLight|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3B_D));
+            return;
+        case   60:		// vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3C_D));
+            return;
+        case   61:		// vSpecular|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3D_D));
+            return;
+        case   62:		// vLight|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3E_D));
+            return;
+        case   63:		// vSpecular|vLight|vAlpha|vFog|vZTest|vZWrite
+            CHK_DX(HW.pDevice->ApplyStateBlock(dwSB_3F_D));
+            return;
+    }
+}
+

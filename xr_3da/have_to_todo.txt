@@ -1,0 +1,26 @@
+NEED:
+1.	Moving Sphere - Static ellipsoid collision
+4.	Simplification of collision database
+5.	No sml....?
+6.	SKY from the ASS :)
+9.	Weapon array
+10.	Inventory array
+
+PROCESSING:
+
+DONE:
+0.	Stripifying
+1.	Raypick - ray/aabb isection
+2.	Nearest picking optimization (range collapse)
+3.	Generalized dynamic VB
+4.	PURE DEVICE - Manual skinning and vertex transform
+5.	Advanced shaders - Q3A style
+6.	DDS Compressor
+7.	DDS loading
+8.	Manual/Direct Model Render
+9.	Memory sharing
+10.	Animation controller
+11.	Weapon Z-Trick
+12.	Rotated ellipsoids
+13.	Ray flag/option - don't perform per poly collision - use ellipse
+14.	Skeletal box pick
