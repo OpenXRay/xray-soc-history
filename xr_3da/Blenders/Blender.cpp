@@ -1,33 +1,17 @@
-// Blender.cpp: implementation of the IBlender class.
+// Blender.cpp: implementation of the CBlender class.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #pragma hdrstop
 
-#include <time.h>
-
 #include "Blender.h"
-
-void CBlender_DESC::Setup	(LPCSTR N)
-{
-	// Name
-	VERIFY(xr_strlen(N)<128);
-	VERIFY(0==strchr(N,'.'));
-	strcpy(cName,N);
-	strlwr(cName);
-	
-//	strcpy(cComputer,Core.CompName);			// Computer
-//	_tzset(); _time32( (__time32_t*)&cTime );	// Time
-	strcpy(cComputer,Core.CompName);			// Computer
-	_tzset(); time( (long*)&cTime );			// Time
-};
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-IBlender::IBlender()
+CBlender::CBlender()
 {
 	oPriority.min	= 0;
 	oPriority.max	= 3;
@@ -36,40 +20,82 @@ IBlender::IBlender()
 	strcpy			(oT_xform,	"$null");
 }
 
-IBlender::~IBlender()
+CBlender::~CBlender()
 {
 
 }
 
-void	IBlender::Save(IWriter& fs )
+void CBlender::BP_write_c(CFS_Base& FS, DWORD ID, LPCSTR name, LPCVOID data, DWORD size )
 {
-	fs.w			(&description,sizeof(description));
-	xrPWRITE_MARKER (fs,"General");
-	xrPWRITE_PROP	(fs,"Priority",			xrPID_INTEGER,	oPriority);
-	xrPWRITE_PROP	(fs,"Strict sorting",	xrPID_BOOL,		oStrictSorting);
-	xrPWRITE_MARKER	(fs,"Base Texture");
-	xrPWRITE_PROP	(fs,"Name",				xrPID_TEXTURE,	oT_Name);
-	xrPWRITE_PROP	(fs,"Transform",		xrPID_MATRIX,	oT_xform);
+	FS.Wdword	(ID);
+	FS.WstringZ	(name);
+	if (data && size)	FS.write	(data,size);
 }
 
-void	IBlender::Load(	IReader& fs, u16  )
+DWORD CBlender::BP_read_c(CStream& FS)
 {
-	// Read desc and doesn't change version
-	u16	V		= description.version;
-	fs.r			(&description,sizeof(description));
-	description.version	= V;
+	char		temp[256];
 
-	// Properties
-	xrPREAD_MARKER	(fs);
-	xrPREAD_PROP	(fs,xrPID_INTEGER,	oPriority);
-	xrPREAD_PROP	(fs,xrPID_BOOL,		oStrictSorting);
-	xrPREAD_MARKER	(fs);
-	xrPREAD_PROP	(fs,xrPID_TEXTURE,	oT_Name);
-	xrPREAD_PROP	(fs,xrPID_MATRIX,	oT_xform);
+	DWORD T		= FS.Rdword();
+	FS.RstringZ	(temp);
+	return		T;
 }
 
-void	IBlender::Compile(CBlender_Compile& C)
+void	CBlender::Save(	CFS_Base& FS )
 {
-	if (C.bEditor)	C.SetParams	(oPriority.value,oStrictSorting.value?true:false);
-	else			C.SetParams	(oPriority.value,oStrictSorting.value?true:false);
+	FS.write	(&description,sizeof(description));
+	BP_W_MARKER ("General");
+	BP_WRITE	("Priority",		BPID_INTEGER,	oPriority);
+	BP_WRITE	("Strict sorting",	BPID_BOOL,		oStrictSorting);
+	BP_W_MARKER	("Base Texture");
+	BP_WRITE	("Name",			BPID_TEXTURE,	oT_Name);
+	BP_WRITE	("Transform",		BPID_MATRIX,	oT_xform);
+}
+
+void	CBlender::Load(	CStream& FS )
+{
+	FS.Read		(&description,sizeof(description));
+	BP_R_MARKER	();
+	BP_READ		(BPID_INTEGER,	oPriority);
+	BP_READ		(BPID_BOOL,		oStrictSorting);
+	BP_R_MARKER	();
+	BP_READ		(BPID_TEXTURE,	oT_Name);
+	BP_READ		(BPID_MATRIX,	oT_xform);
+}
+//////////////////////////////////////////////////////////////////////
+#include "blender_clsid.h"
+#include "blenderdefault.h"
+#include "blender_default_aref.h"
+#include "blender_vertex.h"
+#include "blender_vertex_aref.h"
+#include "blender_screen_set.h"
+#include "blender_screen_gray.h"
+#include "blender_editor_wire.h"
+#include "blender_editor_selection.h"
+CBlender*	CBlender::Create	(CLASS_ID cls)
+{	
+	switch (cls)
+	{
+	case B_DEFAULT:			return new CBlender_default;		break;
+	case B_DEFAULT_AREF:	return new CBlender_default_aref;	break;
+	case B_VERT:			return new CBlender_Vertex;			break;
+	case B_VERT_AREF:		return new CBlender_Vertex_aref;	break;
+	case B_SCREEN_SET:		return new CBlender_Screen_SET;		break;
+	case B_SCREEN_GRAY:		return new CBlender_Screen_GRAY;	break;
+	case B_EDITOR_WIRE:		return new CBlender_Editor_Wire;	break;
+	case B_EDITOR_SEL:		return new CBlender_Editor_Selection;break;
+	default:				return 0;
+	}
+}
+void		CBlender::CreatePalette(vector<CBlender*> &palette)
+{
+	R_ASSERT(palette.empty());
+	palette.push_back(Create(B_DEFAULT));
+	palette.push_back(Create(B_DEFAULT_AREF));
+	palette.push_back(Create(B_VERT));
+	palette.push_back(Create(B_VERT_AREF));
+	palette.push_back(Create(B_SCREEN_SET));
+	palette.push_back(Create(B_SCREEN_GRAY));
+	palette.push_back(Create(B_EDITOR_WIRE));
+	palette.push_back(Create(B_EDITOR_SEL));
 }
