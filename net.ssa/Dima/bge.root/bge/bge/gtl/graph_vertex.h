@@ -1,0 +1,12 @@
+////////////////////////////////////////////////////////////////////////////
+//	Module 		: graph_vertex.h
+//	Created 	: 14.01.2004
+//  Modified 	: 19.02.2005
+//	Author		: Dmitriy Iassenev
+//	Description : Graph vertex class template
+////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "graph_vertex_data.h"
+#include "graph_vertex_no_data.h"

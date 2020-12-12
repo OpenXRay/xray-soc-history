@@ -1,0 +1,61 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXT", "DXT\DXT.vcproj", "{EBF9B543-0830-4866-9B48-DC0740E87E8A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LWO", "LWO\LWO.vcproj", "{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ETools", "ETools\ETools.vcproj", "{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 4
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {1BF9F5C6-7510-4138-8A8D-ED28E6DAB22F}
+		SccProjectUniqueName1 = DXT\\DXT.vcproj
+		SccProjectName1 = \u0022$/Editors/Tools/DXT\u0022,\u0020DDFAAAAA
+		SccLocalPath1 = DXT
+		CanCheckoutShared = true
+		SccProjectUniqueName2 = LWO\\LWO.vcproj
+		SccProjectName2 = \u0022$/Editors/Tools/LWO\u0022,\u0020CDFAAAAA
+		SccLocalPath2 = LWO
+		CanCheckoutShared = true
+		SccProjectUniqueName3 = ETools\\ETools.vcproj
+		SccProjectName3 = \u0022$/Editors/Tools/ETools\u0022,\u0020ADFAAAAA
+		SccLocalPath3 = ETools
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Mixed = Mixed
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Debug.ActiveCfg = Debug|Win32
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Debug.Build.0 = Debug|Win32
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Mixed.ActiveCfg = Release|Win32
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Mixed.Build.0 = Release|Win32
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Release.ActiveCfg = Release|Win32
+		{EBF9B543-0830-4866-9B48-DC0740E87E8A}.Release.Build.0 = Release|Win32
+		{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}.Debug.ActiveCfg = Debug|Win32
+		{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}.Debug.Build.0 = Debug|Win32
+		{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}.Mixed.ActiveCfg = Release|Win32
+		{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}.Release.ActiveCfg = Release|Win32
+		{A6EBBBBB-5FEF-4C20-8460-DFAB11734DED}.Release.Build.0 = Release|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Debug.ActiveCfg = Debug|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Debug.Build.0 = Debug|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Mixed.ActiveCfg = Mixed|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Mixed.Build.0 = Mixed|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Release.ActiveCfg = Release|Win32
+		{65CBB9D0-FBC6-41A4-8316-F5E9B5D7FB33}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

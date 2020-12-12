@@ -1,0 +1,803 @@
+//===========================================================================
+//
+//  File Name:    Setup.rul
+//
+//  Description:  Blank setup main script file
+//
+//  Comments:     Blank setup is an empty setup project. If you want to
+//				  create a new project via. step-by step instructions use the
+//				  Project Assistant.
+//
+//===========================================================================
+
+// Included header files ----------------------------------------------------
+#include "ifx.h"
+
+//---------------------------------------------------------------------------
+// Global variables
+//---------------------------------------------------------------------------
+            
+//.
+#define CURRENT_BUILD_DATE		"03.02.2005"
+//---------------------------------------------------------------------------
+// Definition
+//---------------------------------------------------------------------------
+#define DEF_FOLDER 				"KAC"
+#define MSDE_INSTANCE_NAME	 	"KAS_SQL_SRV"
+#define MSDE_INSTANCE_SERVICE 	"MSSQL$"+MSDE_INSTANCE_NAME
+#define MSDE_INSTANCE_FOLDER	PROGRAMFILES^"Microsoft SQL Server\\"+MSDE_INSTANCE_SERVICE+"\\"
+
+#define MSDE_SERVER_CMD			"\""+PROGRAMFILES^"Microsoft SQL Server\\80\\Tools\\Binn\\scm.exe"+"\""
+#define MSDE_START_SERVER_PAR	" -Action 1 -Silent 1 -Service "+MSDE_INSTANCE_SERVICE
+#define MSDE_STOP_SERVER_PAR	" -Action 6 -Silent 1 -Service "+MSDE_INSTANCE_SERVICE
+                   
+#define DLL_FILE  				TARGETDIR^"SQL_CONFIG.dll"
+#define SQL_USER_NAME_ 			"sa"
+#define SQL_USER_PASS_ 			"KAStorka40"
+#define SQL_SERVER_HOST_ 		"localhost\\"+MSDE_INSTANCE_NAME
+#define SQL_STORED_PROC_DLL_   	"xp_indexing.dll"
+
+#define SETUP_INI_FILE      	SRCDIR^"setupMSDE.ini"
+#define INI_MAIN_SECTION_ID  	"main"
+#define INI_VERSION_EXE_ID    	"version_exe"
+#define INI_VERSION_DB_ID		"version_db"
+#define INI_SERVER_ID			"Main_ServerName"
+
+#define REG_SERVER_ID			"Main_ServerName"
+#define REG_INSTANCE_ID			"instance"
+#define REG_VERSION_DB_ID    	"versionDB"
+#define REG_VERSION_EXE_TMP_ID 	"versionEXE_temp"
+#define REG_SERIAL_TMP_ID    	"serial_number_temp"
+
+//---------------------------------------------------------------------------
+// User defined function prototype
+//---------------------------------------------------------------------------
+prototype 				CreateStartServerShortcut	();
+prototype 				CreateUninstallShortcut		(); 
+prototype 				ClearFolder					(byval string);
+prototype BOOL 			CheckAdminRights			();
+prototype				CleanupTargetFolder			();
+prototype				StopClientUpdater			();
+prototype 				SetTargetFolderAccess		();
+// SQL server management function
+prototype 				StartServer					();
+prototype 				StopServer					();
+prototype 				ParseSerialNumber			(byval string, byref string, byref string);
+prototype BOOL 			CheckMSDEStatus				();
+prototype 				ConfigureServer				();
+prototype BOOL			CheckMDACFeature			();
+// external SQL server management function
+prototype CDECL BOOL 	SQL_CONFIG.initLibrary		();
+prototype CDECL BOOL 	SQL_CONFIG.deInitLibrary	();
+prototype CDECL BOOL 	SQL_CONFIG.testConnection	(byval string, byval string, byval string);
+prototype CDECL BOOL 	SQL_CONFIG.tuneServer		(byval string, byval string, byval string);
+prototype CDECL BOOL 	SQL_CONFIG.attachDatabase	(byval string, byval string, byval string, byval string, byval string);
+prototype CDECL BOOL 	SQL_CONFIG.runSQLString		(byval string, byval string, byval string, byval string, byval string);
+prototype CDECL BOOL 	SQL_CONFIG.detachDatabase	(byval string, byval string, byval string, byval string);
+// export events for IS
+export prototype 		MSDE_2000_UnInstalled		();
+export prototype 		MSDE_2000_UnInstalling		();
+
+//---------------------------------------------------------------------------
+// User defined function
+//---------------------------------------------------------------------------
+function CreateUninstallShortcut()   
+string strCmdLine;  
+begin   
+	// For an InstallScript installation:
+	strCmdLine = "\""+DISK1TARGET ^ "Setup.exe"+"\"";    
+	// Create the shortcut. 
+	AddFolderIcon(SHELL_OBJECT_FOLDER, @IDSL_REMOVE_KAS,strCmdLine, "",TARGETDIR^"MDISplit.ico",0, "", REPLACE );  
+end;
+//---------------------------------------------------------------------------
+function CreateStartServerShortcut()   
+begin   
+	if ( SYSINFO.WIN9X.bWin9X ) then   
+		AddFolderIcon	(FOLDER_STARTUP, "Start KAS SQLServer",MSDE_SERVER_CMD+" "+MSDE_START_SERVER_PAR, "",TARGETDIR^"MDISplit.ico",0, "", REPLACE );  
+	endif;  
+end;
+//---------------------------------------------------------------------------
+function ClearFolder(folder)
+begin
+	DeleteDir(folder,ALLCONTENTS);
+end;                           
+//---------------------------------------------------------------------------
+function BOOL CheckAdminRights()
+begin
+	if (FALSE=SYSINFO.WIN9X.bWin9X) then
+		if (FALSE=SYSINFO.WINNT.bAdmin_Logged_On) then
+        	MessageBox(@IDSL_NEED_ADMIN_RIGHTS, SEVERE);
+        	return FALSE;
+		endif;
+	endif;
+	return TRUE;
+end;                    
+//---------------------------------------------------------------------------
+function ParseSerialNumber(src, tgt0, tgt1)
+    LIST   listID;
+begin
+    listID 		= ListCreate (STRINGLIST);
+    // Get each path from the search path into the list.
+    if (StrGetTokens (listID, src, "-") = 0) then
+    	if (ListCount(listID)==2) then
+    		ListGetFirstString(listID,tgt0);
+    		ListGetNextString (listID,tgt1);
+    	endif;
+    endif;
+    // Remove the list from memory.
+    ListDestroy (listID);
+end;
+//---------------------------------------------------------------------------
+function StartServer()
+begin
+	LaunchAppAndWait (MSDE_SERVER_CMD, MSDE_START_SERVER_PAR, WAIT);
+end;
+//---------------------------------------------------------------------------
+function StopServer()
+begin
+	LaunchAppAndWait (MSDE_SERVER_CMD, MSDE_STOP_SERVER_PAR, WAIT);
+end;
+//---------------------------------------------------------------------------
+function BOOL CheckMSDEStatus()
+    object oObject, oStatus;
+    string szStatus;
+    BOOL res;
+begin        
+	res = FALSE;
+    try
+        set oObject = GetObject("MSDE_2000_Object");
+        if (!IsObject(oObject)) then
+            MessageBoxEx( @IDSL_SETUP_ERROR, "", INFORMATION );
+        endif;
+        set oStatus = oObject.Status;
+        if (!(oStatus.Number = OBJ_STATUS_SUCCESS ||
+              oStatus.Number = MSI_ERROR_SUCCESS_REBOOT_REQUIRED)) then
+            Sprintf( szStatus, "MSDE 2000 Object\n\nNumber:\t\t%d\n" +
+                "Description:\t%s\nFile:\t\t%s\nLine:\t\t%d\nScript Error:\t%d", 
+                oStatus.Number, oStatus.Description, oStatus.szScriptFile, 
+                oStatus.nScriptLine, oStatus.nScriptError );
+            MessageBoxEx( szStatus, "", SEVERE );
+		else            
+	        res = TRUE;
+        endif; 
+    catch    
+        Sprintf( szStatus, "Unexpected Exception\n\nNumber: 0X%X\nDescription:" +
+            "%s\nSource: %s\nHelp File: %s\nHelp Context: %d", Err.Number, 
+            Err.Description, Err.Source, Err.HelpFile, Err.HelpContext);
+        MessageBoxEx( szStatus, "", SEVERE );
+    endcatch;
+    return res;
+end;
+//---------------------------------------------------------------------------
+function StopClientUpdater()
+begin
+	LaunchAppAndWait 		("\""+TARGETDIR^"ClientUpdate.exe"+"\"", " /r", WAIT);
+end;
+//---------------------------------------------------------------------------
+function CleanupTargetFolder()
+begin
+	// remove registry keys
+	RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+	RegDBDeleteKey 			("Software\\KASClient");
+	// remove folder
+    ClearFolder				(TARGETDIR);
+end;
+//---------------------------------------------------------------------------                                                                        
+function SetTargetFolderAccess()          
+string tmp;
+begin                
+ 	if (SYSINFO.WINNT.bWinNT ) then
+ 		LaunchAppAndWait 	("grant_rights.cmd", "\""+TARGETDIR+"\"", LAAW_OPTION_WAIT|LAAW_OPTION_HIDDEN);
+ 	endif;              
+end;
+//---------------------------------------------------------------------------                                                                        
+function ConfigureServer()
+	number 	nResult;
+	BOOL 	bRes;
+	string 	sTmp,db_files,sInsertSQL,sServerName;
+	string 	sPrimReg,sSecReg,sVersionEXE,sVersionDB;
+	NUMBER 	nvType, nvSize, nLocation;
+	string 	sSerial;
+begin
+	bRes = CheckMSDEStatus();    
+	if (TRUE=bRes) then
+		// load dll
+	    nResult 	= UseDLL (DLL_FILE);
+	    if (nResult != 0) then
+	        MessageBox (@IDSL_ERROR_UNABLE_TO_LOAD+" "+DLL_FILE, SEVERE);
+	        abort;
+	    endif;                  
+	    
+	    SQL_CONFIG.initLibrary();
+	                      
+	    // Show Status
+//		SetStatusWindow	( 0, "" );
+//		Enable			( STATUSEX );
+//		StatusUpdate	( ON, 100 );
+    
+	    // Display a message; do not change the progress bar.
+//	    SetStatusWindow (-1, @IDSL_PROGRESS_SETUP_SERVER);
+    
+//	    SetStatusWindow (10, @IDSL_PROGRESS_START_SERVER);
+	    StartServer		();
+	       
+//	    SetStatusWindow (20, @IDSL_PROGRESS_CHECK_CONNECTION);
+		bRes 			= SQL_CONFIG.testConnection(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_);
+		if (bRes = 0) then 
+//		    SetStatusWindow (30, @IDSL_PROGRESS_TUNE_CONNECTION);
+		    bRes = SQL_CONFIG.tuneServer(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_);
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_SERVER_CONFIGURE, SEVERE);
+		        bRes	= FALSE;
+		        goto label_end;
+		    endif;
+
+//		    SetStatusWindow (40, @IDSL_PROGRESS_CONNECT_DB+" 'KAS'");
+		    db_files = "["+TARGETDIR^"DATA\\KAS_Data.MDF] "+"["+TARGETDIR^"DATA\\KAS_Log.LDF]";
+		    bRes = SQL_CONFIG.attachDatabase(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_,"KAS",db_files);
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_CONNECT_DB+" 'KAS'", SEVERE);
+		        bRes	= FALSE;
+		        goto label_end; 
+		    else
+		    	bRes=TRUE;
+		    endif;
+		
+//		    SetStatusWindow (50, @IDSL_PROGRESS_CONNECT_DB+" 'client_repl'");
+		    db_files = "["+TARGETDIR^"DATA\\client_repl_Data.MDF] "+"["+TARGETDIR^"DATA\\client_repl_Log.LDF]";
+		    bRes = SQL_CONFIG.attachDatabase(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_,"client_repl",db_files);
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_CONNECT_DB+" 'client_repl'", SEVERE);
+		        bRes	= FALSE;
+		        goto label_end;
+		    else
+		    	bRes=TRUE;
+		    endif;
+		
+//		    SetStatusWindow (60, @IDSL_PROGRESS_CONNECT_DB+" 'searchdb'");
+		    db_files = "["+TARGETDIR^"DATA\\searchdb_Data.MDF] "+"["+TARGETDIR^"DATA\\searchdb_Log.LDF]";
+		    bRes = SQL_CONFIG.attachDatabase(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_,"searchdb",db_files);
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_CONNECT_DB+" 'searchdb'", SEVERE);
+		        bRes	= FALSE;
+		        goto label_end;
+		    else
+		    	bRes=TRUE;
+		    endif;
+		 
+//		    SetStatusWindow (70, @IDSL_PROGRESS_REGISTER_SP);
+		 	// copy stored proc dll  
+			// register it in DB
+		    bRes = SQL_CONFIG.runSQLString	(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_,
+		    								"master",
+		    								"EXEC sp_addextendedproc xp_check, '"+SQL_STORED_PROC_DLL_+"'");
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_REGISTER_SP+" 'xp_check'", SEVERE);
+		        bRes	= FALSE;
+		        goto label_end;
+		    else
+		    	bRes=TRUE;
+		    endif;
+		
+			// parse serial number      
+			sPrimReg		= "";
+			sSecReg			= "";	           
+			sSerial			= "";
+			// load from registry
+			RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+			if (RegDBGetKeyValueEx	("Software\\KASClient\\Settings\\Temp", REG_SERIAL_TMP_ID,nvType,sSerial,nvSize) < 0) then
+			    MessageBox 			("RegDBGetKeyValueEx failed: "+REG_SERIAL_TMP_ID, SEVERE);
+			endif;
+			if (RegDBGetKeyValueEx	("Software\\KASClient\\Settings\\Temp", REG_VERSION_EXE_TMP_ID,nvType,sVersionEXE,nvSize) < 0) then
+			    MessageBox 			("RegDBGetKeyValueEx failed: "+REG_VERSION_EXE_TMP_ID, SEVERE);
+			endif;
+			if (RegDBGetKeyValueEx	("Software\\KASClient\\Settings", REG_VERSION_DB_ID,nvType,sVersionDB,nvSize) < 0) then
+			    MessageBox 			("RegDBGetKeyValueEx failed: "+REG_VERSION_DB_ID, SEVERE);
+			endif;
+			// parse
+			ParseSerialNumber		(sSerial,sPrimReg,sSecReg);
+		                           
+//		    SetStatusWindow (90, @IDSL_PROGRESS_REGISTERING_USER);
+			// prepare sql string
+			sInsertSQL = "insert into Summary (primary_reg_id, secondary_reg_id, unique_id, version_id, last_update)";
+			sInsertSQL = sInsertSQL+"values('"+sPrimReg+"','"+sSecReg+"',newId(),'"+sVersionEXE+"','"+sVersionDB+"')"; 
+		    bRes = SQL_CONFIG.runSQLString	(SQL_SERVER_HOST_,SQL_USER_NAME_,SQL_USER_PASS_,
+		    								"KAS",
+		    								sInsertSQL);
+		    if(bRes != 0) then
+		        MessageBox (@IDSL_ERROR_SQL_QUERY_FAILED, SEVERE);
+		        bRes	= FALSE;
+		        goto label_end;
+		    else
+		    	bRes=TRUE;
+		    endif;
+		else
+	        MessageBox (@IDSL_ERROR_SQLSERVER_CONNECT_FAILED, SEVERE);
+	        bRes	= FALSE;
+	        goto label_end;
+		endif;
+		
+label_end:
+	    // Set the progress bar to 100% and displays a message.
+//	    SetStatusWindow (100, @IDSL_PROGRESS_END);
+//	    Disable			(STATUSEX);
+	
+	    SQL_CONFIG.deInitLibrary();
+	
+		// free dll
+	    nResult = UnUseDLL (DLL_FILE);
+	    if (nResult < 0) then
+	   //     MessageBox ("Невозможно выгрузить: "+DLL_FILE, SEVERE);
+	    endif;
+	else
+        MessageBox (@IDSL_ERROR_MSDE_INSTALL_FAILED, SEVERE);
+		bRes=FALSE;	    
+	endif;
+    // if error found -> abort instalation          
+    if (bRes=FALSE) then 
+    	abort;
+    else
+		MessageBox("Конфигурация сервера успешно завершена.",INFORMATION);
+    endif;
+end;
+//---------------------------------------------------------------------------                                                                        
+          
+function BOOL CheckMDACFeature()
+	BOOL	mdac_found, mdac_need_install;
+    string 	mdac_ver;
+	NUMBER 	nvType, nvSize, nLocation;
+begin
+	mdac_found				= FALSE;
+	mdac_need_install		= TRUE;
+	RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+	if (RegDBGetKeyValueEx("Software\\Microsoft\\dataAccess","FullInstallVer",nvType,mdac_ver,nvSize) = 0) then
+		nLocation			= StrFind(mdac_ver,"2.8");
+		if (nLocation=0)	then  mdac_found=TRUE; endif;
+	endif;
+	if (mdac_found=TRUE) then
+		if (AskYesNo(@IDS_ASK_MDAC_VERSION,NO)=NO) then
+			mdac_need_install = FALSE;
+	 	endif;
+	endif;     
+	return mdac_need_install;
+end;
+          
+//---------------------------------------------------------------------------                                                                        
+// InstallShield Events
+//---------------------------------------------------------------------------                                                                        
+function OnBegin()             
+begin      
+//.	MessageBox("BUILD DATE:\n\n"+CURRENT_BUILD_DATE,INFORMATION);
+	// check admin rights
+	if (FALSE=CheckAdminRights()) then abort; endif;
+end;
+//---------------------------------------------------------------------------                                                                        
+function OnFirstUIBefore()
+    number  nResult, nLevel, nSize, nSetupType, nUser;
+    string  sTitle, sMsg, sOpt1, sOpt2, sLicenseFile;
+    string  sName, sCompany, sTargetPath, sDir, sFeatures, sTargetdir;
+    string  sSetupType, sMainDir;
+    BOOL    bLicenseAccepted;	
+    LIST 	listStartCopy;
+	string 	sSerial;
+begin	  
+    SetTitle( @IDS_PRODUCT_NAME, 0, BACKGROUNDCAPTION ); 	                  
+   
+    nSetupType 		= COMPLETE;	
+    sDir 			= TARGETDIR;
+    sName 			= "";
+    sCompany		= "";
+    bLicenseAccepted= FALSE;
+
+// Beginning of UI Sequence
+Dlg_Start:
+    nResult = 0;
+
+Dlg_SdWelcome:
+    sTitle = "";
+    sMsg = "";
+    //{{IS_SCRIPT_TAG(Dlg_SdWelcome)
+    nResult = SdWelcome( sTitle, sMsg );
+    //}}IS_SCRIPT_TAG(Dlg_SdWelcome)
+    if (nResult = BACK) goto Dlg_Start;
+
+Dlg_SdLicense2:
+    sTitle = "";
+    sOpt1 = "";
+    sOpt2 = "";
+    //{{IS_SCRIPT_TAG(License_File_Path)
+    sLicenseFile = SUPPORTDIR ^ "License.rtf";
+    //}}IS_SCRIPT_TAG(License_File_Path)
+    //{{IS_SCRIPT_TAG(Dlg_SdLicense2)
+    nResult = SdLicense2Rtf( sTitle, sOpt1, sOpt2, sLicenseFile, bLicenseAccepted );
+    //}}IS_SCRIPT_TAG(Dlg_SdLicense2)
+    if (nResult = BACK) then
+        goto Dlg_SdWelcome;
+    else
+        bLicenseAccepted = TRUE;
+    endif;
+             
+Dlg_SetupType:
+    sTitle = "";
+    sMsg   = "";
+    nResult = SdSetupType(sTitle, sMsg, sDir, 0);
+    if (nResult = BACK) then
+        goto Dlg_SdLicense2;
+    else
+	    TARGETDIR 		= sDir;
+	    nSetupType 		= nResult;  
+        sTargetPath 	= TARGETDIR;
+		if (nSetupType 	= 301) then     
+			sSetupType 	= "ClientServer";
+		elseif(nSetupType = 302) then
+			sSetupType 	= "Client";
+		else
+			sSetupType 	= "Server";
+		endif;
+		if (FeatureSetupTypeSet (MEDIA, sSetupType) < 0) then
+			MessageBox (@IDSL_FEATURE_SETUP_FAILED, SEVERE);
+		endif;      
+		FeatureSelectItem (MEDIA,"MDAC",CheckMDACFeature());
+        nSize = 0;
+        FeatureCompareSizeRequired(MEDIA, sTargetPath, nSize);
+        if (nSize != 0) then      
+        	MessageBox(szSdStr_NotEnoughSpace, WARNING);
+            goto Dlg_SetupType;
+        endif;
+    endif;    
+             
+Dlg_SdCustomerInformation:
+	if (nSetupType = 301) then
+		goto Dlg_SdCustomerInformationServer;      
+	elseif(nSetupType = 302) then
+		goto Dlg_SdCustomerInformationClient;
+	else
+		goto Dlg_SdCustomerInformationServer;      
+	endif;
+
+Dlg_SdCustomerInformationServer:
+	sSerial 	="demo-demo";
+//	sSerial 	="demo-kharkiv";
+	nResult 	= SdCustomerInformationEx(sTitle, sName, sCompany, sSerial,nUser);
+	if (nResult = BACK) then
+		goto Dlg_SetupType;
+	else
+		goto Dlg_SdSelectedFolder;
+	endif;
+	if (sSerial ="demo-demo" ) then 
+		sSerial ="";
+	endif;
+
+Dlg_SdCustomerInformationClient:
+	nResult = SdCustomerInformation(sTitle, sName, sCompany, nUser);
+	if (nResult = BACK) then
+		goto Dlg_SetupType;
+	else
+		goto Dlg_SdSelectedFolder;
+	endif;
+
+Dlg_SdSelectedFolder:
+	sMsg   		= "";
+	sMainDir 	= DEF_FOLDER;
+	nResult 	= SdSelectFolder (sTitle, sMsg, sMainDir);
+	if (nResult = BACK) then
+		goto Dlg_SdCustomerInformation;
+	endif;     
+	SHELL_OBJECT_FOLDER	= sMainDir;
+/*	
+Dlg_SdAskDestPath2:
+	sTitle = "";
+    sMsg = "";
+	nResult = SdAskDestPath2( sTitle, sMsg, sDir );
+    TARGETDIR = sDir;
+    if (nResult = BACK) goto Dlg_SdSelectedFolder;
+*/
+Dlg_SQLServer:
+    nResult 	= OnSQLServerInitialize( nResult );
+    if( nResult = BACK ) goto Dlg_SdSelectedFolder;
+
+Dlg_ObjDialogs:
+    nResult 	= ShowObjWizardPages( nResult );
+    if (nResult = BACK) goto Dlg_SQLServer;
+    
+Dlg_SdStartCopy:
+	sMsg   = "";
+	listStartCopy = ListCreate( STRINGLIST );
+
+    ListAddString(listStartCopy,@IDS_UI_CURDIR,AFTER);
+    ListAddString(listStartCopy,"\t"+TARGETDIR,AFTER);
+   
+    ListAddString(listStartCopy,@IDS_UI_MENU_FOLDER,AFTER);
+    ListAddString(listStartCopy,"\t"+sMainDir,AFTER);
+    
+    ListAddString(listStartCopy,@IDS_UI_SETUP_TYPE,AFTER);
+    
+	if (nSetupType = 301) then
+	    ListAddString(listStartCopy,"\t"+@ID_ST_CLIENT_SERVER_NAME,AFTER);
+	elseif(nSetupType = 302) then
+		ListAddString(listStartCopy,"\t"+@ID_ST_CLIENT_NAME,AFTER);		                                                      
+	else
+		ListAddString(listStartCopy,"\t"+@ID_ST_SERVER_NAME,AFTER);		                                                      
+	endif;
+	
+	nResult = SdStartCopy( sTitle, sMsg, listStartCopy );			
+	ListDestroy(listStartCopy);
+
+	if (nResult = BACK) then
+		goto Dlg_SdSelectedFolder;    
+	endif; 
+                           
+	// clear target folders 
+	StopServer			();
+	StopClientUpdater	();
+	ClearFolder			(TARGETDIR);
+    ClearFolder			(MSDE_INSTANCE_FOLDER);
+
+	// store for the reboot
+	RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+	if (RegDBSetKeyValueEx 	("Software\\KASClient\\Settings\\Temp", REG_SERIAL_TMP_ID, REGDB_STRING, sSerial,-1) < 0) then
+	    MessageBox 			("RegDBSetKeyValueEx failed.", SEVERE);
+	endif;
+
+    return 0;
+end;
+//---------------------------------------------------------------------------
+function OnMaintUIBefore()
+    number	nResult, nType, nMediaFlags;
+    string	szTitle, szMsg, szIgnore;
+begin
+	// nType defaults to MODIFY.
+	nType = MODIFY;
+
+    //Initialize SQL
+    OnSQLServerInitializeMaint( );
+
+// Beginning of UI Sequence
+Dlg_Start:
+
+    // Hide the initial progress dialog as otherwise the user can
+    // click on it, and hide the MessageBox.
+    Disable( DIALOGCACHE );
+
+    // In RemoveOnly mode, set to remove.
+    nType = REMOVEALL;
+
+	// Show Uninstall Confirmation Dialog
+	nResult = MessageBox( @IDS_ASK_REMOVE_ALL, MB_YESNO );
+	if (nResult != IDYES ) then
+        // In REMOVEONLY mode, abort the setup.
+        abort;
+	endif;
+
+	// check admin rights
+	if (FALSE=CheckAdminRights()) then abort; endif;
+	
+Dlg_ObjDialogs:
+    nResult = ShowObjWizardPages( nResult );
+    if ( ( nResult = BACK ) ) goto Dlg_Start;
+
+	// cleanup
+	CleanupTargetFolder	();
+
+	// Ensure that all previously installed features are removed
+	// for media that supports updating.
+	MediaGetData( MEDIA, MEDIA_FIELD_MEDIA_FLAGS, nMediaFlags, szIgnore );
+	
+	if( nMediaFlags & MEDIA_FLAG_UPDATEMODE_SUPPORTED ) then
+		FeatureRemoveAllInMediaAndLog();
+	else
+		FeatureRemoveAllInMedia();
+	endif;
+end;
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+function MSDE_2000_UnInstalling()
+begin
+    StopServer			();
+end;
+function MSDE_2000_UnInstalled()
+begin
+    ClearFolder			(MSDE_INSTANCE_FOLDER);
+end;
+//---------------------------------------------------------------------------
+// OnUninstall
+//
+// The OnUninstall event is called when the setup is run with the -uninst
+// switch, in this case this is the only event that will be called.
+//---------------------------------------------------------------------------
+function OnUninstall()
+string szIgnore, szMsg;
+number nResult;
+BOOL bOpt1, bOpt2;
+begin
+
+    // Hide the initial progress dialog.
+    Disable( DIALOGCACHE );
+	
+	// Show Uninstall Confirmation Dialog
+	if( MessageBox( @IDS_ASK_REMOVE_ALL, MB_YESNO ) != IDYES ) then
+        abort;
+    endif;
+
+    // Remove all features.
+	FeatureRemoveAllInMediaAndLog();
+
+    // Show Status
+	SetStatusWindow( 0, "" );
+	Enable( STATUSEX );
+	StatusUpdate( ON, 100 );
+
+    // Uninstall
+	nResult = FeatureTransferData( MEDIA );
+
+    // Handle move data error and abort if error occured.
+	if( nResult < ISERR_SUCCESS ) then
+		OnComponentError();
+		abort;
+	endif;
+
+    // Disable Status
+	Disable( STATUSEX );
+
+	// cleanup
+	StopClientUpdater	();
+	CleanupTargetFolder	();
+
+    // Show final dialog.
+    if ( BATCH_INSTALL ) then
+        SdFinishReboot( SdLoadString(IFX_SDFINISH_REMOVE_TITLE), SdLoadString(IFX_SDFINISH_REMOVE_MSG2), SYS_BOOTMACHINE, "", 0 );
+    else    
+        SdFinish( SdLoadString(IFX_SDFINISH_REMOVE_TITLE), SdLoadString(IFX_SDFINISH_REMOVE_MSG1), "", "" , "", bOpt1 , bOpt2 );
+    endif;
+ 
+end;
+//---------------------------------------------------------------------------
+function OnFirstUIAfter()
+    STRING szTitle, szMsg1, szMsg2, szOpt1, szOpt2;
+    NUMBER bvOpt1, bvOpt2;
+	NUMBER bShowUpdateServiceDlg;
+	string sServerName,sVersionEXE,sVersionDB;
+begin     
+	// insert registry keys
+	GetProfString			(SETUP_INI_FILE, INI_MAIN_SECTION_ID, INI_SERVER_ID, 		sServerName);
+	GetProfString			(SETUP_INI_FILE, INI_MAIN_SECTION_ID, INI_VERSION_EXE_ID,	sVersionEXE);
+	GetProfString			(SETUP_INI_FILE, INI_MAIN_SECTION_ID, INI_VERSION_DB_ID, 	sVersionDB);
+	// client & server
+	RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+	if (RegDBSetKeyValueEx 	("Software\\KASClient\\Settings", REG_INSTANCE_ID, REGDB_STRING, MSDE_INSTANCE_NAME,-1) < 0) then
+	    MessageBox 			("RegDBSetKeyValueEx failed.", SEVERE);
+	endif;
+
+	if (FeatureIsItemSelected(MEDIA,"MSDE")) then
+		// write specific server variables
+		if (RegDBSetKeyValueEx 	("Software\\KASClient\\Settings", REG_VERSION_DB_ID, REGDB_STRING, sVersionDB,-1) < 0) then
+		    MessageBox 			("RegDBSetKeyValueEx failed.", SEVERE);
+		endif;
+		if (RegDBSetKeyValueEx 	("Software\\KASClient\\Settings", REG_SERVER_ID, REGDB_STRING, sServerName,-1) < 0) then
+		    MessageBox 			("RegDBSetKeyValueEx failed.", SEVERE);
+		endif;
+		if (RegDBSetKeyValueEx 	("Software\\KASClient\\Settings\\Temp", REG_VERSION_EXE_TMP_ID, REGDB_STRING, sVersionEXE,-1) < 0) then
+		    MessageBox 			("RegDBSetKeyValueEx failed.", SEVERE);
+		endif;                            
+		// Delete ServiceManager icon (для уверенности еще раз удаляем)
+	    if (ALLUSERS) then
+		    DeleteFolderIcon(FOLDER_STARTUP, "Service Manager");
+	    else
+			ProgDefGroupType(COMMON);
+	    	DeleteFolderIcon(FOLDER_STARTUP, "Service Manager");
+			ProgDefGroupType(PERSONAL);
+	    endif;
+	    // stop MS DTC  
+	    if (SYSINFO.WIN9X.bWin9X) then 
+	        LaunchAppAndWait 	(WINSYSDIR^"msdtcw.exe", "-remove", WAIT);
+ 	       	RegDBSetDefaultRoot	(HKEY_LOCAL_MACHINE);
+  			RegDBDeleteKey    	("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices\\MSDTC");
+  		else
+	        LaunchAppAndWait	(WINSYSDIR^"msdtc.exe", "-stop", WAIT);
+		    if (SYSINFO.WINNT.bWinNT4) then
+		        LaunchAppAndWait(WINSYSDIR^"msdtc.exe", "-remove", WAIT);
+		    else
+	        	LaunchAppAndWait(WINSYSDIR^"msdtc.exe", "-uninstall", WAIT);
+		    endif;
+		endif;
+
+		// create auto-start shortcut
+		CreateStartServerShortcut();
+	endif;
+                                             
+	// create uninstall shortcut
+	CreateUninstallShortcut			();
+	                 
+    // set folder everyone access
+    SetTargetFolderAccess();
+        
+	// 
+    ShowObjWizardPages(NEXT);
+    
+    szTitle = "";
+    szMsg1 = ""; 
+    szMsg2 = "";
+    szOpt1 = "";
+    szOpt2 = "";
+	bvOpt1   = FALSE;
+    bvOpt2   = FALSE;    
+
+	// Set this to true if you have the update service enabled, and if you want to check for updates.
+	// Note: the ISUS Starter Edition does not support checking for updates programatically.  So, 
+	// only set this to true if you have at least the ISUS Professional Edition.
+	bShowUpdateServiceDlg = FALSE;
+
+    //. Под ответственность Яны Одарич
+	BATCH_INSTALL = TRUE;          
+          
+    //{{IS_SCRIPT_TAG(Dlg_SdDinishEx)	
+    if ( BATCH_INSTALL ) then
+    	SdFinishReboot ( szTitle , szMsg1 , SYS_BOOTMACHINE , szMsg2 , 0 );
+    else   
+    	// configure
+		if (FeatureIsItemSelected(MEDIA,"MSDE")) then ConfigureServer(); endif;
+		// finish
+		SdFinish ( szTitle , szMsg1 , szMsg2 , szOpt1 , szOpt2 , bvOpt1 , bvOpt2 );
+    endif;
+    //}}IS_SCRIPT_TAG(Dlg_SdDinishEx)	
+end;
+//---------------------------------------------------------------------------
+// OnMaintUIAfter
+//
+// The OnMaintUIAfter event called by OnShowUI after the file transfer
+// of the setup when the setup is running in maintenance mode. By default
+// this event displays UI that informs the end user that the maintenance setup
+// has been completed successfully.
+//
+// Note: This event will not be called automatically in a
+// program...endprogram style setup.
+//---------------------------------------------------------------------------
+function OnMaintUIAfter()
+    STRING szTitle, szMsg1, szMsg2, szOpt1, szOpt2;
+    NUMBER bvOpt1, bvOpt2;
+begin
+	// cleanup
+	StopClientUpdater	();
+	CleanupTargetFolder	();
+
+    ShowObjWizardPages(NEXT);
+    
+    // Added - Version 9.5 - Use appropriate strings for complete
+    // uninstall.
+    if( REMOVEALLMODE ) then
+        szTitle = SdLoadString(IFX_SDFINISH_REMOVE_TITLE);
+        szMsg1 = SdLoadString(IFX_SDFINISH_REMOVE_MSG1);
+    else
+        szTitle = SdLoadString(IFX_SDFINISH_MAINT_TITLE);    
+        szMsg1  = SdLoadString(IFX_SDFINISH_MAINT_MSG1);
+    endif;
+
+	szMsg2 = "";    
+    szOpt1 = "";
+    szOpt2 = "";
+	bvOpt1   = FALSE;
+    bvOpt2   = FALSE;    
+
+    if ( BATCH_INSTALL ) then
+    	SdFinishReboot ( szTitle , szMsg1 , SYS_BOOTMACHINE , szMsg2 , 0 );
+    else    
+       	SdFinish ( szTitle , szMsg1 , szMsg2 , szOpt1 , szOpt2 , bvOpt1 , bvOpt2 );
+    endif;
+end;
+//---------------------------------------------------------------------------
+// OnRebooted
+//
+// The OnRebooted event is called when the setup is run automatically after
+// rebooting the system. This is the only event that will be called in this
+// case.
+//---------------------------------------------------------------------------
+function OnRebooted()
+begin
+	// configure server           
+	if (FeatureIsItemSelected(MEDIA,"MSDE")) then
+		ConfigureServer();
+	endif;
+	// clear temp folder from registry
+	RegDBSetDefaultRoot		(HKEY_LOCAL_MACHINE);
+	RegDBDeleteKey 			("Software\\KASClient\\Settings\\Temp");
+end;
